@@ -44,4 +44,52 @@ Created `contactService.js` and `contactService.spec.js` managing contact CRUD s
    * *Interview answer*: "I built contact favoriting and quick bookmark pinning."
 
 ## Chosen Next Iteration
+Option 1: Interactive Bulk Contact Selection & CSV Export Vault (Iteration 2).
+
+---
+
+# Build Notes - Build 46 Iteration 2 (2026-07-27)
+
+Implemented Interactive Bulk Contact Selection & CSV Export Vault.
+
+## Summary
+Updated `contactService.js` and `contactService.spec.js` adding bulk contact deletion (`bulkDeleteContacts`) and CSV payload exporter (`exportContactsAsCsv`). Updated `server.js` adding `POST /contacts/bulk-delete` route and `GET /contacts/export-csv` file attachment download route. Updated `public/index.html` and `public/style.css` adding bulk selection checkboxes, master select-all toggle, and bulk action toolbar (`🗑️ Delete Selected`, `📥 Export CSV`).
+
+## File-by-File Explanation
+- `contactService.js`: Contact CRM service updated with bulk deletion and CSV export generation.
+- `contactService.spec.js`: Vitest unit test suite verifying bulk deletion and CSV payload formatting.
+- `server.js`: Express server updated with `POST /contacts/bulk-delete` and `GET /contacts/export-csv` routes.
+- `public/index.html`: Table layout updated with bulk action toolbar, master checkbox toggle, and CSV download link.
+- `public/style.css`: CSS updated with bulk action button styles and checkbox cell alignment.
+- `CHANGELOG.md`: Logged version 0.2.0 release notes.
+
+## Manual Test Steps
+1. Open [https://htmx-contact-manager-build46.vercel.app](https://htmx-contact-manager-build46.vercel.app).
+2. **Bulk Delete**: Check the master select-all checkbox in `<thead>` (or check individual contact checkboxes) and click **🗑️ Delete Selected**. Confirm prompt to observe selected rows deleted in bulk via HTMX server fragment!
+3. **CSV Export**: Click **📥 Export CSV** to download the full contacts database formatted as a `contacts_vault.csv` file.
+
+## Candidate Next Iterations
+1. **HTMX Active Contact Detail Drawer & Interaction Notes (Iteration 3)**
+   * *Plain English*: Click a contact to slide out a detailed drawer showing interaction notes and email logs.
+   * *Benefit*: Deeper CRM functionality without full page reloads.
+   * *Interview answer*: "I added a sliding contact detail drawer with notes logging."
+2. **Contact Tagging & Category Color Badge Customizer (Iteration 3)**
+   * *Plain English*: Filter contacts by category tags (Sponsor, VIP, Collaborator) with custom color badges.
+   * *Benefit*: Better contact organization for creators & businesses.
+   * *Interview answer*: "I built custom category filtering and color badge tags."
+3. **HTMX Form Validation & Server-Side Toast Error Engine (Iteration 3)**
+   * *Plain English*: Return inline HTML toast notifications for invalid email formats or missing fields.
+   * *Benefit*: Improved user feedback for server-rendered forms.
+   * *Interview answer*: "I built server-rendered HTMX form validation toasts."
+4. **Contact Favoriting & Quick Star Bookmark Bar (Iteration 3)**
+   * *Plain English*: Star favorite contacts to pin them to a top quick-access toolbar.
+   * *Benefit*: Fast access to frequent contacts.
+   * *Interview answer*: "I built contact favoriting and quick bookmark pinning."
+5. **Contact Avatar Image Uploader & Gravatar Integration (Iteration 3)**
+   * *Plain English*: Upload custom contact profile photos or fetch Gravatar images automatically by email.
+   * *Benefit*: Visual contact management.
+   * *Interview answer*: "I built avatar image uploads and Gravatar auto-fetching."
+
+## Chosen Next Iteration
 *None selected yet.*
+

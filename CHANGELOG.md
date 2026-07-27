@@ -5,6 +5,14 @@ All notable changes to the **HTMX Contact Manager** project will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-07-27
+
+### Added
+- Integrated **Interactive Bulk Contact Selection & CSV Export Vault** in `contactService.js` and `server.js`.
+- Added bulk contact deletion (`bulkDeleteContacts`, `POST /contacts/bulk-delete`) and CSV payload exporter (`exportContactsAsCsv`, `GET /contacts/export-csv`).
+- Updated `public/index.html` and `public/style.css` with bulk selection checkboxes, master select-all toggle, and bulk actions toolbar.
+- Added unit tests in `contactService.spec.js`.
+
 ## [0.1.0] - 2026-07-27
 
 ### Added

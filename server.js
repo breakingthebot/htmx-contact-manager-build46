@@ -10,7 +10,9 @@ import {
   getContactById,
   addContact,
   updateContact,
-  deleteContact
+  deleteContact,
+  bulkDeleteContacts,
+  exportContactsAsCsv
 } from './contactService.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -27,6 +29,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 export function renderContactRow(c) {
   return `
     <tr id="contact-row-${c.id}" class="contact-row">
+      <td class="checkbox-cell">
+        <input type="checkbox" name="ids" value="${c.id}" class="contact-checkbox" />
+      </td>
       <td>
         <div class="contact-avatar-name">
           <div class="avatar-circle" style="background-color: ${c.avatarColor}">
@@ -48,6 +53,7 @@ export function renderContactRow(c) {
       </td>
       <td class="action-buttons">
         <button 
+          type="button"
           class="btn-icon btn-edit" 
           hx-get="/contacts/${c.id}/edit" 
           hx-target="#contact-row-${c.id}" 
@@ -57,6 +63,7 @@ export function renderContactRow(c) {
           ✏️
         </button>
         <button 
+          type="button"
           class="btn-icon btn-delete" 
           hx-delete="/contacts/${c.id}" 
           hx-target="#contact-row-${c.id}" 
@@ -74,7 +81,7 @@ export function renderContactRow(c) {
 export function renderEditRow(c) {
   return `
     <tr id="contact-row-${c.id}" class="edit-row">
-      <td colspan="6">
+      <td colspan="7">
         <form 
           hx-put="/contacts/${c.id}" 
           hx-target="#contact-row-${c.id}" 
@@ -123,7 +130,7 @@ app.get('/contacts/search', (req, res) => {
   if (contacts.length === 0) {
     return res.send(`
       <tr>
-        <td colspan="6" class="empty-state">
+        <td colspan="7" class="empty-state">
           🔍 No contacts found matching "<strong>${searchQuery}</strong>"
         </td>
       </tr>
@@ -132,6 +139,38 @@ app.get('/contacts/search', (req, res) => {
 
   const html = contacts.map(renderContactRow).join('');
   res.send(html);
+});
+
+// GET /contacts/export-csv - CSV File Download
+app.get('/contacts/export-csv', (req, res) => {
+  const csvContent = exportContactsAsCsv();
+  res.setHeader('Content-Type', 'text/csv');
+  res.setHeader('Content-Disposition', 'attachment; filename="contacts_vault.csv"');
+  res.status(200).send(csvContent);
+});
+
+// POST /contacts/bulk-delete - Bulk HTMX Delete
+app.post('/contacts/bulk-delete', (req, res) => {
+  let ids = req.body.ids;
+  if (!ids) {
+    return res.send(getAllContacts().map(renderContactRow).join(''));
+  }
+  if (typeof ids === 'string') ids = [ids];
+
+  bulkDeleteContacts(ids);
+  const remaining = getAllContacts();
+
+  if (remaining.length === 0) {
+    return res.send(`
+      <tr>
+        <td colspan="7" class="empty-state">
+          📇 All contacts deleted. Add new contacts above!
+        </td>
+      </tr>
+    `);
+  }
+
+  res.send(remaining.map(renderContactRow).join(''));
 });
 
 // GET /contacts/:id/edit - Render Inline Edit Form Fragment
@@ -183,7 +222,7 @@ app.put('/contacts/:id', (req, res) => {
 // DELETE /contacts/:id - Delete Contact Fragment
 app.delete('/contacts/:id', (req, res) => {
   deleteContact(req.params.id);
-  res.send(''); // Empty string removes element from DOM with hx-swap="outerHTML"
+  res.send('');
 });
 
 // Serve Main Page

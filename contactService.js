@@ -101,6 +101,26 @@ export function deleteContact(id) {
   return contactsStore.length < initialLen;
 }
 
+export function bulkDeleteContacts(ids = []) {
+  if (!Array.isArray(ids) || ids.length === 0) return 0;
+  const initialLen = contactsStore.length;
+  contactsStore = contactsStore.filter(c => !ids.includes(c.id));
+  return initialLen - contactsStore.length;
+}
+
+export function exportContactsAsCsv(ids = null) {
+  const targetContacts = ids && ids.length > 0 
+    ? contactsStore.filter(c => ids.includes(c.id))
+    : contactsStore;
+
+  const headers = 'ID,Name,Email,Phone,Category,Status\n';
+  const rows = targetContacts.map(c => 
+    `"${c.id}","${c.name}","${c.email}","${c.phone}","${c.category}","${c.status}"`
+  ).join('\n');
+
+  return headers + rows;
+}
+
 export function resetContactsStore() {
   contactsStore = [...INITIAL_CONTACTS];
 }

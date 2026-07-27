@@ -9,6 +9,8 @@ import {
   addContact,
   updateContact,
   deleteContact,
+  bulkDeleteContacts,
+  exportContactsAsCsv,
   resetContactsStore
 } from './contactService.js';
 
@@ -55,5 +57,18 @@ describe('contactService', () => {
     const deleted = deleteContact('cnt_1');
     expect(deleted).toBe(true);
     expect(getAllContacts().length).toBe(2);
+  });
+
+  it('deletes multiple contacts in bulk', () => {
+    const count = bulkDeleteContacts(['cnt_1', 'cnt_2']);
+    expect(count).toBe(2);
+    expect(getAllContacts().length).toBe(1);
+  });
+
+  it('exports contacts formatted as CSV payload', () => {
+    const csv = exportContactsAsCsv();
+    expect(csv).toContain('ID,Name,Email,Phone,Category,Status');
+    expect(csv).toContain('Sarah Jenkins');
+    expect(csv).toContain('alex@creatorstudio.io');
   });
 });

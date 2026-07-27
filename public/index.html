@@ -79,57 +79,77 @@
         </form>
       </section>
 
-      <!-- Contacts Table Card -->
+      <!-- Contacts Table Card with Bulk Action Form -->
       <section class="card table-card">
-        <div class="table-toolbar">
-          <div class="toolbar-title">
-            <h2>📇 Contact Vault</h2>
-            <span class="contact-count-badge">Live Fragment Table</span>
+        <form 
+          id="bulk-actions-form"
+          hx-post="/contacts/bulk-delete"
+          hx-target="#contacts-table-body"
+          hx-confirm="Are you sure you want to delete selected contacts?"
+        >
+          <div class="table-toolbar">
+            <div class="toolbar-title">
+              <h2>📇 Contact Vault</h2>
+              <span class="contact-count-badge">Live Fragment Table</span>
+            </div>
+
+            <div class="toolbar-actions">
+              <!-- Bulk Action Controls -->
+              <button type="submit" class="btn-bulk-delete">
+                🗑️ Delete Selected
+              </button>
+              <a href="/contacts/export-csv" class="btn-export-csv" download>
+                📥 Export CSV
+              </a>
+
+              <!-- HTMX Live Search Bar -->
+              <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input 
+                  type="text" 
+                  name="q" 
+                  placeholder="Search by name, email, or category..." 
+                  class="search-input"
+                  hx-get="/contacts/search"
+                  hx-trigger="keyup changed delay:300ms, search"
+                  hx-target="#contacts-table-body"
+                  hx-indicator="#search-spinner"
+                />
+                <span class="htmx-indicator spinner" id="search-spinner"></span>
+              </div>
+            </div>
           </div>
 
-          <!-- HTMX Live Search Bar -->
-          <div class="search-box">
-            <span class="search-icon">🔍</span>
-            <input 
-              type="text" 
-              name="q" 
-              placeholder="Search by name, email, or category..." 
-              class="search-input"
-              hx-get="/contacts/search"
-              hx-trigger="keyup changed delay:300ms, search"
-              hx-target="#contacts-table-body"
-              hx-indicator="#search-spinner"
-            />
-            <span class="htmx-indicator spinner" id="search-spinner"></span>
+          <div class="table-wrapper">
+            <table class="contacts-table">
+              <thead>
+                <tr>
+                  <th class="checkbox-cell">
+                    <input type="checkbox" id="select-all-checkbox" onclick="toggleSelectAll(this)" />
+                  </th>
+                  <th>Contact Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Category</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody 
+                id="contacts-table-body"
+                hx-get="/contacts/search"
+                hx-trigger="load"
+              >
+                <!-- Populated via HTMX Fragment rendering on load -->
+                <tr>
+                  <td colspan="7" class="loading-state">
+                    Loading contacts server fragments...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-        </div>
-
-        <div class="table-wrapper">
-          <table class="contacts-table">
-            <thead>
-              <tr>
-                <th>Contact Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Category</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody 
-              id="contacts-table-body"
-              hx-get="/contacts/search"
-              hx-trigger="load"
-            >
-              <!-- Populated via HTMX Fragment rendering on load -->
-              <tr>
-                <td colspan="6" class="loading-state">
-                  Loading contacts server fragments...
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        </form>
       </section>
     </main>
 
@@ -137,5 +157,12 @@
       <p>Build 46 — HTMX Contact Manager &bull; Powered by Express.js Server Fragments &bull; 0 KB Client JS Framework</p>
     </footer>
   </div>
+
+  <script>
+    function toggleSelectAll(master) {
+      const checkboxes = document.querySelectorAll('.contact-checkbox');
+      checkboxes.forEach(cb => cb.checked = master.checked);
+    }
+  </script>
 </body>
 </html>

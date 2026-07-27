@@ -197,6 +197,50 @@ label {
   gap: 10px;
 }
 
+.toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-bulk-delete {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-bulk-delete:hover {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+.btn-export-csv {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #6ee7b7;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.btn-export-csv:hover {
+  background: #10b981;
+  color: #ffffff;
+}
+
 .contact-count-badge {
   font-size: 11px;
   color: #818cf8;
@@ -208,7 +252,7 @@ label {
 
 .search-box {
   position: relative;
-  width: 320px;
+  width: 260px;
 }
 
 .search-icon {
@@ -225,9 +269,9 @@ label {
   background: #0f172a;
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  padding: 10px 14px 10px 36px;
+  padding: 8px 14px 8px 36px;
   color: var(--text-main);
-  font-size: 13px;
+  font-size: 12px;
   outline: none;
 }
 
@@ -261,6 +305,18 @@ label {
   padding: 14px 16px;
   border-bottom: 1px solid var(--border-color);
   vertical-align: middle;
+}
+
+.checkbox-cell {
+  width: 40px;
+  text-align: center;
+}
+
+.contact-checkbox, #select-all-checkbox {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent-primary);
+  cursor: pointer;
 }
 
 .contact-row {
