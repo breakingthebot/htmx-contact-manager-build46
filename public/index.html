@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTMX Enterprise Contact & Creator Network CRM</title>
+  <link rel="stylesheet" href="/style.css">
+  <!-- HTMX 1.9.12 CDN -->
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-left">
+        <div class="logo-badge">⚡ HTMX 0-JS</div>
+        <div>
+          <h1>HyperScale Contact & Creator Network CRM</h1>
+          <p class="header-subtitle">Server-rendered HTML fragment architecture with zero client-side JS framework</p>
+        </div>
+      </div>
+      <div class="header-right">
+        <span class="htmx-badge">htmx.org active</span>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Add New Contact Form Card -->
+      <section class="card form-card">
+        <div class="card-header">
+          <h2>➕ Add New Contact</h2>
+          <span class="badge-mini">HTML POST Fragment</span>
+        </div>
+        <form 
+          hx-post="/contacts" 
+          hx-target="#contacts-table-body" 
+          hx-swap="afterbegin"
+          hx-on::after-request="if (event.detail.successful) this.reset()"
+          class="add-contact-form"
+        >
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Full Name *</label>
+              <input type="text" name="name" placeholder="e.g. Jordan Lee" required class="form-input">
+            </div>
+            <div class="form-group">
+              <label>Email Address *</label>
+              <input type="email" name="email" placeholder="jordan@partner.com" required class="form-input">
+            </div>
+            <div class="form-group">
+              <label>Phone Number</label>
+              <input type="text" name="phone" placeholder="+1 (555) 345-6789" class="form-input">
+            </div>
+            <div class="form-group">
+              <label>Category</label>
+              <select name="category" class="form-input">
+                <option value="Sponsor">Sponsor</option>
+                <option value="Collaborator">Collaborator</option>
+                <option value="VIP">VIP</option>
+                <option value="Agency">Agency</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Status</label>
+              <select name="status" class="form-input">
+                <option value="Active">Active</option>
+                <option value="Pending">Pending</option>
+                <option value="Archived">Archived</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">
+              <span class="htmx-indicator spinner" id="add-spinner"></span>
+              ✨ Create Contact
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Contacts Table Card -->
+      <section class="card table-card">
+        <div class="table-toolbar">
+          <div class="toolbar-title">
+            <h2>📇 Contact Vault</h2>
+            <span class="contact-count-badge">Live Fragment Table</span>
+          </div>
+
+          <!-- HTMX Live Search Bar -->
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input 
+              type="text" 
+              name="q" 
+              placeholder="Search by name, email, or category..." 
+              class="search-input"
+              hx-get="/contacts/search"
+              hx-trigger="keyup changed delay:300ms, search"
+              hx-target="#contacts-table-body"
+              hx-indicator="#search-spinner"
+            />
+            <span class="htmx-indicator spinner" id="search-spinner"></span>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="contacts-table">
+            <thead>
+              <tr>
+                <th>Contact Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody 
+              id="contacts-table-body"
+              hx-get="/contacts/search"
+              hx-trigger="load"
+            >
+              <!-- Populated via HTMX Fragment rendering on load -->
+              <tr>
+                <td colspan="6" class="loading-state">
+                  Loading contacts server fragments...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <p>Build 46 — HTMX Contact Manager &bull; Powered by Express.js Server Fragments &bull; 0 KB Client JS Framework</p>
+    </footer>
+  </div>
+</body>
+</html>

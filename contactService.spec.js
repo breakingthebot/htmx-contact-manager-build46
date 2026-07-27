@@ -1,0 +1,59 @@
+// contactService.spec.js
+// Unit tests for contactService.
+// Created: 2026-07-27
+
+import { describe, it, expect, beforeEach } from 'vitest';
+import {
+  getAllContacts,
+  getContactById,
+  addContact,
+  updateContact,
+  deleteContact,
+  resetContactsStore
+} from './contactService.js';
+
+describe('contactService', () => {
+  beforeEach(() => {
+    resetContactsStore();
+  });
+
+  it('retrieves initial list of contacts', () => {
+    const contacts = getAllContacts();
+    expect(contacts.length).toBe(3);
+    expect(contacts[0].name).toBe('Sarah Jenkins');
+  });
+
+  it('filters contacts by search query', () => {
+    const filtered = getAllContacts('Alex');
+    expect(filtered.length).toBe(1);
+    expect(filtered[0].email).toBe('alex@creatorstudio.io');
+  });
+
+  it('adds a new contact successfully', () => {
+    const newContact = addContact({
+      name: 'Marcus Vance',
+      email: 'marcus@vance.io',
+      phone: '+1 (555) 999-1111',
+      category: 'Sponsor',
+      status: 'Active'
+    });
+
+    expect(newContact.id).toBeDefined();
+    expect(getAllContacts().length).toBe(4);
+  });
+
+  it('throws error when adding contact without name or email', () => {
+    expect(() => addContact({ name: '', email: '' })).toThrow();
+  });
+
+  it('updates an existing contact', () => {
+    const updated = updateContact('cnt_1', { name: 'Sarah Jenkins-Smith' });
+    expect(updated.name).toBe('Sarah Jenkins-Smith');
+  });
+
+  it('deletes a contact', () => {
+    const deleted = deleteContact('cnt_1');
+    expect(deleted).toBe(true);
+    expect(getAllContacts().length).toBe(2);
+  });
+});
