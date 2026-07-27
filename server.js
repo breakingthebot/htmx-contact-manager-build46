@@ -9,6 +9,7 @@ import {
   getAllContacts,
   getFavoriteContacts,
   toggleFavoriteContact,
+  updateContactAvatar,
   getCategoryStats,
   getContactById,
   addContact,
@@ -40,6 +41,17 @@ export function renderToastNotification(type, message) {
   `;
 }
 
+export function renderAvatarImg(c, sizeClass = '') {
+  if (c.avatarUrl) {
+    return `<img src="${c.avatarUrl}" alt="${c.name}" class="avatar-img ${sizeClass}" style="border-color: ${c.avatarColor}" />`;
+  }
+  return `
+    <div class="avatar-circle ${sizeClass}" style="background-color: ${c.avatarColor}">
+      ${c.name.charAt(0).toUpperCase()}
+    </div>
+  `;
+}
+
 export function renderFavoritesBar() {
   const favorites = getFavoriteContacts();
   if (favorites.length === 0) {
@@ -57,7 +69,7 @@ export function renderFavoritesBar() {
             hx-get="/contacts/${f.id}/drawer" 
             hx-target="#contact-drawer-container"
           >
-            <span class="fav-avatar" style="background-color: ${f.avatarColor}">${f.name.charAt(0)}</span>
+            ${renderAvatarImg(f, 'avatar-mini')}
             <span class="fav-name">${f.name}</span>
           </button>
         `).join('')}
@@ -84,9 +96,7 @@ export function renderContactRow(c) {
           >
             ${c.isFavorite ? '⭐' : '☆'}
           </button>
-          <div class="avatar-circle" style="background-color: ${c.avatarColor}">
-            ${c.name.charAt(0).toUpperCase()}
-          </div>
+          ${renderAvatarImg(c)}
           <div>
             <div class="contact-name">${c.name}</div>
             <div class="contact-id">${c.id}</div>
@@ -224,9 +234,7 @@ export function renderContactDrawer(c) {
     <div class="drawer-panel">
       <div class="drawer-header">
         <div class="drawer-user-info">
-          <div class="avatar-circle avatar-large" style="background-color: ${c.avatarColor}">
-            ${c.name.charAt(0).toUpperCase()}
-          </div>
+          ${renderAvatarImg(c, 'avatar-large')}
           <div>
             <h3>${c.name} ${c.isFavorite ? '⭐' : ''}</h3>
             <p class="drawer-email">${c.email}</p>
@@ -408,7 +416,8 @@ app.post('/contacts', (req, res) => {
       email: req.body.email,
       phone: req.body.phone,
       category: req.body.category,
-      status: req.body.status
+      status: req.body.status,
+      avatarUrl: req.body.avatarUrl
     });
     res.setHeader('HX-Trigger', 'contactCreated');
     res.send(renderContactRow(newContact));
@@ -425,7 +434,8 @@ app.put('/contacts/:id', (req, res) => {
       email: req.body.email,
       phone: req.body.phone,
       category: req.body.category,
-      status: req.body.status
+      status: req.body.status,
+      avatarUrl: req.body.avatarUrl
     });
     res.setHeader('HX-Trigger', 'favoriteToggled');
     res.send(renderContactRow(updated));

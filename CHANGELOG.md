@@ -5,6 +5,14 @@ All notable changes to the **HTMX Contact Manager** project will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0] - 2026-07-27
+
+### Added
+- Integrated **Contact Avatar Image Uploader & Gravatar Integration** in `contactService.js` and `server.js`.
+- Added auto-generated Gravatar / Identicon URL generator (`generateGravatarUrl`), `renderAvatarImg` HTML fragment helper, and custom avatar update capabilities.
+- Updated `public/index.html` and `public/style.css` with circular contact avatar profile images in table rows, detail drawer, and top favorites toolbar.
+- Added unit tests in `contactService.spec.js`.
+
 ## [0.6.0] - 2026-07-27
 
 ### Added

@@ -283,7 +283,55 @@ Updated `contactService.js` and `contactService.spec.js` with contact favoriting
    * *Interview answer*: "I built server-rendered HTMX pagination controls."
 
 ## Chosen Next Iteration
+Option 1: Contact Avatar Image Uploader & Gravatar Integration (Iteration 7).
+
+---
+
+# Build Notes - Build 46 Iteration 7 (2026-07-27)
+
+Implemented Contact Avatar Image Uploader & Gravatar Integration.
+
+## Summary
+Updated `contactService.js` and `contactService.spec.js` with auto-generated Dicebear / Gravatar Identicon URLs (`generateGravatarUrl(email)`) and custom avatar update capabilities (`updateContactAvatar`). Updated `server.js` with avatar image fragment helpers (`renderAvatarImg`). Updated `public/index.html` and `public/style.css` adding visual contact avatars across table rows, slide-out drawer header, and starred favorites toolbar.
+
+## File-by-File Explanation
+- `contactService.js`: Contact CRM service updated with Gravatar / Identicon SVG URL generator and custom avatar updates.
+- `contactService.spec.js`: Vitest unit test suite verifying Gravatar URL creation and avatar photo updates.
+- `server.js`: Express server updated with `renderAvatarImg` helper to render contact profile images.
+- `public/index.html`: Table rows, detail drawer, and top favorites bar updated to display contact avatar photos.
+- `public/style.css`: CSS updated with `.avatar-img`, `.avatar-mini`, `.avatar-large` circular image borders.
+- `CHANGELOG.md`: Logged version 0.7.0 release notes.
+
+## Manual Test Steps
+1. Open [https://htmx-contact-manager-build46.vercel.app](https://htmx-contact-manager-build46.vercel.app).
+2. **View Avatars**: Observe each contact row, top favorites bar, and detail drawer render unique visual profile photos generated automatically via Gravatar / Identicon!
+3. **Add Contact Avatar**: Create a new contact and observe their unique avatar generated instantly based on their email hash.
+
+## Candidate Next Iterations
+1. **Contact Activity Audit Timeline (Iteration 8)**
+   * *Plain English*: View chronological timeline of contact edits, notes, and status changes.
+   * *Benefit*: Full audit trail for CRM activities.
+   * *Interview answer*: "I built a contact activity audit timeline logger."
+2. **Contact Import via JSON Payload Vault (Iteration 8)**
+   * *Plain English*: Import contacts in bulk by uploading or pasting JSON contact arrays.
+   * *Benefit*: Batch contact onboarding.
+   * *Interview answer*: "I built a JSON contact payload importer."
+3. **Contact Field Sorting & Multi-Column Reordering (Iteration 8)**
+   * *Plain English*: Click table column headers (Name, Email, Status) to sort contacts dynamically.
+   * *Benefit*: Flexible table data organization.
+   * *Interview answer*: "I built dynamic table column sorting for HTMX fragments."
+4. **Contact Pagination & Items-Per-Page Selector (Iteration 8)**
+   * *Plain English*: Paginate large contact lists (10, 25, 50 per page) with server-rendered HTML page controls.
+   * *Benefit*: Performance optimization for massive contact databases.
+   * *Interview answer*: "I built server-rendered HTMX pagination controls."
+5. **Contact Field Customizer & Custom Key-Value Attributes (Iteration 8)**
+   * *Plain English*: Add custom key-value metadata fields (e.g. Instagram Handle, Budget) to contacts.
+   * *Benefit*: Extensible contact metadata.
+   * *Interview answer*: "I built extensible key-value attribute fields."
+
+## Chosen Next Iteration
 *None selected yet.*
+
 
 
 

@@ -7,6 +7,8 @@ import {
   getAllContacts,
   getFavoriteContacts,
   toggleFavoriteContact,
+  generateGravatarUrl,
+  updateContactAvatar,
   getCategoryStats,
   getContactById,
   addContact,
@@ -28,6 +30,17 @@ describe('contactService', () => {
     const contacts = getAllContacts();
     expect(contacts.length).toBe(3);
     expect(contacts[0].name).toBe('Sarah Jenkins');
+  });
+
+  it('generates Gravatar / Identicon URLs correctly', () => {
+    const url = generateGravatarUrl('test@example.com');
+    expect(url).toContain('dicebear.com');
+    expect(url).toContain('test%40example.com');
+  });
+
+  it('updates contact custom avatar URL', () => {
+    const updated = updateContactAvatar('cnt_1', 'https://example.com/avatar.jpg');
+    expect(updated.avatarUrl).toBe('https://example.com/avatar.jpg');
   });
 
   it('retrieves favorite contacts list', () => {
@@ -78,6 +91,7 @@ describe('contactService', () => {
     });
 
     expect(newContact.id).toBeDefined();
+    expect(newContact.avatarUrl).toBeDefined();
     expect(getAllContacts().length).toBe(4);
   });
 

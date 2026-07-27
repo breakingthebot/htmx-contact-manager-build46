@@ -537,6 +537,27 @@ label {
   gap: 12px;
 }
 
+.avatar-img {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--accent-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.avatar-img.avatar-mini {
+  width: 20px;
+  height: 20px;
+  border-width: 1px;
+}
+
+.avatar-img.avatar-large {
+  width: 48px;
+  height: 48px;
+  border-width: 2px;
+}
+
 .avatar-circle {
   width: 34px;
   height: 34px;

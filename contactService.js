@@ -18,11 +18,17 @@
  * @property {'Sponsor' | 'Collaborator' | 'VIP' | 'Agency'} category
  * @property {'Active' | 'Pending' | 'Archived'} status
  * @property {string} avatarColor
+ * @property {string} avatarUrl
  * @property {boolean} isFavorite
  * @property {ContactNote[]} notes
  */
 
 const AVATAR_COLORS = ['#6366f1', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6', '#06b6d4'];
+
+export function generateGravatarUrl(email) {
+  const cleanEmail = (email || '').trim().toLowerCase();
+  return `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(cleanEmail)}`;
+}
 
 /** @type {Contact[]} */
 const INITIAL_CONTACTS = [
@@ -34,6 +40,7 @@ const INITIAL_CONTACTS = [
     category: 'Sponsor',
     status: 'Active',
     avatarColor: '#6366f1',
+    avatarUrl: generateGravatarUrl('sarah.jenkins@brandpartners.com'),
     isFavorite: true,
     notes: [
       { id: 'note_1', text: 'Discussed Q3 YouTube sponsorship package rates.', createdAt: '2026-07-20 14:30' }
@@ -47,6 +54,7 @@ const INITIAL_CONTACTS = [
     category: 'Collaborator',
     status: 'Active',
     avatarColor: '#10b981',
+    avatarUrl: generateGravatarUrl('alex@creatorstudio.io'),
     isFavorite: true,
     notes: [
       { id: 'note_2', text: 'Confirmed co-hosting collaborative livestream next Tuesday.', createdAt: '2026-07-22 10:15' }
@@ -60,6 +68,7 @@ const INITIAL_CONTACTS = [
     category: 'Agency',
     status: 'Pending',
     avatarColor: '#f59e0b',
+    avatarUrl: generateGravatarUrl('elena@talentagency.net'),
     isFavorite: false,
     notes: []
   }
@@ -114,6 +123,16 @@ export function toggleFavoriteContact(id) {
   return contact;
 }
 
+export function updateContactAvatar(id, avatarUrl) {
+  const contact = getContactById(id);
+  if (!contact) {
+    throw new Error(`Contact with ID ${id} not found`);
+  }
+
+  contact.avatarUrl = avatarUrl ? avatarUrl.trim() : generateGravatarUrl(contact.email);
+  return contact;
+}
+
 export function getCategoryStats() {
   const counts = { All: contactsStore.length, Sponsor: 0, Collaborator: 0, VIP: 0, Agency: 0 };
   contactsStore.forEach(c => {
@@ -131,14 +150,17 @@ export function getContactById(id) {
 export function addContact(data) {
   validateContactInput(data);
 
+  const cleanEmail = data.email.trim();
+
   const newContact = {
     id: `cnt_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
     name: data.name.trim(),
-    email: data.email.trim(),
+    email: cleanEmail,
     phone: data.phone ? data.phone.trim() : '+1 (555) 000-0000',
     category: data.category || 'VIP',
     status: data.status || 'Active',
     avatarColor: AVATAR_COLORS[Math.floor(Math.random() * AVATAR_COLORS.length)],
+    avatarUrl: data.avatarUrl ? data.avatarUrl.trim() : generateGravatarUrl(cleanEmail),
     isFavorite: false,
     notes: []
   };
@@ -179,11 +201,14 @@ export function updateContact(id, updates) {
     });
   }
 
+  const newEmail = updates.email ? updates.email.trim() : contactsStore[index].email;
+
   contactsStore[index] = {
     ...contactsStore[index],
     ...updates,
     name: updates.name ? updates.name.trim() : contactsStore[index].name,
-    email: updates.email ? updates.email.trim() : contactsStore[index].email
+    email: newEmail,
+    avatarUrl: updates.avatarUrl ? updates.avatarUrl.trim() : (updates.email ? generateGravatarUrl(newEmail) : contactsStore[index].avatarUrl)
   };
 
   return contactsStore[index];
@@ -207,9 +232,9 @@ export function exportContactsAsCsv(ids = null) {
     ? contactsStore.filter(c => ids.includes(c.id))
     : contactsStore;
 
-  const headers = 'ID,Name,Email,Phone,Category,Status\n';
+  const headers = 'ID,Name,Email,Phone,Category,Status,AvatarURL\n';
   const rows = targetContacts.map(c => 
-    `"${c.id}","${c.name}","${c.email}","${c.phone}","${c.category}","${c.status}"`
+    `"${c.id}","${c.name}","${c.email}","${c.phone}","${c.category}","${c.status}","${c.avatarUrl}"`
   ).join('\n');
 
   return headers + rows;
