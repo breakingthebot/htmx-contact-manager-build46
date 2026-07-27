@@ -18,6 +18,7 @@
  * @property {'Sponsor' | 'Collaborator' | 'VIP' | 'Agency'} category
  * @property {'Active' | 'Pending' | 'Archived'} status
  * @property {string} avatarColor
+ * @property {boolean} isFavorite
  * @property {ContactNote[]} notes
  */
 
@@ -33,6 +34,7 @@ const INITIAL_CONTACTS = [
     category: 'Sponsor',
     status: 'Active',
     avatarColor: '#6366f1',
+    isFavorite: true,
     notes: [
       { id: 'note_1', text: 'Discussed Q3 YouTube sponsorship package rates.', createdAt: '2026-07-20 14:30' }
     ]
@@ -45,6 +47,7 @@ const INITIAL_CONTACTS = [
     category: 'Collaborator',
     status: 'Active',
     avatarColor: '#10b981',
+    isFavorite: true,
     notes: [
       { id: 'note_2', text: 'Confirmed co-hosting collaborative livestream next Tuesday.', createdAt: '2026-07-22 10:15' }
     ]
@@ -57,6 +60,7 @@ const INITIAL_CONTACTS = [
     category: 'Agency',
     status: 'Pending',
     avatarColor: '#f59e0b',
+    isFavorite: false,
     notes: []
   }
 ];
@@ -96,6 +100,20 @@ export function getAllContacts(searchQuery = '', categoryFilter = 'All') {
   return result;
 }
 
+export function getFavoriteContacts() {
+  return contactsStore.filter(c => c.isFavorite);
+}
+
+export function toggleFavoriteContact(id) {
+  const contact = getContactById(id);
+  if (!contact) {
+    throw new Error(`Contact with ID ${id} not found`);
+  }
+
+  contact.isFavorite = !contact.isFavorite;
+  return contact;
+}
+
 export function getCategoryStats() {
   const counts = { All: contactsStore.length, Sponsor: 0, Collaborator: 0, VIP: 0, Agency: 0 };
   contactsStore.forEach(c => {
@@ -121,6 +139,7 @@ export function addContact(data) {
     category: data.category || 'VIP',
     status: data.status || 'Active',
     avatarColor: AVATAR_COLORS[Math.floor(Math.random() * AVATAR_COLORS.length)],
+    isFavorite: false,
     notes: []
   };
 

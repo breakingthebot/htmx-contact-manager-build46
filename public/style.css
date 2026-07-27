@@ -95,6 +95,77 @@ body {
   color: #ffffff;
 }
 
+/* Starred Favorites Toolbar */
+.favorites-bar-wrapper {
+  margin-bottom: 20px;
+}
+
+.favorites-bar-inner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  backdrop-filter: blur(12px);
+}
+
+.favorites-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #f59e0b;
+  white-space: nowrap;
+}
+
+.favorites-pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.fav-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: #0f172a;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  color: #fef08a;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.fav-pill:hover {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: #f59e0b;
+  transform: translateY(-1px);
+}
+
+.fav-avatar {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  color: #ffffff;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-favorites {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-style: italic;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: rgba(30, 41, 59, 0.4);
+  border: 1px dashed var(--border-color);
+}
+
 /* Header */
 .app-header {
   display: flex;
@@ -430,6 +501,28 @@ label {
 
 .contact-row:hover {
   background: rgba(30, 41, 59, 0.4);
+}
+
+.row-favorite {
+  background: rgba(245, 158, 11, 0.05);
+}
+
+.btn-star {
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: var(--text-muted);
+  padding: 2px 4px;
+  transition: transform 0.2s;
+}
+
+.btn-star.active {
+  color: #f59e0b;
+}
+
+.btn-star:hover {
+  transform: scale(1.2);
 }
 
 /* HTMX Swapping animation */

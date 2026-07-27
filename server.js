@@ -7,6 +7,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import {
   getAllContacts,
+  getFavoriteContacts,
+  toggleFavoriteContact,
   getCategoryStats,
   getContactById,
   addContact,
@@ -38,14 +40,50 @@ export function renderToastNotification(type, message) {
   `;
 }
 
+export function renderFavoritesBar() {
+  const favorites = getFavoriteContacts();
+  if (favorites.length === 0) {
+    return `<div class="empty-favorites">⭐ No starred favorite contacts yet. Click ☆ on any contact row to pin!</div>`;
+  }
+
+  return `
+    <div class="favorites-bar-inner">
+      <span class="favorites-title">⭐ Starred Favorites:</span>
+      <div class="favorites-pills">
+        ${favorites.map(f => `
+          <button 
+            type="button" 
+            class="fav-pill" 
+            hx-get="/contacts/${f.id}/drawer" 
+            hx-target="#contact-drawer-container"
+          >
+            <span class="fav-avatar" style="background-color: ${f.avatarColor}">${f.name.charAt(0)}</span>
+            <span class="fav-name">${f.name}</span>
+          </button>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
 export function renderContactRow(c) {
   return `
-    <tr id="contact-row-${c.id}" class="contact-row">
+    <tr id="contact-row-${c.id}" class="contact-row ${c.isFavorite ? 'row-favorite' : ''}">
       <td class="checkbox-cell">
         <input type="checkbox" name="ids" value="${c.id}" class="contact-checkbox" />
       </td>
       <td>
         <div class="contact-avatar-name">
+          <button 
+            type="button"
+            class="btn-star ${c.isFavorite ? 'active' : ''}"
+            hx-post="/contacts/${c.id}/favorite"
+            hx-target="#contact-row-${c.id}"
+            hx-swap="outerHTML"
+            title="${c.isFavorite ? 'Unstar Contact' : 'Star Contact'}"
+          >
+            ${c.isFavorite ? '⭐' : '☆'}
+          </button>
           <div class="avatar-circle" style="background-color: ${c.avatarColor}">
             ${c.name.charAt(0).toUpperCase()}
           </div>
@@ -190,7 +228,7 @@ export function renderContactDrawer(c) {
             ${c.name.charAt(0).toUpperCase()}
           </div>
           <div>
-            <h3>${c.name}</h3>
+            <h3>${c.name} ${c.isFavorite ? '⭐' : ''}</h3>
             <p class="drawer-email">${c.email}</p>
           </div>
         </div>
@@ -249,6 +287,22 @@ export function renderContactDrawer(c) {
 }
 
 // HTMX Server Routes
+
+// GET /contacts/favorites-bar - Starred Favorites Bar
+app.get('/contacts/favorites-bar', (req, res) => {
+  res.send(renderFavoritesBar());
+});
+
+// POST /contacts/:id/favorite - Toggle Favorite State
+app.post('/contacts/:id/favorite', (req, res) => {
+  try {
+    const contact = toggleFavoriteContact(req.params.id);
+    res.setHeader('HX-Trigger', 'favoriteToggled');
+    res.send(renderContactRow(contact));
+  } catch (err) {
+    res.status(400).send(renderToastNotification('error', err.message));
+  }
+});
 
 // GET /contacts/categories - Category Pills Bar
 app.get('/contacts/categories', (req, res) => {
@@ -316,6 +370,7 @@ app.post('/contacts/bulk-delete', (req, res) => {
   if (typeof ids === 'string') ids = [ids];
 
   bulkDeleteContacts(ids);
+  res.setHeader('HX-Trigger', 'favoriteToggled');
   const remaining = getAllContacts();
 
   if (remaining.length === 0) {
@@ -372,6 +427,7 @@ app.put('/contacts/:id', (req, res) => {
       category: req.body.category,
       status: req.body.status
     });
+    res.setHeader('HX-Trigger', 'favoriteToggled');
     res.send(renderContactRow(updated));
   } catch (err) {
     res.status(400).send(renderToastNotification('error', err.message));
@@ -381,6 +437,7 @@ app.put('/contacts/:id', (req, res) => {
 // DELETE /contacts/:id - Delete Contact Fragment
 app.delete('/contacts/:id', (req, res) => {
   deleteContact(req.params.id);
+  res.setHeader('HX-Trigger', 'favoriteToggled');
   res.send('');
 });
 

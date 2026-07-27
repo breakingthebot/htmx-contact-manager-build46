@@ -235,7 +235,56 @@ Updated `contactService.js` and `contactService.spec.js` with input validation r
    * *Interview answer*: "I built dynamic table column sorting for HTMX fragments."
 
 ## Chosen Next Iteration
+Option 1: Contact Favoriting & Quick Star Bookmark Bar (Iteration 6).
+
+---
+
+# Build Notes - Build 46 Iteration 6 (2026-07-27)
+
+Implemented Contact Favoriting & Quick Star Bookmark Bar.
+
+## Summary
+Updated `contactService.js` and `contactService.spec.js` with contact favoriting boolean flag (`isFavorite`), `toggleFavoriteContact(id)`, and `getFavoriteContacts()`. Updated `server.js` with favorites bar fragment controller (`renderFavoritesBar`, `GET /contacts/favorites-bar`, `POST /contacts/:id/favorite`). Updated `public/index.html` and `public/style.css` adding top quick-access starred favorites toolbar, star toggle button (`⭐` / `☆`), and favorite row highlight styling.
+
+## File-by-File Explanation
+- `contactService.js`: Contact CRM service updated with favorite state toggling and favorite list retrieval.
+- `contactService.spec.js`: Vitest unit test suite verifying favoriting logic and favorite list queries.
+- `server.js`: Express server updated with favorites bar fragment route and star toggle endpoint.
+- `public/index.html`: Added `<div id="favorites-bar-container"></div>` target container reloaded on `favoriteToggled`.
+- `public/style.css`: CSS updated with star button animations, golden favorite row highlights, and quick-access pill styles.
+- `CHANGELOG.md`: Logged version 0.6.0 release notes.
+
+## Manual Test Steps
+1. Open [https://htmx-contact-manager-build46.vercel.app](https://htmx-contact-manager-build46.vercel.app).
+2. **Toggle Star**: Click **☆** next to any contact name on the table to star them.
+3. Observe the star turn **⭐** gold and the contact pin instantly to the top *Starred Favorites Bar* via HTMX server fragment!
+4. **Quick Open**: Click any pinned favorite pill in the top bar to open their detail drawer immediately.
+
+## Candidate Next Iterations
+1. **Contact Avatar Image Uploader & Gravatar Integration (Iteration 7)**
+   * *Plain English*: Upload custom contact profile photos or fetch Gravatar images automatically by email.
+   * *Benefit*: Visual contact management.
+   * *Interview answer*: "I built avatar image uploads and Gravatar auto-fetching."
+2. **Contact Activity Audit Timeline (Iteration 7)**
+   * *Plain English*: View chronological timeline of contact edits, notes, and status changes.
+   * *Benefit*: Full audit trail for CRM activities.
+   * *Interview answer*: "I built a contact activity audit timeline logger."
+3. **Contact Import via JSON Payload Vault (Iteration 7)**
+   * *Plain English*: Import contacts in bulk by uploading or pasting JSON contact arrays.
+   * *Benefit*: Batch contact onboarding.
+   * *Interview answer*: "I built a JSON contact payload importer."
+4. **Contact Field Sorting & Multi-Column Reordering (Iteration 7)**
+   * *Plain English*: Click table column headers (Name, Email, Status) to sort contacts dynamically.
+   * *Benefit*: Flexible table data organization.
+   * *Interview answer*: "I built dynamic table column sorting for HTMX fragments."
+5. **Contact Pagination & Items-Per-Page Selector (Iteration 7)**
+   * *Plain English*: Paginate large contact lists (10, 25, 50 per page) with server-rendered HTML page controls.
+   * *Benefit*: Performance optimization for massive contact databases.
+   * *Interview answer*: "I built server-rendered HTMX pagination controls."
+
+## Chosen Next Iteration
 *None selected yet.*
+
 
 
 

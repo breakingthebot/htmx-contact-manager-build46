@@ -5,6 +5,8 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import {
   getAllContacts,
+  getFavoriteContacts,
+  toggleFavoriteContact,
   getCategoryStats,
   getContactById,
   addContact,
@@ -26,6 +28,18 @@ describe('contactService', () => {
     const contacts = getAllContacts();
     expect(contacts.length).toBe(3);
     expect(contacts[0].name).toBe('Sarah Jenkins');
+  });
+
+  it('retrieves favorite contacts list', () => {
+    const favorites = getFavoriteContacts();
+    expect(favorites.length).toBe(2);
+    expect(favorites[0].isFavorite).toBe(true);
+  });
+
+  it('toggles contact favorite state correctly', () => {
+    const updated = toggleFavoriteContact('cnt_3');
+    expect(updated.isFavorite).toBe(true);
+    expect(getFavoriteContacts().length).toBe(3);
   });
 
   it('validates email format regex correctly', () => {

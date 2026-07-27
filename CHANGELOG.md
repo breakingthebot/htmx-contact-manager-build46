@@ -5,6 +5,14 @@ All notable changes to the **HTMX Contact Manager** project will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2026-07-27
+
+### Added
+- Integrated **Contact Favoriting & Quick Star Bookmark Bar** in `contactService.js` and `server.js`.
+- Added favorite state toggling (`toggleFavoriteContact`, `POST /contacts/:id/favorite`) and quick-access favorites bar fragment (`renderFavoritesBar`, `GET /contacts/favorites-bar`).
+- Updated `public/index.html` and `public/style.css` with top starred favorites bar, star toggle button (`⭐`/`☆`), and favorite row highlight styles.
+- Added unit tests in `contactService.spec.js`.
+
 ## [0.5.0] - 2026-07-27
 
 ### Added

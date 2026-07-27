@@ -84,6 +84,11 @@
         </form>
       </section>
 
+      <!-- Starred Favorites Quick-Access Bar -->
+      <div id="favorites-bar-container" class="favorites-bar-wrapper" hx-get="/contacts/favorites-bar" hx-trigger="load, favoriteToggled from:body">
+        <!-- Rendered via HTMX Fragment -->
+      </div>
+
       <!-- Category Filter Pills Bar -->
       <div id="category-pills-bar" class="category-pills-container" hx-get="/contacts/categories" hx-trigger="load, contactCreated from:body">
         <!-- Rendered via HTMX Fragment -->
