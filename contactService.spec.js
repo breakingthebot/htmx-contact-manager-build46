@@ -5,6 +5,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import {
   getAllContacts,
+  getCategoryStats,
   getContactById,
   addContact,
   addContactNote,
@@ -30,6 +31,21 @@ describe('contactService', () => {
     const filtered = getAllContacts('Alex');
     expect(filtered.length).toBe(1);
     expect(filtered[0].email).toBe('alex@creatorstudio.io');
+  });
+
+  it('filters contacts by category tag', () => {
+    const sponsors = getAllContacts('', 'Sponsor');
+    expect(sponsors.length).toBe(1);
+    expect(sponsors[0].name).toBe('Sarah Jenkins');
+  });
+
+  it('calculates category stats correctly', () => {
+    const stats = getCategoryStats();
+    expect(stats.All).toBe(3);
+    expect(stats.Sponsor).toBe(1);
+    expect(stats.Collaborator).toBe(1);
+    expect(stats.Agency).toBe(1);
+    expect(stats.VIP).toBe(0);
   });
 
   it('adds a new contact successfully', () => {

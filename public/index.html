@@ -79,6 +79,11 @@
         </form>
       </section>
 
+      <!-- Category Filter Pills Bar -->
+      <div id="category-pills-bar" class="category-pills-container" hx-get="/contacts/categories" hx-trigger="load, after-request from:body">
+        <!-- Rendered via HTMX Fragment -->
+      </div>
+
       <!-- Contacts Table Card with Bulk Action Form -->
       <section class="card table-card">
         <form 
@@ -165,6 +170,11 @@
     function toggleSelectAll(master) {
       const checkboxes = document.querySelectorAll('.contact-checkbox');
       checkboxes.forEach(cb => cb.checked = master.checked);
+    }
+
+    function setActiveCategoryPill(btn) {
+      document.querySelectorAll('.category-pill').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
     }
   </script>
 </body>

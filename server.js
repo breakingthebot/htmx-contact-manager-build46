@@ -7,6 +7,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import {
   getAllContacts,
+  getCategoryStats,
   getContactById,
   addContact,
   addContactNote,
@@ -130,6 +131,29 @@ export function renderEditRow(c) {
   `;
 }
 
+export function renderCategoryPills(activeCategory = 'All') {
+  const stats = getCategoryStats();
+  const categories = ['All', 'Sponsor', 'Collaborator', 'VIP', 'Agency'];
+
+  return categories.map(cat => {
+    const isActive = cat === activeCategory;
+    const count = stats[cat] || 0;
+    return `
+      <button 
+        type="button"
+        class="category-pill ${isActive ? 'active' : ''} category-pill-${cat.toLowerCase()}"
+        hx-get="/contacts/search?category=${cat}"
+        hx-target="#contacts-table-body"
+        hx-swap="innerHTML"
+        onclick="setActiveCategoryPill(this)"
+      >
+        <span>${cat}</span>
+        <span class="pill-count">${count}</span>
+      </button>
+    `;
+  }).join('');
+}
+
 export function renderNotesList(notes) {
   if (!notes || notes.length === 0) {
     return `<div class="empty-notes">📝 No interaction notes recorded yet.</div>`;
@@ -215,7 +239,13 @@ export function renderContactDrawer(c) {
 
 // HTMX Server Routes
 
-// GET /contacts/clear-drawer - Close drawer by clearing container
+// GET /contacts/categories - Category Pills Bar
+app.get('/contacts/categories', (req, res) => {
+  const activeCat = req.query.active || 'All';
+  res.send(renderCategoryPills(activeCat));
+});
+
+// GET /contacts/clear-drawer - Close drawer
 app.get('/contacts/clear-drawer', (req, res) => {
   res.send('');
 });
@@ -238,16 +268,17 @@ app.post('/contacts/:id/notes', (req, res) => {
   }
 });
 
-// GET /contacts/search - Live HTMX Search
+// GET /contacts/search - Live HTMX Search & Category Filter
 app.get('/contacts/search', (req, res) => {
   const searchQuery = req.query.q || '';
-  const contacts = getAllContacts(searchQuery);
+  const category = req.query.category || 'All';
+  const contacts = getAllContacts(searchQuery, category);
 
   if (contacts.length === 0) {
     return res.send(`
       <tr>
         <td colspan="7" class="empty-state">
-          🔍 No contacts found matching "<strong>${searchQuery}</strong>"
+          🔍 No contacts found matching category "${category}" ${searchQuery ? `and query "${searchQuery}"` : ''}
         </td>
       </tr>
     `);

@@ -139,6 +139,55 @@ Updated `contactService.js` and `contactService.spec.js` extending contact data 
    * *Interview answer*: "I built a contact activity audit timeline logger."
 
 ## Chosen Next Iteration
+Option 1: Contact Tagging & Category Color Badge Customizer (Iteration 4).
+
+---
+
+# Build Notes - Build 46 Iteration 4 (2026-07-27)
+
+Implemented Contact Tagging & Category Color Badge Customizer.
+
+## Summary
+Updated `contactService.js` and `contactService.spec.js` with category filtering (`getAllContacts(searchQuery, categoryFilter)`) and category stats calculation (`getCategoryStats`: `All`, `Sponsor`, `Collaborator`, `VIP`, `Agency`). Updated `server.js` with category pills fragment controller (`renderCategoryPills`, `GET /contacts/categories`). Updated `public/index.html` and `public/style.css` with interactive category filter bar above the table, pill count badges, and category color badge highlights.
+
+## File-by-File Explanation
+- `contactService.js`: Contact CRM service updated with category tag filtering and category counts.
+- `contactService.spec.js`: Vitest unit test suite verifying category filtering and stats calculation.
+- `server.js`: Express server updated with category pills fragment route.
+- `public/index.html`: Added category pills container (`<div id="category-pills-bar"></div>`).
+- `public/style.css`: CSS updated with category filter pill styles and active category glow states.
+- `CHANGELOG.md`: Logged version 0.4.0 release notes.
+
+## Manual Test Steps
+1. Open [https://htmx-contact-manager-build46.vercel.app](https://htmx-contact-manager-build46.vercel.app).
+2. **Category Filter**: Click **Sponsor**, **Collaborator**, or **Agency** pills above the contact table.
+3. Observe the contact table update instantly via HTMX server fragment to display only contacts in that category!
+4. Click **All** to return to the full contacts list.
+
+## Candidate Next Iterations
+1. **HTMX Form Validation & Server-Side Toast Error Engine (Iteration 5)**
+   * *Plain English*: Return inline HTML toast notifications for invalid email formats or missing fields.
+   * *Benefit*: Improved user feedback for server-rendered forms.
+   * *Interview answer*: "I built server-rendered HTMX form validation toasts."
+2. **Contact Favoriting & Quick Star Bookmark Bar (Iteration 5)**
+   * *Plain English*: Star favorite contacts to pin them to a top quick-access toolbar.
+   * *Benefit*: Fast access to frequent contacts.
+   * *Interview answer*: "I built contact favoriting and quick bookmark pinning."
+3. **Contact Avatar Image Uploader & Gravatar Integration (Iteration 5)**
+   * *Plain English*: Upload custom contact profile photos or fetch Gravatar images automatically by email.
+   * *Benefit*: Visual contact management.
+   * *Interview answer*: "I built avatar image uploads and Gravatar auto-fetching."
+4. **Contact Activity Audit Timeline (Iteration 5)**
+   * *Plain English*: View chronological timeline of contact edits, notes, and status changes.
+   * *Benefit*: Full audit trail for CRM activities.
+   * *Interview answer*: "I built a contact activity audit timeline logger."
+5. **Contact Import via JSON Payload Vault (Iteration 5)**
+   * *Plain English*: Import contacts in bulk by uploading or pasting JSON contact arrays.
+   * *Benefit*: Batch contact onboarding.
+   * *Interview answer*: "I built a JSON contact payload importer."
+
+## Chosen Next Iteration
 *None selected yet.*
+
 
 

@@ -63,12 +63,31 @@ const INITIAL_CONTACTS = [
 
 let contactsStore = [...INITIAL_CONTACTS];
 
-export function getAllContacts(searchQuery = '') {
-  if (!searchQuery.trim()) return [...contactsStore];
-  const q = searchQuery.toLowerCase();
-  return contactsStore.filter(
-    c => c.name.toLowerCase().includes(q) || c.email.toLowerCase().includes(q) || c.category.toLowerCase().includes(q)
-  );
+export function getAllContacts(searchQuery = '', categoryFilter = 'All') {
+  let result = [...contactsStore];
+
+  if (categoryFilter && categoryFilter !== 'All') {
+    result = result.filter(c => c.category === categoryFilter);
+  }
+
+  if (searchQuery.trim()) {
+    const q = searchQuery.toLowerCase();
+    result = result.filter(
+      c => c.name.toLowerCase().includes(q) || c.email.toLowerCase().includes(q) || c.category.toLowerCase().includes(q)
+    );
+  }
+
+  return result;
+}
+
+export function getCategoryStats() {
+  const counts = { All: contactsStore.length, Sponsor: 0, Collaborator: 0, VIP: 0, Agency: 0 };
+  contactsStore.forEach(c => {
+    if (counts[c.category] !== undefined) {
+      counts[c.category] += 1;
+    }
+  });
+  return counts;
 }
 
 export function getContactById(id) {
