@@ -63,6 +63,22 @@ const INITIAL_CONTACTS = [
 
 let contactsStore = [...INITIAL_CONTACTS];
 
+export function validateContactInput(data) {
+  if (!data.name || !data.name.trim()) {
+    throw new Error('Full Name is required');
+  }
+  if (!data.email || !data.email.trim()) {
+    throw new Error('Email address is required');
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(data.email.trim())) {
+    throw new Error('Invalid email format (e.g. name@domain.com)');
+  }
+
+  return true;
+}
+
 export function getAllContacts(searchQuery = '', categoryFilter = 'All') {
   let result = [...contactsStore];
 
@@ -95,9 +111,7 @@ export function getContactById(id) {
 }
 
 export function addContact(data) {
-  if (!data.name || !data.email) {
-    throw new Error('Name and email are required fields');
-  }
+  validateContactInput(data);
 
   const newContact = {
     id: `cnt_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
@@ -137,6 +151,13 @@ export function updateContact(id, updates) {
   const index = contactsStore.findIndex(c => c.id === id);
   if (index === -1) {
     throw new Error(`Contact with ID ${id} not found`);
+  }
+
+  if (updates.name !== undefined || updates.email !== undefined) {
+    validateContactInput({
+      name: updates.name ?? contactsStore[index].name,
+      email: updates.email ?? contactsStore[index].email
+    });
   }
 
   contactsStore[index] = {

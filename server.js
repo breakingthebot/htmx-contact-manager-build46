@@ -28,6 +28,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // HTML Fragment Render Helpers
+export function renderToastNotification(type, message) {
+  const icon = type === 'success' ? '✅' : '⚠️';
+  return `
+    <div class="toast toast-${type}" onclick="this.remove()">
+      <span>${icon} ${message}</span>
+      <span class="toast-close">&times;</span>
+    </div>
+  `;
+}
+
 export function renderContactRow(c) {
   return `
     <tr id="contact-row-${c.id}" class="contact-row">
@@ -96,6 +106,7 @@ export function renderEditRow(c) {
         <form 
           hx-put="/contacts/${c.id}" 
           hx-target="#contact-row-${c.id}" 
+          hx-target-error="#toast-container"
           hx-swap="outerHTML"
           class="edit-form-grid"
         >
@@ -264,7 +275,7 @@ app.post('/contacts/:id/notes', (req, res) => {
     const contact = getContactById(req.params.id);
     res.send(renderNotesList(contact.notes));
   } catch (err) {
-    res.status(400).send(`<div class="toast-error">⚠️ ${err.message}</div>`);
+    res.status(400).send(renderToastNotification('error', err.message));
   }
 });
 
@@ -334,7 +345,7 @@ app.get('/contacts/:id/row', (req, res) => {
   res.send(renderContactRow(contact));
 });
 
-// POST /contacts - Add New Contact Fragment
+// POST /contacts - Add New Contact Fragment with Server-Side Validation Toast
 app.post('/contacts', (req, res) => {
   try {
     const newContact = addContact({
@@ -344,9 +355,10 @@ app.post('/contacts', (req, res) => {
       category: req.body.category,
       status: req.body.status
     });
+    res.setHeader('HX-Trigger', 'contactCreated');
     res.send(renderContactRow(newContact));
   } catch (err) {
-    res.status(400).send(`<div class="toast-error">⚠️ ${err.message}</div>`);
+    res.status(400).send(renderToastNotification('error', err.message));
   }
 });
 
@@ -362,7 +374,7 @@ app.put('/contacts/:id', (req, res) => {
     });
     res.send(renderContactRow(updated));
   } catch (err) {
-    res.status(400).send(`Error updating contact: ${err.message}`);
+    res.status(400).send(renderToastNotification('error', err.message));
   }
 });
 

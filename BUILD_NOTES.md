@@ -187,7 +187,56 @@ Updated `contactService.js` and `contactService.spec.js` with category filtering
    * *Interview answer*: "I built a JSON contact payload importer."
 
 ## Chosen Next Iteration
+Option 1: HTMX Form Validation & Server-Side Toast Error Engine (Iteration 5).
+
+---
+
+# Build Notes - Build 46 Iteration 5 (2026-07-27)
+
+Implemented HTMX Form Validation & Server-Side Toast Error Engine.
+
+## Summary
+Updated `contactService.js` and `contactService.spec.js` with input validation rules (`validateContactInput`: name required, email regex validation `/^[^\s@]+@[^\s@]+\.[^\s@]+$/`). Updated `server.js` with server-rendered toast fragment controller (`renderToastNotification`). Updated `public/index.html` and `public/style.css` adding `response-targets` HTMX extension, `<div id="toast-container"></div>` container, and glassmorphism toast notification popups with auto-fade keyframe animations.
+
+## File-by-File Explanation
+- `contactService.js`: Contact CRM service updated with strict email format regex and field validation.
+- `contactService.spec.js`: Vitest unit test suite verifying email format validation rules.
+- `server.js`: Express server updated with server-rendered toast notification fragments.
+- `public/index.html`: Added `response-targets` HTMX extension script and `#toast-container` target element.
+- `public/style.css`: CSS updated with toast notification glassmorphism styling and keyframe animations.
+- `CHANGELOG.md`: Logged version 0.5.0 release notes.
+
+## Manual Test Steps
+1. Open [https://htmx-contact-manager-build46.vercel.app](https://htmx-contact-manager-build46.vercel.app).
+2. **Trigger Validation Error**: Enter an invalid email format (e.g. `invalid-email`) in the *➕ Add New Contact* form and click **✨ Create Contact**.
+3. Observe a glassmorphism error toast notification (`⚠️ Invalid email format (e.g. name@domain.com)`) pop up instantly without full page refresh!
+4. Click the toast (or wait 4.5 seconds) to dismiss the notification.
+
+## Candidate Next Iterations
+1. **Contact Favoriting & Quick Star Bookmark Bar (Iteration 6)**
+   * *Plain English*: Star favorite contacts to pin them to a top quick-access toolbar.
+   * *Benefit*: Fast access to frequent contacts.
+   * *Interview answer*: "I built contact favoriting and quick bookmark pinning."
+2. **Contact Avatar Image Uploader & Gravatar Integration (Iteration 6)**
+   * *Plain English*: Upload custom contact profile photos or fetch Gravatar images automatically by email.
+   * *Benefit*: Visual contact management.
+   * *Interview answer*: "I built avatar image uploads and Gravatar auto-fetching."
+3. **Contact Activity Audit Timeline (Iteration 6)**
+   * *Plain English*: View chronological timeline of contact edits, notes, and status changes.
+   * *Benefit*: Full audit trail for CRM activities.
+   * *Interview answer*: "I built a contact activity audit timeline logger."
+4. **Contact Import via JSON Payload Vault (Iteration 6)**
+   * *Plain English*: Import contacts in bulk by uploading or pasting JSON contact arrays.
+   * *Benefit*: Batch contact onboarding.
+   * *Interview answer*: "I built a JSON contact payload importer."
+5. **Contact Field Sorting & Multi-Column Reordering (Iteration 6)**
+   * *Plain English*: Click table column headers (Name, Email, Status) to sort contacts dynamically.
+   * *Benefit*: Flexible table data organization.
+   * *Interview answer*: "I built dynamic table column sorting for HTMX fragments."
+
+## Chosen Next Iteration
 *None selected yet.*
+
 
 
 

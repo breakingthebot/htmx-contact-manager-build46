@@ -33,6 +33,66 @@ body {
 .app-container {
   max-width: 1200px;
   margin: 0 auto;
+  position: relative;
+}
+
+/* Toast Notifications Container */
+.toast-container {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: auto;
+  min-width: 280px;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(12px);
+  animation: toastSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1), toastFadeOut 0.5s ease 4.5s forwards;
+  cursor: pointer;
+}
+
+@keyframes toastSlideIn {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes toastFadeOut {
+  to { opacity: 0; transform: translateY(-10px); visibility: hidden; }
+}
+
+.toast-error {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid var(--danger);
+  color: #fca5a5;
+}
+
+.toast-success {
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid var(--success);
+  color: #6ee7b7;
+}
+
+.toast-close {
+  font-size: 16px;
+  color: var(--text-muted);
+}
+
+.toast-close:hover {
+  color: #ffffff;
 }
 
 /* Header */

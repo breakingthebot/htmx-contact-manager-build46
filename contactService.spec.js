@@ -13,6 +13,7 @@ import {
   deleteContact,
   bulkDeleteContacts,
   exportContactsAsCsv,
+  validateContactInput,
   resetContactsStore
 } from './contactService.js';
 
@@ -25,6 +26,11 @@ describe('contactService', () => {
     const contacts = getAllContacts();
     expect(contacts.length).toBe(3);
     expect(contacts[0].name).toBe('Sarah Jenkins');
+  });
+
+  it('validates email format regex correctly', () => {
+    expect(() => validateContactInput({ name: 'Test', email: 'invalid-email' })).toThrow('Invalid email format');
+    expect(validateContactInput({ name: 'Test', email: 'valid@example.com' })).toBe(true);
   });
 
   it('filters contacts by search query', () => {
