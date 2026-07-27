@@ -91,5 +91,54 @@ Updated `contactService.js` and `contactService.spec.js` adding bulk contact del
    * *Interview answer*: "I built avatar image uploads and Gravatar auto-fetching."
 
 ## Chosen Next Iteration
+Option 1: HTMX Active Contact Detail Drawer & Interaction Notes (Iteration 3).
+
+---
+
+# Build Notes - Build 46 Iteration 3 (2026-07-27)
+
+Implemented HTMX Active Contact Detail Drawer & Interaction Notes.
+
+## Summary
+Updated `contactService.js` and `contactService.spec.js` extending contact data models with interaction notes (`addContactNote`). Updated `server.js` with slide-out drawer fragment controller (`renderContactDrawer`, `renderNotesList`, `GET /contacts/:id/drawer`, `POST /contacts/:id/notes`, `GET /contacts/clear-drawer`). Updated `public/index.html` and `public/style.css` adding view contact drawer action buttons (`👁️ View`) and glassmorphism drawer slide-in panel with timestamped note logging.
+
+## File-by-File Explanation
+- `contactService.js`: Contact CRM service updated with note creation and timestamp management.
+- `contactService.spec.js`: Vitest unit test suite verifying note creation and note list retrieval.
+- `server.js`: Express server updated with contact drawer fragment and note logger endpoints.
+- `public/index.html`: Table rows updated with `👁️ View` drawer button and `<aside id="contact-drawer-container"></aside>` target container.
+- `public/style.css`: CSS updated with drawer backdrop blur, slide-in animation, and note cards.
+- `CHANGELOG.md`: Logged version 0.3.0 release notes.
+
+## Manual Test Steps
+1. Open [https://htmx-contact-manager-build46.vercel.app](https://htmx-contact-manager-build46.vercel.app).
+2. **View Drawer**: Click **👁️ View** on any contact row to slide out the contact detail drawer panel.
+3. **Log Note**: Type a note (e.g. "Sent sponsorship contract PDF") and click **➕ Add Note**. Observe the note append instantly to the interaction log via HTMX server fragment!
+4. **Close Drawer**: Click **❌** or click the background backdrop to close the drawer.
+
+## Candidate Next Iterations
+1. **Contact Tagging & Category Color Badge Customizer (Iteration 4)**
+   * *Plain English*: Filter contacts by category tags (Sponsor, VIP, Collaborator) with custom color badges.
+   * *Benefit*: Better contact organization for creators & businesses.
+   * *Interview answer*: "I built custom category filtering and color badge tags."
+2. **HTMX Form Validation & Server-Side Toast Error Engine (Iteration 4)**
+   * *Plain English*: Return inline HTML toast notifications for invalid email formats or missing fields.
+   * *Benefit*: Improved user feedback for server-rendered forms.
+   * *Interview answer*: "I built server-rendered HTMX form validation toasts."
+3. **Contact Favoriting & Quick Star Bookmark Bar (Iteration 4)**
+   * *Plain English*: Star favorite contacts to pin them to a top quick-access toolbar.
+   * *Benefit*: Fast access to frequent contacts.
+   * *Interview answer*: "I built contact favoriting and quick bookmark pinning."
+4. **Contact Avatar Image Uploader & Gravatar Integration (Iteration 4)**
+   * *Plain English*: Upload custom contact profile photos or fetch Gravatar images automatically by email.
+   * *Benefit*: Visual contact management.
+   * *Interview answer*: "I built avatar image uploads and Gravatar auto-fetching."
+5. **Contact Activity Audit Timeline (Iteration 4)**
+   * *Plain English*: View chronological timeline of contact edits, notes, and status changes.
+   * *Benefit*: Full audit trail for CRM activities.
+   * *Interview answer*: "I built a contact activity audit timeline logger."
+
+## Chosen Next Iteration
 *None selected yet.*
+
 

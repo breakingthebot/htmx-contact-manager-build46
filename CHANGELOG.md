@@ -5,6 +5,14 @@ All notable changes to the **HTMX Contact Manager** project will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-07-27
+
+### Added
+- Integrated **HTMX Active Contact Detail Drawer & Interaction Notes** in `contactService.js` and `server.js`.
+- Added note creation (`addContactNote`, `POST /contacts/:id/notes`) and slide-out drawer fragments (`GET /contacts/:id/drawer`, `GET /contacts/clear-drawer`).
+- Updated `public/index.html` and `public/style.css` with `👁️ View` buttons, drawer slide-in panel, and note card logging UI.
+- Added unit tests in `contactService.spec.js`.
+
 ## [0.2.0] - 2026-07-27
 
 ### Added

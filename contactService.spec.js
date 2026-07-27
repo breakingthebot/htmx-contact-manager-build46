@@ -7,6 +7,7 @@ import {
   getAllContacts,
   getContactById,
   addContact,
+  addContactNote,
   updateContact,
   deleteContact,
   bulkDeleteContacts,
@@ -42,6 +43,18 @@ describe('contactService', () => {
 
     expect(newContact.id).toBeDefined();
     expect(getAllContacts().length).toBe(4);
+  });
+
+  it('adds interaction note to a contact', () => {
+    const note = addContactNote('cnt_1', 'Sent brand deck agreement PDF.');
+    expect(note.id).toBeDefined();
+    const contact = getContactById('cnt_1');
+    expect(contact.notes.length).toBe(2);
+    expect(contact.notes[0].text).toBe('Sent brand deck agreement PDF.');
+  });
+
+  it('throws error when adding empty note text', () => {
+    expect(() => addContactNote('cnt_1', '')).toThrow();
   });
 
   it('throws error when adding contact without name or email', () => {

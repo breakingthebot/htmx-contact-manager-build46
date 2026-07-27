@@ -9,6 +9,7 @@ import {
   getAllContacts,
   getContactById,
   addContact,
+  addContactNote,
   updateContact,
   deleteContact,
   bulkDeleteContacts,
@@ -52,6 +53,15 @@ export function renderContactRow(c) {
         <span class="status-badge status-${c.status.toLowerCase()}">${c.status}</span>
       </td>
       <td class="action-buttons">
+        <button 
+          type="button"
+          class="btn-icon btn-view"
+          hx-get="/contacts/${c.id}/drawer"
+          hx-target="#contact-drawer-container"
+          title="View Contact Details & Notes"
+        >
+          👁️
+        </button>
         <button 
           type="button"
           class="btn-icon btn-edit" 
@@ -120,7 +130,113 @@ export function renderEditRow(c) {
   `;
 }
 
+export function renderNotesList(notes) {
+  if (!notes || notes.length === 0) {
+    return `<div class="empty-notes">📝 No interaction notes recorded yet.</div>`;
+  }
+
+  return notes.map(n => `
+    <div class="note-card">
+      <div class="note-header">
+        <span class="note-time">⏱️ ${n.createdAt}</span>
+      </div>
+      <div class="note-text">${n.text}</div>
+    </div>
+  `).join('');
+}
+
+export function renderContactDrawer(c) {
+  return `
+    <div class="drawer-backdrop" hx-get="/contacts/clear-drawer" hx-target="#contact-drawer-container"></div>
+    <div class="drawer-panel">
+      <div class="drawer-header">
+        <div class="drawer-user-info">
+          <div class="avatar-circle avatar-large" style="background-color: ${c.avatarColor}">
+            ${c.name.charAt(0).toUpperCase()}
+          </div>
+          <div>
+            <h3>${c.name}</h3>
+            <p class="drawer-email">${c.email}</p>
+          </div>
+        </div>
+        <button 
+          type="button" 
+          class="btn-close-drawer" 
+          hx-get="/contacts/clear-drawer" 
+          hx-target="#contact-drawer-container"
+        >
+          ❌
+        </button>
+      </div>
+
+      <div class="drawer-details">
+        <div class="detail-pill">
+          <span class="detail-label">Phone:</span>
+          <span>${c.phone}</span>
+        </div>
+        <div class="detail-pill">
+          <span class="detail-label">Category:</span>
+          <span class="category-badge category-${c.category.toLowerCase()}">${c.category}</span>
+        </div>
+        <div class="detail-pill">
+          <span class="detail-label">Status:</span>
+          <span class="status-badge status-${c.status.toLowerCase()}">${c.status}</span>
+        </div>
+      </div>
+
+      <hr class="drawer-divider" />
+
+      <div class="drawer-notes-section">
+        <h4>📝 Interaction & Communication Notes</h4>
+        
+        <form 
+          hx-post="/contacts/${c.id}/notes" 
+          hx-target="#drawer-notes-list" 
+          hx-on::after-request="if (event.detail.successful) this.reset()"
+          class="add-note-form"
+        >
+          <input 
+            type="text" 
+            name="noteText" 
+            placeholder="Add interaction note (e.g. Sent rate card PDF)..." 
+            required 
+            class="note-input" 
+          />
+          <button type="submit" class="btn-add-note">➕ Add Note</button>
+        </form>
+
+        <div id="drawer-notes-list" class="notes-list">
+          ${renderNotesList(c.notes)}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 // HTMX Server Routes
+
+// GET /contacts/clear-drawer - Close drawer by clearing container
+app.get('/contacts/clear-drawer', (req, res) => {
+  res.send('');
+});
+
+// GET /contacts/:id/drawer - Render Contact Drawer Fragment
+app.get('/contacts/:id/drawer', (req, res) => {
+  const contact = getContactById(req.params.id);
+  if (!contact) return res.status(404).send('Contact not found');
+  res.send(renderContactDrawer(contact));
+});
+
+// POST /contacts/:id/notes - Add Interaction Note
+app.post('/contacts/:id/notes', (req, res) => {
+  try {
+    addContactNote(req.params.id, req.body.noteText);
+    const contact = getContactById(req.params.id);
+    res.send(renderNotesList(contact.notes));
+  } catch (err) {
+    res.status(400).send(`<div class="toast-error">⚠️ ${err.message}</div>`);
+  }
+});
 
 // GET /contacts/search - Live HTMX Search
 app.get('/contacts/search', (req, res) => {

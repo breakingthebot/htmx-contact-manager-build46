@@ -352,6 +352,12 @@ label {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
+.avatar-large {
+  width: 48px;
+  height: 48px;
+  font-size: 20px;
+}
+
 .contact-name {
   font-weight: 600;
   color: #ffffff;
@@ -388,7 +394,7 @@ label {
 
 .action-buttons {
   display: flex;
-  gap: 8px;
+  gap: 6px;
 }
 
 .btn-icon {
@@ -404,6 +410,177 @@ label {
 .btn-icon:hover {
   background: #334155;
   border-color: #64748b;
+}
+
+/* Slide-Out Contact Detail Drawer */
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+}
+
+.drawer-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 420px;
+  max-width: 90vw;
+  background: #0f172a;
+  border-left: 1px solid var(--border-color);
+  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.6);
+  z-index: 101;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow-y: auto;
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.drawer-user-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.drawer-user-info h3 {
+  font-size: 18px;
+  color: #ffffff;
+}
+
+.drawer-email {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.btn-close-drawer {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.btn-close-drawer:hover {
+  color: #ffffff;
+}
+
+.drawer-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.detail-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  background: #1e293b;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+}
+
+.detail-label {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.drawer-divider {
+  border: none;
+  border-top: 1px solid var(--border-color);
+  margin: 10px 0 20px 0;
+}
+
+.drawer-notes-section h4 {
+  font-size: 14px;
+  color: #f1f5f9;
+  margin-bottom: 12px;
+}
+
+.add-note-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.note-input {
+  flex: 1;
+  background: #090d16;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 8px 12px;
+  color: #ffffff;
+  font-size: 12px;
+  outline: none;
+}
+
+.note-input:focus {
+  border-color: var(--accent-primary);
+}
+
+.btn-add-note {
+  background: var(--accent-primary);
+  color: #ffffff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.notes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.note-card {
+  background: #1e293b;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 10px 14px;
+}
+
+.note-time {
+  font-size: 10px;
+  font-family: monospace;
+  color: var(--text-muted);
+}
+
+.note-text {
+  font-size: 13px;
+  color: #e2e8f0;
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+.empty-notes {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-style: italic;
+  padding: 12px;
+  text-align: center;
+  background: rgba(30, 41, 59, 0.4);
+  border-radius: 6px;
 }
 
 /* Inline Edit Form */
