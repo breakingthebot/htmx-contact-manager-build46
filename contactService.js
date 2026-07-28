@@ -10,6 +10,14 @@
  */
 
 /**
+ * @typedef {Object} ActivityLog
+ * @property {string} id
+ * @property {string} action
+ * @property {string} details
+ * @property {string} timestamp
+ */
+
+/**
  * @typedef {Object} Contact
  * @property {string} id
  * @property {string} name
@@ -21,6 +29,7 @@
  * @property {string} avatarUrl
  * @property {boolean} isFavorite
  * @property {ContactNote[]} notes
+ * @property {ActivityLog[]} activityLog
  */
 
 const AVATAR_COLORS = ['#6366f1', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6', '#06b6d4'];
@@ -28,6 +37,10 @@ const AVATAR_COLORS = ['#6366f1', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6', '#
 export function generateGravatarUrl(email) {
   const cleanEmail = (email || '').trim().toLowerCase();
   return `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(cleanEmail)}`;
+}
+
+function getTimestamp() {
+  return new Date().toISOString().replace('T', ' ').substring(0, 16);
 }
 
 /** @type {Contact[]} */
@@ -44,6 +57,11 @@ const INITIAL_CONTACTS = [
     isFavorite: true,
     notes: [
       { id: 'note_1', text: 'Discussed Q3 YouTube sponsorship package rates.', createdAt: '2026-07-20 14:30' }
+    ],
+    activityLog: [
+      { id: 'act_1', action: 'CREATE', details: 'Contact record created.', timestamp: '2026-07-20 12:00' },
+      { id: 'act_2', action: 'NOTE_ADD', details: 'Added note: Discussed Q3 YouTube sponsorship package rates.', timestamp: '2026-07-20 14:30' },
+      { id: 'act_3', action: 'STARRED', details: 'Starred as favorite contact.', timestamp: '2026-07-21 09:15' }
     ]
   },
   {
@@ -58,6 +76,10 @@ const INITIAL_CONTACTS = [
     isFavorite: true,
     notes: [
       { id: 'note_2', text: 'Confirmed co-hosting collaborative livestream next Tuesday.', createdAt: '2026-07-22 10:15' }
+    ],
+    activityLog: [
+      { id: 'act_4', action: 'CREATE', details: 'Contact record created.', timestamp: '2026-07-22 10:00' },
+      { id: 'act_5', action: 'NOTE_ADD', details: 'Added note: Confirmed co-hosting collaborative livestream next Tuesday.', timestamp: '2026-07-22 10:15' }
     ]
   },
   {
@@ -70,11 +92,30 @@ const INITIAL_CONTACTS = [
     avatarColor: '#f59e0b',
     avatarUrl: generateGravatarUrl('elena@talentagency.net'),
     isFavorite: false,
-    notes: []
+    notes: [],
+    activityLog: [
+      { id: 'act_6', action: 'CREATE', details: 'Contact record created.', timestamp: '2026-07-25 16:45' }
+    ]
   }
 ];
 
 let contactsStore = [...INITIAL_CONTACTS];
+
+export function logContactActivity(contactId, action, details) {
+  const contact = getContactById(contactId);
+  if (!contact) return null;
+
+  const entry = {
+    id: `act_${Date.now()}_${Math.random().toString(36).substr(2, 3)}`,
+    action,
+    details,
+    timestamp: getTimestamp()
+  };
+
+  if (!contact.activityLog) contact.activityLog = [];
+  contact.activityLog.unshift(entry);
+  return entry;
+}
 
 export function validateContactInput(data) {
   if (!data.name || !data.name.trim()) {
@@ -120,6 +161,7 @@ export function toggleFavoriteContact(id) {
   }
 
   contact.isFavorite = !contact.isFavorite;
+  logContactActivity(id, contact.isFavorite ? 'STARRED' : 'UNSTARRED', contact.isFavorite ? 'Starred as favorite contact.' : 'Unstarred from favorites.');
   return contact;
 }
 
@@ -130,6 +172,7 @@ export function updateContactAvatar(id, avatarUrl) {
   }
 
   contact.avatarUrl = avatarUrl ? avatarUrl.trim() : generateGravatarUrl(contact.email);
+  logContactActivity(id, 'AVATAR_UPDATE', 'Updated avatar profile image.');
   return contact;
 }
 
@@ -162,7 +205,10 @@ export function addContact(data) {
     avatarColor: AVATAR_COLORS[Math.floor(Math.random() * AVATAR_COLORS.length)],
     avatarUrl: data.avatarUrl ? data.avatarUrl.trim() : generateGravatarUrl(cleanEmail),
     isFavorite: false,
-    notes: []
+    notes: [],
+    activityLog: [
+      { id: `act_${Date.now()}`, action: 'CREATE', details: 'Contact record created.', timestamp: getTimestamp() }
+    ]
   };
 
   contactsStore.unshift(newContact);
@@ -178,13 +224,15 @@ export function addContactNote(contactId, noteText) {
     throw new Error('Note text cannot be empty');
   }
 
+  const cleanText = noteText.trim();
   const newNote = {
     id: `note_${Date.now()}`,
-    text: noteText.trim(),
-    createdAt: new Date().toISOString().replace('T', ' ').substring(0, 16)
+    text: cleanText,
+    createdAt: getTimestamp()
   };
 
   contact.notes.unshift(newNote);
+  logContactActivity(contactId, 'NOTE_ADD', `Added note: "${cleanText}"`);
   return newNote;
 }
 
@@ -211,6 +259,7 @@ export function updateContact(id, updates) {
     avatarUrl: updates.avatarUrl ? updates.avatarUrl.trim() : (updates.email ? generateGravatarUrl(newEmail) : contactsStore[index].avatarUrl)
   };
 
+  logContactActivity(id, 'UPDATE', `Updated contact details.`);
   return contactsStore[index];
 }
 

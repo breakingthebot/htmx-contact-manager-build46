@@ -330,7 +330,56 @@ Updated `contactService.js` and `contactService.spec.js` with auto-generated Dic
    * *Interview answer*: "I built extensible key-value attribute fields."
 
 ## Chosen Next Iteration
+Option 1: Contact Activity Audit Timeline (Iteration 8).
+
+---
+
+# Build Notes - Build 46 Iteration 8 (2026-07-27)
+
+Implemented Contact Activity Audit Timeline.
+
+## Summary
+Updated `contactService.js` and `contactService.spec.js` with activity logging engine (`logContactActivity`: `CREATE`, `UPDATE`, `NOTE_ADD`, `STARRED`, `UNSTARRED`, `AVATAR_UPDATE`). Updated `server.js` with activity timeline fragment controller (`renderActivityTimeline`). Updated `public/index.html` and `public/style.css` extending slide-out contact detail drawer with a chronological activity audit timeline featuring visual action icons, timestamp badges, and connecting vertical line indicators.
+
+## File-by-File Explanation
+- `contactService.js`: Contact CRM service updated with automated activity audit logging across all state changes.
+- `contactService.spec.js`: Vitest unit test suite verifying activity logging and audit timeline entries.
+- `server.js`: Express server updated with `renderActivityTimeline` helper integrated into drawer panel.
+- `public/index.html`: Contact detail drawer updated with `📜 Contact Activity Audit Timeline` section.
+- `public/style.css`: CSS updated with `.timeline-item`, `.timeline-badge`, `.timeline-details`, and `.timeline-time`.
+- `CHANGELOG.md`: Logged version 0.8.0 release notes.
+
+## Manual Test Steps
+1. Open [https://htmx-contact-manager-build46.vercel.app](https://htmx-contact-manager-build46.vercel.app).
+2. **Open Drawer**: Click **👁️ View** on any contact row to open their detail drawer panel.
+3. Scroll to **📜 Contact Activity Audit Timeline** to view the chronological log of record creations, note additions, star updates, and profile edits!
+4. **Log Action**: Add a note or star the contact, then re-open the drawer to observe the new audit entry logged instantly.
+
+## Candidate Next Iterations
+1. **Contact Import via JSON Payload Vault (Iteration 9)**
+   * *Plain English*: Import contacts in bulk by uploading or pasting JSON contact arrays.
+   * *Benefit*: Batch contact onboarding.
+   * *Interview answer*: "I built a JSON contact payload importer."
+2. **Contact Field Sorting & Multi-Column Reordering (Iteration 9)**
+   * *Plain English*: Click table column headers (Name, Email, Status) to sort contacts dynamically.
+   * *Benefit*: Flexible table data organization.
+   * *Interview answer*: "I built dynamic table column sorting for HTMX fragments."
+3. **Contact Pagination & Items-Per-Page Selector (Iteration 9)**
+   * *Plain English*: Paginate large contact lists (10, 25, 50 per page) with server-rendered HTML page controls.
+   * *Benefit*: Performance optimization for massive contact databases.
+   * *Interview answer*: "I built server-rendered HTMX pagination controls."
+4. **Contact Field Customizer & Custom Key-Value Attributes (Iteration 9)**
+   * *Plain English*: Add custom key-value metadata fields (e.g. Instagram Handle, Budget) to contacts.
+   * *Benefit*: Extensible contact metadata.
+   * *Interview answer*: "I built extensible key-value attribute fields."
+5. **Contact Duplicate Detection & Merge Engine (Iteration 9)**
+   * *Plain English*: Detect duplicate contacts by email address and merge records into a unified contact.
+   * *Benefit*: Clean database deduplication.
+   * *Interview answer*: "I built automated contact duplicate detection and merging."
+
+## Chosen Next Iteration
 *None selected yet.*
+
 
 
 

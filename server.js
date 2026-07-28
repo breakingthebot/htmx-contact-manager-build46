@@ -228,6 +228,31 @@ export function renderNotesList(notes) {
   `).join('');
 }
 
+export function renderActivityTimeline(activityLog) {
+  if (!activityLog || activityLog.length === 0) {
+    return `<div class="empty-notes">📜 No activity history recorded yet.</div>`;
+  }
+
+  const actionIcons = {
+    CREATE: '✨',
+    UPDATE: '✏️',
+    NOTE_ADD: '📝',
+    STARRED: '⭐',
+    UNSTARRED: '☆',
+    AVATAR_UPDATE: '🖼️'
+  };
+
+  return activityLog.map(act => `
+    <div class="timeline-item">
+      <div class="timeline-badge">${actionIcons[act.action] || '📌'}</div>
+      <div class="timeline-content">
+        <div class="timeline-details">${act.details}</div>
+        <div class="timeline-time">⏱️ ${act.timestamp}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
 export function renderContactDrawer(c) {
   return `
     <div class="drawer-backdrop" hx-get="/contacts/clear-drawer" hx-target="#contact-drawer-container"></div>
@@ -288,6 +313,15 @@ export function renderContactDrawer(c) {
 
         <div id="drawer-notes-list" class="notes-list">
           ${renderNotesList(c.notes)}
+        </div>
+      </div>
+
+      <hr class="drawer-divider" />
+
+      <div class="drawer-notes-section">
+        <h4>📜 Contact Activity Audit Timeline</h4>
+        <div class="activity-timeline-container">
+          ${renderActivityTimeline(c.activityLog)}
         </div>
       </div>
     </div>

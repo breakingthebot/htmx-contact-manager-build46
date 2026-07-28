@@ -7,6 +7,7 @@ import {
   getAllContacts,
   getFavoriteContacts,
   toggleFavoriteContact,
+  logContactActivity,
   generateGravatarUrl,
   updateContactAvatar,
   getCategoryStats,
@@ -30,6 +31,19 @@ describe('contactService', () => {
     const contacts = getAllContacts();
     expect(contacts.length).toBe(3);
     expect(contacts[0].name).toBe('Sarah Jenkins');
+  });
+
+  it('logs and tracks contact activity audit entries', () => {
+    logContactActivity('cnt_1', 'TEST_ACTION', 'Testing activity logger.');
+    const contact = getContactById('cnt_1');
+    expect(contact.activityLog.length).toBe(4);
+    expect(contact.activityLog[0].action).toBe('TEST_ACTION');
+  });
+
+  it('automatically logs activity when contact is updated or starred', () => {
+    toggleFavoriteContact('cnt_3');
+    const contact = getContactById('cnt_3');
+    expect(contact.activityLog[0].action).toBe('STARRED');
   });
 
   it('generates Gravatar / Identicon URLs correctly', () => {
@@ -91,7 +105,7 @@ describe('contactService', () => {
     });
 
     expect(newContact.id).toBeDefined();
-    expect(newContact.avatarUrl).toBeDefined();
+    expect(newContact.activityLog.length).toBe(1);
     expect(getAllContacts().length).toBe(4);
   });
 
