@@ -474,7 +474,56 @@ Updated `contactService.js` and `contactService.spec.js` with multi-column sorti
    * *Interview answer*: "I built server-rendered CRM analytics dashboards."
 
 ## Chosen Next Iteration
+Option 1: Contact Pagination & Items-Per-Page Selector (Iteration 11 - Release v1.1.0).
+
+---
+
+# Build Notes - Build 46 Iteration 11 (Release v1.1.0) (2026-07-27)
+
+Implemented Contact Pagination & Items-Per-Page Selector (Release v1.1.0).
+
+## Summary
+Updated `contactService.js` and `contactService.spec.js` with array pagination calculations (`getPaginatedContacts(searchQuery, categoryFilter, sortField, sortOrder, page, pageSize)`). Updated `server.js` with pagination controls fragment controller (`renderPaginationControls`, HTMX Out-Of-Band `hx-swap-oob="true"` swap on `GET /contacts/search`). Updated `public/index.html` and `public/style.css` adding `<div id="pagination-container">`, Previous/Next page buttons, page index indicator (`Page X of Y`), and items-per-page selector dropdown (`5`, `10`, `25`, `50`).
+
+## File-by-File Explanation
+- `contactService.js`: Contact CRM service updated with `getPaginatedContacts` page slice calculations.
+- `contactService.spec.js`: Vitest unit test suite verifying page index slicing and total page count logic.
+- `server.js`: Express server updated with `renderPaginationControls` and OOB fragment swapping in `/contacts/search`.
+- `public/index.html`: Added `#pagination-container` target below the contact table.
+- `public/style.css`: CSS updated with `.pagination-bar`, `.btn-page`, `.page-indicator`, and `.select-limit` styles.
+- `CHANGELOG.md`: Logged version 1.1.0 Release notes.
+
+## Manual Test Steps
+1. Open [https://htmx-contact-manager-build46.vercel.app](https://htmx-contact-manager-build46.vercel.app).
+2. **Items Per Page**: Change **Per Page** dropdown to `5` or `10`.
+3. **Navigate Pages**: Click **Next ⏭️** or **⏮️ Previous** to paginate between contact pages via HTMX server fragments.
+4. Observe the page indicator (`Page X of Y`) and item range count (`Showing 1-10 of 12 contacts`) update in real-time without full page reloads!
+
+## Candidate Next Iterations
+1. **Contact Field Customizer & Custom Key-Value Attributes (Iteration 12)**
+   * *Plain English*: Add custom key-value metadata fields (e.g. Instagram Handle, Budget) to contacts.
+   * *Benefit*: Extensible contact metadata.
+   * *Interview answer*: "I built extensible key-value attribute fields."
+2. **Contact Duplicate Detection & Merge Engine (Iteration 12)**
+   * *Plain English*: Detect duplicate contacts by email address and merge records into a unified contact.
+   * *Benefit*: Clean database deduplication.
+   * *Interview answer*: "I built automated contact duplicate detection and merging."
+3. **Contact Reminders & Scheduled Follow-up Alerts (Iteration 12)**
+   * *Plain English*: Schedule follow-up date reminders for contacts with urgency badge highlights.
+   * *Benefit*: Proactive contact relationship management.
+   * *Interview answer*: "I built contact follow-up date scheduling and alerts."
+4. **Contact Performance & Analytics Dashboard Fragment (Iteration 12)**
+   * *Plain English*: View visual charts of total contacts, top category breakdown, and interaction trends.
+   * *Benefit*: Executive CRM insight reporting.
+   * *Interview answer*: "I built server-rendered CRM analytics dashboards."
+5. **Contact Export to VCF / vCard Payload Vault (Iteration 12)**
+   * *Plain English*: Export contacts as `.vcf` vCard files for seamless mobile address book import.
+   * *Benefit*: Mobile CRM contact syncing.
+   * *Interview answer*: "I built vCard / VCF contact file exporter."
+
+## Chosen Next Iteration
 *None selected yet.*
+
 
 
 

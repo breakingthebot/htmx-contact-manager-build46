@@ -7,6 +7,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import {
   getAllContacts,
+  getPaginatedContacts,
   getFavoriteContacts,
   toggleFavoriteContact,
   updateContactAvatar,
@@ -74,6 +75,56 @@ export function renderFavoritesBar() {
             <span class="fav-name">${f.name}</span>
           </button>
         `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+export function renderPaginationControls(page, totalPages, pageSize, totalCount, category = 'All', query = '', sort = 'name', order = 'asc') {
+  const prevPage = Math.max(1, page - 1);
+  const nextPage = Math.min(totalPages, page + 1);
+
+  return `
+    <div class="pagination-bar">
+      <div class="pagination-info">
+        Showing ${totalCount > 0 ? (page - 1) * pageSize + 1 : 0}-${Math.min(page * pageSize, totalCount)} of ${totalCount} contacts
+      </div>
+
+      <div class="pagination-buttons">
+        <button 
+          type="button"
+          class="btn-page ${page <= 1 ? 'disabled' : ''}"
+          ${page > 1 ? `hx-get="/contacts/search?page=${prevPage}&limit=${pageSize}&category=${category}&q=${query}&sort=${sort}&order=${order}" hx-target="#contacts-table-body" hx-swap="innerHTML"` : 'disabled'}
+        >
+          ⏮️ Previous
+        </button>
+
+        <span class="page-indicator">Page <strong>${page}</strong> of <strong>${totalPages}</strong></span>
+
+        <button 
+          type="button"
+          class="btn-page ${page >= totalPages ? 'disabled' : ''}"
+          ${page < totalPages ? `hx-get="/contacts/search?page=${nextPage}&limit=${pageSize}&category=${category}&q=${query}&sort=${sort}&order=${order}" hx-target="#contacts-table-body" hx-swap="innerHTML"` : 'disabled'}
+        >
+          Next ⏭️
+        </button>
+      </div>
+
+      <div class="pagination-limit-selector">
+        <label>Per Page:</label>
+        <select 
+          name="limit" 
+          class="select-limit"
+          hx-get="/contacts/search?page=1&category=${category}&q=${query}&sort=${sort}&order=${order}"
+          hx-target="#contacts-table-body"
+          hx-swap="innerHTML"
+          hx-include="this"
+        >
+          <option value="5" ${pageSize === 5 ? 'selected' : ''}>5</option>
+          <option value="10" ${pageSize === 10 ? 'selected' : ''}>10</option>
+          <option value="25" ${pageSize === 25 ? 'selected' : ''}>25</option>
+          <option value="50" ${pageSize === 50 ? 'selected' : ''}>50</option>
+        </select>
       </div>
     </div>
   `;
@@ -423,14 +474,16 @@ app.post('/contacts/:id/notes', (req, res) => {
   }
 });
 
-// GET /contacts/search - Live HTMX Search & Category Filter with Dynamic Column Sorting
+// GET /contacts/search - Live HTMX Search, Category Filter, Column Sorting & Server Pagination
 app.get('/contacts/search', (req, res) => {
   const searchQuery = req.query.q || '';
   const category = req.query.category || 'All';
   const sortField = req.query.sort || 'name';
   const sortOrder = req.query.order || 'asc';
+  const page = parseInt(req.query.page, 10) || 1;
+  const pageSize = parseInt(req.query.limit, 10) || 10;
 
-  const contacts = getAllContacts(searchQuery, category, sortField, sortOrder);
+  const { contacts, totalCount, totalPages } = getPaginatedContacts(searchQuery, category, sortField, sortOrder, page, pageSize);
 
   if (contacts.length === 0) {
     return res.send(`
@@ -442,8 +495,16 @@ app.get('/contacts/search', (req, res) => {
     `);
   }
 
-  const html = contacts.map(renderContactRow).join('');
-  res.send(html);
+  const rowsHtml = contacts.map(renderContactRow).join('');
+  const paginationHtml = renderPaginationControls(page, totalPages, pageSize, totalCount, category, searchQuery, sortField, sortOrder);
+
+  // Return rows + OOB (Out of Band) pagination container swap
+  res.send(`
+    ${rowsHtml}
+    <div id="pagination-container" hx-swap-oob="true" class="pagination-wrapper">
+      ${paginationHtml}
+    </div>
+  `);
 });
 
 // GET /contacts/export-csv - CSV File Download

@@ -200,6 +200,24 @@ export function getAllContacts(searchQuery = '', categoryFilter = 'All', sortFie
   return result;
 }
 
+export function getPaginatedContacts(searchQuery = '', categoryFilter = 'All', sortField = 'name', sortOrder = 'asc', page = 1, pageSize = 10) {
+  const all = getAllContacts(searchQuery, categoryFilter, sortField, sortOrder);
+  const totalCount = all.length;
+  const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
+  const currentPage = Math.min(Math.max(1, parseInt(page, 10) || 1), totalPages);
+
+  const startIdx = (currentPage - 1) * pageSize;
+  const contacts = all.slice(startIdx, startIdx + pageSize);
+
+  return {
+    contacts,
+    totalCount,
+    page: currentPage,
+    totalPages,
+    pageSize
+  };
+}
+
 export function getFavoriteContacts() {
   return contactsStore.filter(c => c.isFavorite);
 }

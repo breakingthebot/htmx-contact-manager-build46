@@ -5,6 +5,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import {
   getAllContacts,
+  getPaginatedContacts,
   getFavoriteContacts,
   toggleFavoriteContact,
   logContactActivity,
@@ -34,6 +35,18 @@ describe('contactService', () => {
     expect(contacts[0].name).toBe('Alex Rivera');
     expect(contacts[1].name).toBe('Elena Rostova');
     expect(contacts[2].name).toBe('Sarah Jenkins');
+  });
+
+  it('paginates contact records cleanly', () => {
+    const paginated = getPaginatedContacts('', 'All', 'name', 'asc', 1, 2);
+    expect(paginated.contacts.length).toBe(2);
+    expect(paginated.totalCount).toBe(3);
+    expect(paginated.totalPages).toBe(2);
+    expect(paginated.page).toBe(1);
+
+    const page2 = getPaginatedContacts('', 'All', 'name', 'asc', 2, 2);
+    expect(page2.contacts.length).toBe(1);
+    expect(page2.contacts[0].name).toBe('Sarah Jenkins');
   });
 
   it('sorts contacts by name descending', () => {

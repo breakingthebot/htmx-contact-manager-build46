@@ -5,6 +5,14 @@ All notable changes to the **HTMX Contact Manager** project will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-07-27
+
+### Added
+- Integrated **Contact Pagination & Items-Per-Page Selector** in `contactService.js` and `server.js`.
+- Added array pagination calculations (`getPaginatedContacts`), pagination controls fragment renderer (`renderPaginationControls`), and HTMX Out-Of-Band (`hx-swap-oob="true"`) pagination container swapping.
+- Updated `public/index.html` and `public/style.css` with Previous/Next page buttons, page index indicators (`Page X of Y`), and items-per-page selector dropdowns (`5`, `10`, `25`, `50`).
+- Added unit tests in `contactService.spec.js` (24 total unit tests passing).
+
 ## [1.0.0] - 2026-07-27 - Milestone Release 🎉
 
 ### Added
