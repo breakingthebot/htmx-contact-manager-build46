@@ -167,90 +167,91 @@
         <!-- Rendered via HTMX Fragment -->
       </div>
 
-      <!-- Contacts Table Card with Bulk Action Form -->
+      <!-- Contacts Table Card -->
       <section class="card table-card">
-        <form 
-          id="bulk-actions-form"
-          hx-post="/contacts/bulk-delete"
-          hx-target="#contacts-table-body"
-          hx-confirm="Are you sure you want to delete selected contacts?"
-        >
-          <div class="table-toolbar">
-            <div class="toolbar-title">
-              <h2>📇 Contact Vault</h2>
-              <span class="contact-count-badge">Live Fragment Table</span>
-            </div>
-
-            <div class="toolbar-actions">
-              <!-- Bulk Action Controls -->
-              <button type="submit" class="btn-bulk-delete">
-                🗑️ Delete Selected
-              </button>
-              <a href="/contacts/export-csv" class="btn-export-csv" download title="Export Contacts as CSV">
-                📥 Export CSV
-              </a>
-              <a href="/contacts/export-vcard" class="btn-export-vcard" download title="Export Contacts as Mobile vCard (.vcf)">
-                📇 Export vCard
-              </a>
-
-              <!-- HTMX Live Search Bar -->
-              <div class="search-box">
-                <span class="search-icon">🔍</span>
-                <input 
-                  type="text" 
-                  name="q" 
-                  placeholder="Search by name, email, or category..." 
-                  class="search-input"
-                  hx-get="/contacts/search"
-                  hx-trigger="keyup changed delay:300ms, search"
-                  hx-target="#contacts-table-body"
-                  hx-indicator="#search-spinner"
-                />
-                <span class="htmx-indicator spinner" id="search-spinner"></span>
-              </div>
-            </div>
+        <div class="table-toolbar">
+          <div class="toolbar-title">
+            <h2>📇 Contact Vault</h2>
+            <span class="contact-count-badge">Live Fragment Table</span>
           </div>
 
-          <div class="table-wrapper">
-            <table class="contacts-table">
-              <thead>
-                <tr>
-                  <th class="checkbox-cell">
-                    <input type="checkbox" id="select-all-checkbox" onclick="toggleSelectAll(this)" />
-                  </th>
-                  <th class="sortable-header" hx-get="/contacts/search?sort=name&order=asc" hx-target="#contacts-table-body" title="Click to sort by Name">Contact Name <span class="sort-icon">⇅</span></th>
-                  <th class="sortable-header" hx-get="/contacts/search?sort=email&order=asc" hx-target="#contacts-table-body" title="Click to sort by Email">Email <span class="sort-icon">⇅</span></th>
-                  <th class="sortable-header" hx-get="/contacts/search?sort=phone&order=asc" hx-target="#contacts-table-body" title="Click to sort by Phone">Phone <span class="sort-icon">⇅</span></th>
-                  <th class="sortable-header" hx-get="/contacts/search?sort=category&order=asc" hx-target="#contacts-table-body" title="Click to sort by Category">Category <span class="sort-icon">⇅</span></th>
-                  <th class="sortable-header" hx-get="/contacts/search?sort=status&order=asc" hx-target="#contacts-table-body" title="Click to sort by Status">Status <span class="sort-icon">⇅</span></th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody 
-                id="contacts-table-body"
+          <div class="toolbar-actions">
+            <!-- Bulk Action Controls -->
+            <button 
+              type="button" 
+              class="btn-bulk-delete"
+              hx-post="/contacts/bulk-delete"
+              hx-include=".contact-checkbox:checked"
+              hx-target="#contacts-table-body"
+              hx-confirm="Are you sure you want to delete selected contacts?"
+            >
+              🗑️ Delete Selected
+            </button>
+            <a href="/contacts/export-csv" class="btn-export-csv" download title="Export Contacts as CSV">
+              📥 Export CSV
+            </a>
+            <a href="/contacts/export-vcard" class="btn-export-vcard" download title="Export Contacts as Mobile vCard (.vcf)">
+              📇 Export vCard
+            </a>
+
+            <!-- HTMX Live Search Bar -->
+            <div class="search-box">
+              <span class="search-icon">🔍</span>
+              <input 
+                type="text" 
+                name="q" 
+                placeholder="Search by name, email, or category..." 
+                class="search-input"
                 hx-get="/contacts/search"
-                hx-trigger="load"
-              >
-                <!-- Populated via HTMX Fragment rendering on load -->
-                <tr>
-                  <td colspan="7" class="loading-state">
-                    Loading contacts server fragments...
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                hx-trigger="keyup changed delay:300ms, search"
+                hx-target="#contacts-table-body"
+                hx-indicator="#search-spinner"
+                onkeydown="if(event.key==='Enter'){event.preventDefault();}"
+              />
+              <span class="htmx-indicator spinner" id="search-spinner"></span>
+            </div>
           </div>
+        </div>
 
-          <!-- Server-Rendered HTMX Pagination Controls Container -->
-          <div 
-            id="pagination-container" 
-            class="pagination-wrapper"
-            hx-get="/contacts/pagination"
-            hx-trigger="load, contactsLoaded from:body, contactCreated from:body"
-          >
-            <!-- Rendered via HTMX Fragment -->
-          </div>
-        </form>
+        <div class="table-wrapper">
+          <table class="contacts-table">
+            <thead>
+              <tr>
+                <th class="checkbox-cell">
+                  <input type="checkbox" id="select-all-checkbox" onclick="toggleSelectAll(this)" />
+                </th>
+                <th class="sortable-header" hx-get="/contacts/search?sort=name&order=asc" hx-target="#contacts-table-body" title="Click to sort by Name">Contact Name <span class="sort-icon">⇅</span></th>
+                <th class="sortable-header" hx-get="/contacts/search?sort=email&order=asc" hx-target="#contacts-table-body" title="Click to sort by Email">Email <span class="sort-icon">⇅</span></th>
+                <th class="sortable-header" hx-get="/contacts/search?sort=phone&order=asc" hx-target="#contacts-table-body" title="Click to sort by Phone">Phone <span class="sort-icon">⇅</span></th>
+                <th class="sortable-header" hx-get="/contacts/search?sort=category&order=asc" hx-target="#contacts-table-body" title="Click to sort by Category">Category <span class="sort-icon">⇅</span></th>
+                <th class="sortable-header" hx-get="/contacts/search?sort=status&order=asc" hx-target="#contacts-table-body" title="Click to sort by Status">Status <span class="sort-icon">⇅</span></th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody 
+              id="contacts-table-body"
+              hx-get="/contacts/search"
+              hx-trigger="load"
+            >
+              <!-- Populated via HTMX Fragment rendering on load -->
+              <tr>
+                <td colspan="7" class="loading-state">
+                  Loading contacts server fragments...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Server-Rendered HTMX Pagination Controls Container -->
+        <div 
+          id="pagination-container" 
+          class="pagination-wrapper"
+          hx-get="/contacts/pagination"
+          hx-trigger="load, contactsLoaded from:body, contactCreated from:body"
+        >
+          <!-- Rendered via HTMX Fragment -->
+        </div>
       </section>
     </main>
 

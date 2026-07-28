@@ -868,10 +868,16 @@ app.get('/contacts/export-csv', (req, res) => {
 // POST /contacts/bulk-delete - Bulk HTMX Delete
 app.post('/contacts/bulk-delete', (req, res) => {
   let ids = req.body.ids;
-  if (!ids) {
+  
+  if (!ids || (Array.isArray(ids) && ids.length === 0)) {
     return res.send(getAllContacts().map(renderContactRow).join(''));
   }
   if (typeof ids === 'string') ids = [ids];
+
+  ids = ids.filter(id => id && typeof id === 'string' && id.trim().startsWith('cnt_'));
+  if (ids.length === 0) {
+    return res.send(getAllContacts().map(renderContactRow).join(''));
+  }
 
   bulkDeleteContacts(ids);
   res.setHeader('HX-Trigger', 'contactCreated');
