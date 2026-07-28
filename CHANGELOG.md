@@ -5,6 +5,14 @@ All notable changes to the **HTMX Contact Manager** project will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-07-27
+
+### Added
+- Integrated **Contact Duplicate Detection & Merge Engine** in `contactService.js` and `server.js`.
+- Added email-based duplicate detector (`detectDuplicateContacts`), record merge engine (`mergeDuplicateContacts`), and Express endpoints (`GET /contacts/duplicates`, `POST /contacts/merge`).
+- Updated `public/index.html` and `public/style.css` with **👯 Duplicate Detection & Merge Engine** card, match alerts, primary/duplicate contact badges, and amber merge action buttons.
+- Added unit tests in `contactService.spec.js` (28 total unit tests passing).
+
 ## [1.2.0] - 2026-07-27
 
 ### Added

@@ -571,7 +571,58 @@ Updated `contactService.js` and `contactService.spec.js` with custom key-value a
    * *Interview answer*: "I built dynamic contact lead scoring algorithms."
 
 ## Chosen Next Iteration
+Option 1: Contact Duplicate Detection & Merge Engine (Iteration 13 - Release v1.3.0).
+
+---
+
+# Build Notes - Build 46 Iteration 13 (Release v1.3.0) (2026-07-27)
+
+Implemented Contact Duplicate Detection & Merge Engine (Release v1.3.0).
+
+## Summary
+Updated `contactService.js` and `contactService.spec.js` with automated duplicate detector (`detectDuplicateContacts`) and contact merge engine (`mergeDuplicateContacts(targetId, duplicateIds)`). Updated `server.js` with duplicate scanner endpoint (`GET /contacts/duplicates`), merge endpoint (`POST /contacts/merge`), and fragment renderer (`renderDuplicatesList`). Updated `public/index.html` and `public/style.css` adding **👯 Duplicate Detection & Merge Engine** card with scan button, match alerts, primary vs duplicate contact badges, and single-click merge action buttons.
+
+## File-by-File Explanation
+- `contactService.js`: Contact CRM service updated with email-based duplicate detection and multi-record merging logic.
+- `contactService.spec.js`: Vitest unit test suite verifying duplicate group identification, notes/activity log consolidation, and primary contact updates.
+- `server.js`: Express server updated with `GET /contacts/duplicates` and `POST /contacts/merge` endpoints.
+- `public/index.html`: Added `👯 Duplicate Detection & Merge Engine` section with HTMX fragment auto-trigger on contact creation.
+- `public/style.css`: CSS updated with `.duplicate-group-card`, `.dup-header`, `.dup-contact-item`, and `.btn-merge` amber gradient styles.
+- `CHANGELOG.md`: Logged version 1.3.0 Release notes.
+
+## Manual Test Steps
+1. Open [https://htmx-contact-manager-build46.vercel.app](https://htmx-contact-manager-build46.vercel.app).
+2. **Create Duplicate**: Use the Add Contact form or **📥 Bulk JSON Import Vault** to add a duplicate contact with email `sarah.jenkins@brandpartners.com`.
+3. Scroll to **👯 Duplicate Detection & Merge Engine** or click **🔍 Scan Duplicates**.
+4. Observe the duplicate alert highlight `⚠️ 2 Records matching email: sarah.jenkins@brandpartners.com`.
+5. Click **⚡ Merge into Sarah Jenkins**.
+6. See the toast confirm `✅ Merged duplicates into Sarah Jenkins` and observe the duplicate record disappear, merging all notes and activity logs cleanly!
+
+## Candidate Next Iterations
+1. **Contact Reminders & Scheduled Follow-up Alerts (Iteration 14)**
+   * *Plain English*: Schedule follow-up date reminders for contacts with urgency badge highlights.
+   * *Benefit*: Proactive contact relationship management.
+   * *Interview answer*: "I built contact follow-up date scheduling and alerts."
+2. **Contact Performance & Analytics Dashboard Fragment (Iteration 14)**
+   * *Plain English*: View visual charts of total contacts, top category breakdown, and interaction trends.
+   * *Benefit*: Executive CRM insight reporting.
+   * *Interview answer*: "I built server-rendered CRM analytics dashboards."
+3. **Contact Export to VCF / vCard Payload Vault (Iteration 14)**
+   * *Plain English*: Export contacts as `.vcf` vCard files for seamless mobile address book import.
+   * *Benefit*: Mobile CRM contact syncing.
+   * *Interview answer*: "I built vCard / VCF contact file exporter."
+4. **Contact Lead Score & Engagement Calculator (Iteration 14)**
+   * *Plain English*: Compute dynamic lead scores based on notes, activity frequency, and custom fields.
+   * *Benefit*: Automated contact prioritization.
+   * *Interview answer*: "I built dynamic contact lead scoring algorithms."
+5. **Contact Field Encryption & Privacy Sanitizer (Iteration 14)**
+   * *Plain English*: Encrypt sensitive contact attributes (e.g. phone numbers, private notes) with AES masking.
+   * *Benefit*: Enterprise data privacy & compliance.
+   * *Interview answer*: "I built contact privacy masking and field encryption."
+
+## Chosen Next Iteration
 *None selected yet.*
+
 
 
 

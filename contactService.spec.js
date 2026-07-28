@@ -11,6 +11,8 @@ import {
   logContactActivity,
   addCustomField,
   removeCustomField,
+  detectDuplicateContacts,
+  mergeDuplicateContacts,
   importContactsFromJson,
   generateGravatarUrl,
   updateContactAvatar,
@@ -37,6 +39,26 @@ describe('contactService', () => {
     expect(contacts[0].name).toBe('Alex Rivera');
     expect(contacts[1].name).toBe('Elena Rostova');
     expect(contacts[2].name).toBe('Sarah Jenkins');
+  });
+
+  it('detects duplicate contacts sharing identical email address', () => {
+    addContact({ name: 'Sarah Jenkins Duplicate', email: 'sarah.jenkins@brandpartners.com' });
+    const duplicates = detectDuplicateContacts();
+    expect(duplicates.length).toBe(1);
+    expect(duplicates[0].email).toBe('sarah.jenkins@brandpartners.com');
+    expect(duplicates[0].contacts.length).toBe(2);
+  });
+
+  it('merges duplicate contacts into primary contact profile', () => {
+    const dup = addContact({ name: 'Sarah Jenkins Duplicate', email: 'sarah.jenkins@brandpartners.com' });
+    addContactNote(dup.id, 'Duplicate note to be merged.');
+    
+    mergeDuplicateContacts('cnt_1', [dup.id]);
+
+    const target = getContactById('cnt_1');
+    expect(getAllContacts().length).toBe(3);
+    expect(target.notes.some(n => n.text === 'Duplicate note to be merged.')).toBe(true);
+    expect(target.activityLog[0].action).toBe('MERGE');
   });
 
   it('adds and removes custom metadata key-value fields', () => {

@@ -1,64 +1,48 @@
-# 🤖 AGENTS.md — Agent & Workflow Standard Operating Procedures
+# 🤖 AGENTS.md — Universal Standard Operating Procedures for AI-286 Projects
 
-> **Mandatory guidelines for AI Coding Agents working on Build 46 (HTMX Contact Manager & Creator CRM)**
-
----
-
-## 📁 Standard Directory Setup & Required Files
-
-When initializing or working on any build folder in `AI-286-Builds`, the agent MUST maintain the following core files from **Iteration 1**:
-
-1. `README.md`: Public-facing project overview, live demo links (Vercel & GitHub), features list, tech stack, and local installation/run instructions.
-2. `BUILD_NOTES.md`: Chronological log of every iteration built, file-by-file explanations, manual testing steps, top 5 candidate next iterations, and chosen iteration.
-3. `CHANGELOG.md`: Semantic versioning release history following [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) standards (`v0.1.0`, `v0.2.0`, ..., `v1.0.0 Milestone`).
-4. `AGENTS.md`: Project-specific agent instructions, architectural rules, and deployment procedures.
-5. `.gitignore`: Git exclusions (`node_modules/`, `.env`, `.vercel`, `dist/`).
+> **Mandatory instructions and standard workflow for AI coding agents building projects in the AI-286 workspace.**
 
 ---
 
-## ⚙️ Development & Server Commands
+## 🛠️ Master Build Directive & Workflow Rules
 
-- **Start Local Dev Server**:
-  ```bash
-  npm run dev
-  ```
-  *(Runs Express server on `http://localhost:3000`)*
+When building or updating projects in `AI-286-Builds`, the AI Agent MUST follow these strict standards across **every single build**:
 
-- **Run Unit Test Suite**:
-  ```bash
-  npm test
-  ```
-  *(Runs Vitest test suite `contactService.spec.js`)*
+### 1. New Project Setup (Iteration 1 Initial Scaffolding)
+Whenever a new build folder is initialized, the agent MUST immediately set up all project files and ignore configurations before writing feature code:
+- `.gitignore`: Exclude `node_modules/`, `.env`, `.vercel/`, `dist/`, `.DS_Store`, build artifacts.
+- `README.md`: Root public project documentation with project overview, live Vercel URL, GitHub repository link, feature list, tech stack, and local installation/run instructions.
+- `BUILD_NOTES.md`: Chronological log of every iteration built, file-by-file explanations, manual test steps, top 5 candidate next iterations, and chosen iteration.
+- `CHANGELOG.md`: Semantic versioning log following [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) standards (`v0.1.0`, `v0.2.0`, ..., `v1.0.0 Milestone`).
+- `AGENTS.md`: Copy of this universal standard operating procedures file into the build directory.
 
-- **Deploy to Production Vercel**:
-  ```bash
-  npx vercel --prod --yes
-  ```
+### 2. Mandatory Iteration Workflow Checklist
+For **EVERY** build iteration, the AI Agent MUST perform the following steps sequentially:
 
----
-
-## 🔄 Iteration Workflow Checklist
-
-For **EVERY** iteration built, the AI Agent MUST perform all of the following steps:
-
-1. **Implement Feature & Code**:
-   - Write clean modular functions in `contactService.js`.
-   - Add server endpoints & fragment renderers in `server.js`.
-   - Update UI HTML/CSS in `public/index.html` and `public/style.css`.
-2. **Write & Pass Unit Tests**:
-   - Add unit test coverage in `contactService.spec.js`.
-   - Run `npm test` and ensure 100% pass rate.
-3. **Update Documentation**:
-   - Document iteration details, manual test steps, and candidate next iterations in `BUILD_NOTES.md`.
-   - Update release version in `CHANGELOG.md`.
-   - Update features & badges in `README.md`.
-4. **Git Commit & Push**:
-   - `git add .`
-   - `git commit -m "feat: ..."`
-   - `git push origin main`
+1. **Feature Implementation**:
+   - Write clean, modular, production-quality code.
+   - Maintain modern, responsive design aesthetics (dark mode, glassmorphism, dynamic micro-animations).
+2. **Automated Unit Testing**:
+   - Write comprehensive unit tests for all core services and logic.
+   - Execute the project test command (`npm test`) and verify 100% pass rate.
+3. **Documentation Updates**:
+   - Update `BUILD_NOTES.md` with summary, file-by-file changes, manual test steps, and top 5 candidate next iterations.
+   - Update `CHANGELOG.md` with semantic version release notes.
+   - Update `README.md` features and badges.
+4. **Git Repository Commit & Push**:
+   - Stage all changes: `git add .`
+   - Commit with structured message: `git commit -m "feat: ..."`
+   - Push to main branch: `git push origin main`
 5. **Vercel Production Deployment**:
-   - Run `npx vercel --prod --yes` to deploy live.
-   - Verify deployment returns status `READY`.
+   - Trigger production deployment: `npx vercel --prod --yes`
+   - Confirm deployment status returns `READY`.
 6. **User Progress Report**:
-   - Provide manual test steps.
-   - List top 5 candidate next iterations for the user to select.
+   - Provide clear manual test steps.
+   - Present the next top 5 candidate iterations for the user to select.
+
+---
+
+## 📌 Code Quality & Architecture Guardrails
+- **No Symptom Patches**: Never wrap failing code in silent try/except or dummy fallbacks. Identify and resolve underlying root causes.
+- **Empirical Verification**: Never claim a task is completed until tests have run and deployment is verified live.
+- **Preserve Existing Logic**: Preserve existing docstrings, tests, and API signatures unless explicitly asked to modify them.

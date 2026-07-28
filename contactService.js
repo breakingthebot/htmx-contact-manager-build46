@@ -133,6 +133,75 @@ export function logContactActivity(contactId, action, details) {
   return entry;
 }
 
+export function detectDuplicateContacts() {
+  const groups = {};
+
+  contactsStore.forEach(c => {
+    const cleanEmail = c.email.trim().toLowerCase();
+    if (!groups[cleanEmail]) {
+      groups[cleanEmail] = [];
+    }
+    groups[cleanEmail].push(c);
+  });
+
+  const duplicates = [];
+  Object.keys(groups).forEach(email => {
+    if (groups[email].length > 1) {
+      duplicates.push({
+        email,
+        contacts: groups[email]
+      });
+    }
+  });
+
+  return duplicates;
+}
+
+export function mergeDuplicateContacts(targetContactId, duplicateIdsToMerge) {
+  const target = getContactById(targetContactId);
+  if (!target) {
+    throw new Error(`Target contact with ID ${targetContactId} not found`);
+  }
+
+  if (!Array.isArray(duplicateIdsToMerge) || duplicateIdsToMerge.length === 0) {
+    throw new Error('No duplicate contacts specified for merge');
+  }
+
+  let mergedCount = 0;
+
+  duplicateIdsToMerge.forEach(dupId => {
+    if (dupId === targetContactId) return;
+
+    const dup = getContactById(dupId);
+    if (!dup) return;
+
+    // Merge notes
+    if (dup.notes && dup.notes.length > 0) {
+      target.notes = [...target.notes, ...dup.notes];
+    }
+
+    // Merge activity log
+    if (dup.activityLog && dup.activityLog.length > 0) {
+      target.activityLog = [...target.activityLog, ...dup.activityLog];
+    }
+
+    // Merge custom fields
+    if (dup.customFields && dup.customFields.length > 0) {
+      dup.customFields.forEach(cf => {
+        if (!target.customFields.some(tcf => tcf.key.toLowerCase() === cf.key.toLowerCase())) {
+          target.customFields.push({ ...cf });
+        }
+      });
+    }
+
+    deleteContact(dupId);
+    mergedCount++;
+  });
+
+  logContactActivity(targetContactId, 'MERGE', `Merged ${mergedCount} duplicate contact record(s) into this profile.`);
+  return target;
+}
+
 export function addCustomField(contactId, key, value) {
   const contact = getContactById(contactId);
   if (!contact) {

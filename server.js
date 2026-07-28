@@ -13,6 +13,8 @@ import {
   updateContactAvatar,
   addCustomField,
   removeCustomField,
+  detectDuplicateContacts,
+  mergeDuplicateContacts,
   importContactsFromJson,
   getCategoryStats,
   getContactById,
@@ -54,6 +56,52 @@ export function renderAvatarImg(c, sizeClass = '') {
       ${c.name.charAt(0).toUpperCase()}
     </div>
   `;
+}
+
+export function renderDuplicatesList() {
+  const duplicates = detectDuplicateContacts();
+
+  if (duplicates.length === 0) {
+    return `
+      <div class="empty-duplicates">
+        ✅ No duplicate contacts detected! Your CRM database is clean.
+      </div>
+    `;
+  }
+
+  return duplicates.map(group => {
+    const primary = group.contacts[0];
+    const mergeTargetIds = group.contacts.slice(1).map(c => c.id);
+
+    return `
+      <div class="duplicate-group-card">
+        <div class="dup-header">
+          <span>⚠️ <strong>${group.contacts.length} Records</strong> matching email: <code>${group.email}</code></span>
+        </div>
+        <div class="dup-contacts-list">
+          ${group.contacts.map((c, idx) => `
+            <div class="dup-contact-item">
+              <span class="dup-badge">${idx === 0 ? 'Primary' : 'Duplicate'}</span>
+              ${renderAvatarImg(c, 'avatar-mini')}
+              <strong>${c.name}</strong> (${c.id}) - ${c.category}
+            </div>
+          `).join('')}
+        </div>
+        <form 
+          hx-post="/contacts/merge" 
+          hx-target="#toast-container"
+          hx-swap="innerHTML"
+          class="merge-form"
+        >
+          <input type="hidden" name="targetId" value="${primary.id}" />
+          ${mergeTargetIds.map(id => `<input type="hidden" name="mergeIds" value="${id}" />`).join('')}
+          <button type="submit" class="btn-merge">
+            ⚡ Merge into ${primary.name} (${primary.id})
+          </button>
+        </form>
+      </div>
+    `;
+  }).join('');
 }
 
 export function renderCustomFieldsList(contactId, customFields) {
@@ -352,7 +400,8 @@ export function renderActivityTimeline(activityLog) {
     UNSTARRED: '☆',
     AVATAR_UPDATE: '🖼️',
     FIELD_UPDATE: '🏷️',
-    FIELD_DELETE: '🗑️'
+    FIELD_DELETE: '🗑️',
+    MERGE: '👯'
   };
 
   return activityLog.map(act => `
@@ -463,6 +512,25 @@ export function renderContactDrawer(c) {
 }
 
 // HTMX Server Routes
+
+// GET /contacts/duplicates - Duplicate Detection Scanner Vault Endpoint
+app.get('/contacts/duplicates', (req, res) => {
+  res.send(renderDuplicatesList());
+});
+
+// POST /contacts/merge - Merge Duplicate Contacts Endpoint
+app.post('/contacts/merge', (req, res) => {
+  try {
+    let mergeIds = req.body.mergeIds;
+    if (typeof mergeIds === 'string') mergeIds = [mergeIds];
+
+    const mergedContact = mergeDuplicateContacts(req.body.targetId, mergeIds);
+    res.setHeader('HX-Trigger', 'contactCreated');
+    res.send(renderToastNotification('success', `Merged duplicates into ${mergedContact.name} (${mergedContact.id})`));
+  } catch (err) {
+    res.status(400).send(renderToastNotification('error', err.message));
+  }
+});
 
 // POST /contacts/:id/custom-fields - Add Custom Key-Value Attribute
 app.post('/contacts/:id/custom-fields', (req, res) => {

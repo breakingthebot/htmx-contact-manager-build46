@@ -4,8 +4,8 @@
 
 [![Vercel Deployment](https://img.shields.io/badge/Vercel-Live%20Demo-000000?style=for-the-badge&logo=vercel)](https://htmx-contact-manager-build46.vercel.app)
 [![GitHub Repository](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github)](https://github.com/breakingthebot/htmx-contact-manager-build46)
-[![Tests](https://img.shields.io/badge/Vitest-26%20Passed-6E9F18?style=for-the-badge&logo=vitest)](file:///C:/Users/marve/Desktop/AI-286-Builds/Build_46/contactService.spec.js)
-[![Version](https://img.shields.io/badge/Release-v1.2.0-blue?style=for-the-badge)](file:///C:/Users/marve/Desktop/AI-286-Builds/Build_46/CHANGELOG.md)
+[![Tests](https://img.shields.io/badge/Vitest-28%20Passed-6E9F18?style=for-the-badge&logo=vitest)](file:///C:/Users/marve/Desktop/AI-286-Builds/Build_46/contactService.spec.js)
+[![Version](https://img.shields.io/badge/Release-v1.3.0-blue?style=for-the-badge)](file:///C:/Users/marve/Desktop/AI-286-Builds/Build_46/CHANGELOG.md)
 
 ---
 
@@ -22,6 +22,7 @@
 ## 🔥 Key Features
 
 - **⚡ Zero Client-Side JS Framework**: Powered purely by HTMX `hx-get`, `hx-post`, `hx-put`, and `hx-delete` fragment swaps.
+- **👯 Duplicate Detection & Merge Engine**: Automated scanner detecting matching emails/names and merging duplicate profiles, consolidating notes and activity timelines.
 - **🔍 Real-Time Live Search & Category Filtering**: Instantly search contacts by name, email, or category tags (`Sponsor`, `Collaborator`, `VIP`, `Agency`) without page refreshes.
 - **📊 Dynamic Column Sorting**: Sort contact records by Name, Email, Phone, Category, or Status ascending/descending with clickable table header fragment triggers (`▲` / `▼`).
 - **📄 Server-Rendered HTMX Pagination**: Paginate contact lists dynamically with Out-Of-Band (`hx-swap-oob="true"`) page controls (`Page X of Y`) and items-per-page selectors (`5`, `10`, `25`, `50`).

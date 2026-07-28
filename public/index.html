@@ -115,6 +115,24 @@
         </form>
       </section>
 
+      <!-- Duplicate Contact Detector & Merge Engine Card -->
+      <section class="card duplicates-card">
+        <div class="card-header">
+          <h2>👯 Duplicate Detection & Merge Engine</h2>
+          <button 
+            type="button" 
+            class="btn-secondary btn-scan-dup"
+            hx-get="/contacts/duplicates"
+            hx-target="#duplicates-container"
+          >
+            🔍 Scan Duplicates
+          </button>
+        </div>
+        <div id="duplicates-container" class="duplicates-container" hx-get="/contacts/duplicates" hx-trigger="load, contactCreated from:body">
+          <!-- Rendered via HTMX Fragment -->
+        </div>
+      </section>
+
       <!-- Starred Favorites Quick-Access Bar -->
       <div id="favorites-bar-container" class="favorites-bar-wrapper" hx-get="/contacts/favorites-bar" hx-trigger="load, favoriteToggled from:body">
         <!-- Rendered via HTMX Fragment -->
