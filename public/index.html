@@ -24,6 +24,17 @@
         </div>
       </div>
       <div class="header-right">
+        <div id="privacy-toggle-container" class="privacy-toggle-wrapper" hx-post="/contacts/toggle-privacy" hx-trigger="none">
+          <button 
+            type="button" 
+            class="btn-privacy-toggle"
+            hx-post="/contacts/toggle-privacy"
+            hx-target="#privacy-toggle-container"
+            title="Enable Privacy Shield (Mask Emails & Phones)"
+          >
+            🔓 Privacy Shield OFF
+          </button>
+        </div>
         <span class="htmx-badge">htmx.org active</span>
       </div>
     </header>

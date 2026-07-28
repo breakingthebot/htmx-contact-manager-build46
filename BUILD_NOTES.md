@@ -813,7 +813,56 @@ Updated `contactService.js` and `contactService.spec.js` with engagement lead sc
    * *Interview answer*: "I built drag-and-drop contact avatar uploader."
 
 ## Chosen Next Iteration
+Option 1: Contact Field Encryption & Privacy Sanitizer (Iteration 18 - Release v1.8.0).
+
+---
+
+# Build Notes - Build 46 Iteration 18 (Release v1.8.0) (2026-07-27)
+
+Implemented Contact Field Encryption & Privacy Sanitizer (Release v1.8.0).
+
+## Summary
+Updated `contactService.js` and `contactService.spec.js` with field masking algorithms (`maskEmail`, `maskPhone`, `toggleGlobalPrivacyMode`, `isPrivacyModeActive`). Updated `server.js` with privacy toggle route (`POST /contacts/toggle-privacy`) and privacy mask rendering in contact table rows, detail drawers, and duplicate cards. Updated `public/index.html` and `public/style.css` adding **🔒 Privacy Shield** toggle button in the header toolbar with blur masking CSS (`.masked-field`, `.btn-privacy-toggle`).
+
+## File-by-File Explanation
+- `contactService.js`: Contact CRM service updated with email masking (`s***s@domain.com`), phone masking (`+1 (***) ***-5678`), and global privacy mode toggle state.
+- `contactService.spec.js`: Vitest unit test suite verifying email and phone masking regex and state toggles.
+- `server.js`: Express server updated with `POST /contacts/toggle-privacy` endpoint and masked field rendering.
+- `public/index.html`: Added `#privacy-toggle-container` target in header toolbar.
+- `public/style.css`: CSS updated with `.btn-privacy-toggle`, `.active-privacy`, and `.masked-field` CSS blur styles.
+- `CHANGELOG.md`: Logged version 1.8.0 Release notes.
+
+## Manual Test Steps
+1. Open [https://htmx-contact-manager-build46.vercel.app](https://htmx-contact-manager-build46.vercel.app).
+2. **Enable Privacy Shield**: Click **🔓 Privacy Shield OFF** in the top header.
+3. Observe the button toggle to **🔒 Privacy Shield ON** and all email addresses, phone numbers, and duplicate cards blur / mask sensitive PII data instantly!
+4. **Hover to Unmask**: Hover over any masked email or phone number to temporarily unblur the PII value cleanly.
+
+## Candidate Next Iterations
+1. **Contact Webhook Integration & Automated Dispatch (Iteration 19)**
+   * *Plain English*: Dispatch outbound webhooks to external URLs when contacts are added or updated.
+   * *Benefit*: CRM automation & third-party integrations.
+   * *Interview answer*: "I built real-time outbound CRM webhooks."
+2. **Contact Tagging Auto-Complete & Multi-Select Filter (Iteration 19)**
+   * *Plain English*: Filter contacts with multi-select tag pills and search auto-completion.
+   * *Benefit*: Enhanced contact search flexibility.
+   * *Interview answer*: "I built multi-tag auto-complete filtering."
+3. **Contact Activity Timeline CSV / Audit Log Exporter (Iteration 19)**
+   * *Plain English*: Export entire CRM activity audit history as downloadable CSV file.
+   * *Benefit*: Security compliance & audit reporting.
+   * *Interview answer*: "I built activity audit history exporter."
+4. **Contact Avatar Drag-and-Drop Uploader Vault (Iteration 19)**
+   * *Plain English*: Drag and drop custom avatar images with live client preview and base64 storage.
+   * *Benefit*: Enhanced visual profile customization.
+   * *Interview answer*: "I built drag-and-drop contact avatar uploader."
+5. **Contact Field Validation & Regex Customizer (Iteration 19)**
+   * *Plain English*: Define custom regex pattern rules for phone numbers and custom key-value fields.
+   * *Benefit*: Data integrity enforcement.
+   * *Interview answer*: "I built custom field validation rule engine."
+
+## Chosen Next Iteration
 *None selected yet.*
+
 
 
 

@@ -45,6 +45,32 @@
 
 const AVATAR_COLORS = ['#6366f1', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6', '#06b6d4'];
 
+let isPrivacyMaskedGlobal = false;
+
+export function isPrivacyModeActive() {
+  return isPrivacyMaskedGlobal;
+}
+
+export function toggleGlobalPrivacyMode() {
+  isPrivacyMaskedGlobal = !isPrivacyMaskedGlobal;
+  return isPrivacyMaskedGlobal;
+}
+
+export function maskEmail(email) {
+  if (!email || !email.includes('@')) return '***@***.com';
+  const [local, domain] = email.split('@');
+  if (local.length <= 2) return `${local.charAt(0)}*@${domain}`;
+  return `${local.charAt(0)}***${local.charAt(local.length - 1)}@${domain}`;
+}
+
+export function maskPhone(phone) {
+  if (!phone) return '***-***-****';
+  const digits = phone.replace(/\D/g, '');
+  if (digits.length <= 4) return '***-***-****';
+  const visibleLast = digits.slice(-4);
+  return `+1 (***) ***-${visibleLast}`;
+}
+
 export function generateGravatarUrl(email) {
   const cleanEmail = (email || '').trim().toLowerCase();
   return `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(cleanEmail)}`;
@@ -652,5 +678,6 @@ export function exportContactsAsCsv(ids = null) {
 }
 
 export function resetContactsStore() {
+  isPrivacyMaskedGlobal = false;
   contactsStore = JSON.parse(JSON.stringify(INITIAL_CONTACTS));
 }

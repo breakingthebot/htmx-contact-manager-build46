@@ -5,6 +5,14 @@ All notable changes to the **HTMX Contact Manager** project will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.0] - 2026-07-27
+
+### Added
+- Integrated **Contact Field Encryption & Privacy Sanitizer** in `contactService.js` and `server.js`.
+- Added email/phone PII masking helpers (`maskEmail`, `maskPhone`), global privacy shield state manager (`toggleGlobalPrivacyMode`), and Express endpoint (`POST /contacts/toggle-privacy`).
+- Updated `public/index.html` and `public/style.css` with **🔒 Privacy Shield** header toggle button, masked table email/phone cells, and interactive hover-to-unblur CSS rules.
+- Added unit tests in `contactService.spec.js` (36 total unit tests passing).
+
 ## [1.7.0] - 2026-07-27
 
 ### Added

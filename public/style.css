@@ -989,6 +989,46 @@ label {
 .cat-fill-vip { background: #ec4899; }
 .cat-fill-agency { background: #f59e0b; }
 
+/* Privacy Shield & Sensitive Field Masking */
+.privacy-toggle-wrapper {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 12px;
+}
+
+.btn-privacy-toggle {
+  background: rgba(100, 116, 139, 0.2);
+  color: #cbd5e1;
+  border: 1px solid rgba(100, 116, 139, 0.4);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-privacy-toggle.active-privacy {
+  background: rgba(239, 68, 68, 0.25);
+  color: #fca5a5;
+  border-color: rgba(239, 68, 68, 0.5);
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+}
+
+.btn-privacy-toggle:hover {
+  transform: scale(1.03);
+}
+
+.masked-field {
+  filter: blur(3px);
+  user-select: none;
+  transition: filter 0.3s ease;
+}
+
+.masked-field:hover {
+  filter: blur(0px);
+}
+
 /* Scheduled Follow-up Reminders Bar */
 .reminders-bar-wrapper {
   margin-bottom: 20px;

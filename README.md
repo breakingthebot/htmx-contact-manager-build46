@@ -4,8 +4,8 @@
 
 [![Vercel Deployment](https://img.shields.io/badge/Vercel-Live%20Demo-000000?style=for-the-badge&logo=vercel)](https://htmx-contact-manager-build46.vercel.app)
 [![GitHub Repository](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github)](https://github.com/breakingthebot/htmx-contact-manager-build46)
-[![Tests](https://img.shields.io/badge/Vitest-34%20Passed-6E9F18?style=for-the-badge&logo=vitest)](file:///C:/Users/marve/Desktop/AI-286-Builds/Build_46/contactService.spec.js)
-[![Version](https://img.shields.io/badge/Release-v1.7.0-blue?style=for-the-badge)](file:///C:/Users/marve/Desktop/AI-286-Builds/Build_46/CHANGELOG.md)
+[![Tests](https://img.shields.io/badge/Vitest-36%20Passed-6E9F18?style=for-the-badge&logo=vitest)](file:///C:/Users/marve/Desktop/AI-286-Builds/Build_46/contactService.spec.js)
+[![Version](https://img.shields.io/badge/Release-v1.8.0-blue?style=for-the-badge)](file:///C:/Users/marve/Desktop/AI-286-Builds/Build_46/CHANGELOG.md)
 
 ---
 
@@ -22,6 +22,7 @@
 ## 🔥 Key Features
 
 - **⚡ Zero Client-Side JS Framework**: Powered purely by HTMX `hx-get`, `hx-post`, `hx-put`, and `hx-delete` fragment swaps.
+- **🔒 Privacy Shield & Sensitive Field Sanitizer**: Single-click header toggle to mask sensitive contact emails and phone numbers (`s***s@domain.com`, `+1 (***) ***-5678`) with interactive CSS hover unblur.
 - **🔥 Contact Lead Score & Engagement Calculator**: Dynamic lead scores (0-100) and tier badges (`🔥 HOT`, `⚡ WARM`, `❄️ COLD`) based on notes, activity frequency, custom fields, and scheduled follow-ups.
 - **📇 Contact Export to VCF / vCard Payload Vault**: Single-click export of contact records to standard RFC 6350 `.vcf` vCard files for mobile address book sync.
 - **📊 CRM Analytics & Performance Dashboard**: Real-time metric counters (Total Contacts, Favorites, Notes, Attributes) and visual category distribution progress bars.

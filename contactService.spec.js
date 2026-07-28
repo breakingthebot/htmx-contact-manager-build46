@@ -18,6 +18,10 @@ import {
   getUpcomingReminders,
   getAnalyticsSummary,
   calculateLeadScore,
+  maskEmail,
+  maskPhone,
+  toggleGlobalPrivacyMode,
+  isPrivacyModeActive,
   exportContactsAsVcard,
   importContactsFromJson,
   generateGravatarUrl,
@@ -45,6 +49,20 @@ describe('contactService', () => {
     expect(contacts[0].name).toBe('Alex Rivera');
     expect(contacts[1].name).toBe('Elena Rostova');
     expect(contacts[2].name).toBe('Sarah Jenkins');
+  });
+
+  it('masks sensitive email addresses and phone numbers correctly', () => {
+    expect(maskEmail('sarah.jenkins@brandpartners.com')).toContain('s***s@brandpartners.com');
+    expect(maskPhone('+1 (555) 234-5678')).toContain('5678');
+    expect(maskPhone('+1 (555) 234-5678')).toContain('*');
+  });
+
+  it('toggles global privacy masking mode state', () => {
+    expect(isPrivacyModeActive()).toBe(false);
+    toggleGlobalPrivacyMode();
+    expect(isPrivacyModeActive()).toBe(true);
+    toggleGlobalPrivacyMode();
+    expect(isPrivacyModeActive()).toBe(false);
   });
 
   it('calculates contact engagement lead score and tier correctly', () => {

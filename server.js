@@ -20,6 +20,10 @@ import {
   getUpcomingReminders,
   getAnalyticsSummary,
   calculateLeadScore,
+  maskEmail,
+  maskPhone,
+  toggleGlobalPrivacyMode,
+  isPrivacyModeActive,
   exportContactsAsVcard,
   importContactsFromJson,
   getCategoryStats,
@@ -50,6 +54,21 @@ export function renderToastNotification(type, message) {
       <span>${icon} ${message}</span>
       <span class="toast-close">&times;</span>
     </div>
+  `;
+}
+
+export function renderPrivacyToggleButton() {
+  const active = isPrivacyModeActive();
+  return `
+    <button 
+      type="button" 
+      class="btn-privacy-toggle ${active ? 'active-privacy' : ''}"
+      hx-post="/contacts/toggle-privacy"
+      hx-target="#privacy-toggle-container"
+      title="${active ? 'Disable Privacy Shield' : 'Enable Privacy Shield (Mask Emails & Phones)'}"
+    >
+      ${active ? '🔒 Privacy Shield ON' : '🔓 Privacy Shield OFF'}
+    </button>
   `;
 }
 
@@ -161,14 +180,17 @@ export function renderDuplicatesList() {
     `;
   }
 
+  const isMasked = isPrivacyModeActive();
+
   return duplicates.map(group => {
     const primary = group.contacts[0];
     const mergeTargetIds = group.contacts.slice(1).map(c => c.id);
+    const displayEmail = isMasked ? maskEmail(group.email) : group.email;
 
     return `
       <div class="duplicate-group-card">
         <div class="dup-header">
-          <span>⚠️ <strong>${group.contacts.length} Records</strong> matching email: <code>${group.email}</code></span>
+          <span>⚠️ <strong>${group.contacts.length} Records</strong> matching email: <code>${displayEmail}</code></span>
         </div>
         <div class="dup-contacts-list">
           ${group.contacts.map((c, idx) => `
@@ -351,6 +373,9 @@ export function renderContactRow(c) {
     `;
   }
 
+  const isMasked = isPrivacyModeActive();
+  const displayEmail = isMasked ? maskEmail(c.email) : c.email;
+
   const lead = calculateLeadScore(c);
   const tierIcon = lead.tier === 'HOT' ? '🔥' : (lead.tier === 'WARM' ? '⚡' : '❄️');
 
@@ -379,7 +404,7 @@ export function renderContactRow(c) {
           </div>
         </div>
       </td>
-      <td class="contact-email">${c.email}</td>
+      <td class="contact-email ${isMasked ? 'masked-field' : ''}">${displayEmail}</td>
       <td>
         <span class="lead-score-badge score-${lead.tier.toLowerCase()}" title="Engagement Score: ${lead.score}/100">
           ${tierIcon} ${lead.tier} (${lead.score})
@@ -547,6 +572,10 @@ export function renderActivityTimeline(activityLog) {
 }
 
 export function renderContactDrawer(c) {
+  const isMasked = isPrivacyModeActive();
+  const displayEmail = isMasked ? maskEmail(c.email) : c.email;
+  const displayPhone = isMasked ? maskPhone(c.phone) : c.phone;
+
   const lead = calculateLeadScore(c);
   const tierIcon = lead.tier === 'HOT' ? '🔥' : (lead.tier === 'WARM' ? '⚡' : '❄️');
 
@@ -558,7 +587,7 @@ export function renderContactDrawer(c) {
           ${renderAvatarImg(c, 'avatar-large')}
           <div>
             <h3>${c.name} ${c.isFavorite ? '⭐' : ''}</h3>
-            <p class="drawer-email">${c.email}</p>
+            <p class="drawer-email ${isMasked ? 'masked-field' : ''}">${displayEmail}</p>
           </div>
         </div>
         <div class="drawer-header-actions">
@@ -581,7 +610,7 @@ export function renderContactDrawer(c) {
         </div>
         <div class="detail-pill">
           <span class="detail-label">Phone:</span>
-          <span>${c.phone}</span>
+          <span class="${isMasked ? 'masked-field' : ''}">${displayPhone}</span>
         </div>
         <div class="detail-pill">
           <span class="detail-label">Category:</span>
@@ -683,6 +712,13 @@ export function renderContactDrawer(c) {
 }
 
 // HTMX Server Routes
+
+// POST /contacts/toggle-privacy - Toggle Global Privacy Shield Endpoint
+app.post('/contacts/toggle-privacy', (req, res) => {
+  toggleGlobalPrivacyMode();
+  res.setHeader('HX-Trigger', 'contactCreated');
+  res.send(renderPrivacyToggleButton());
+});
 
 // GET /contacts/export-vcard - Bulk vCard Payload Download
 app.get('/contacts/export-vcard', (req, res) => {
