@@ -124,6 +124,34 @@ body {
   flex-wrap: wrap;
 }
 
+.btn-export-csv,
+.btn-export-vcard {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.btn-export-vcard {
+  background: rgba(139, 92, 246, 0.15);
+  color: #c084fc;
+  border-color: rgba(139, 92, 246, 0.3);
+}
+
+.btn-export-csv:hover,
+.btn-export-vcard:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.2);
+}
+
 .fav-pill {
   display: inline-flex;
   align-items: center;

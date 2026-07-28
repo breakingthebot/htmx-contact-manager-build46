@@ -718,7 +718,55 @@ Updated `contactService.js` and `contactService.spec.js` with analytics metrics 
    * *Interview answer*: "I built multi-tag auto-complete filtering."
 
 ## Chosen Next Iteration
+Option 1: Contact Export to VCF / vCard Payload Vault (Iteration 16 - Release v1.6.0).
+
+---
+
+# Build Notes - Build 46 Iteration 16 (Release v1.6.0) (2026-07-27)
+
+Implemented Contact Export to VCF / vCard Payload Vault (Release v1.6.0).
+
+## Summary
+Updated `contactService.js` and `contactService.spec.js` with vCard RFC 6350 payload generator (`exportContactsAsVcard`). Updated `server.js` with bulk export endpoint (`GET /contacts/export-vcard`) and single contact export endpoint (`GET /contacts/:id/vcard`). Updated `public/index.html` and `public/style.css` adding **📇 Export vCard** toolbar download button, table row vCard icons, and detail drawer header download actions.
+
+## File-by-File Explanation
+- `contactService.js`: Contact CRM service updated with `exportContactsAsVcard` RFC 6350 formatter.
+- `contactService.spec.js`: Vitest unit test suite verifying `BEGIN:VCARD` ... `END:VCARD` headers, email, phone, name, and notes formatting.
+- `server.js`: Express server updated with `text/vcard` response headers and vCard download routes.
+- `public/index.html`: Added `📇 Export vCard` toolbar button.
+- `public/style.css`: CSS updated with `.btn-export-vcard` purple glassmorphism styling.
+- `CHANGELOG.md`: Logged version 1.6.0 Release notes.
+
+## Manual Test Steps
+1. Open [https://htmx-contact-manager-build46.vercel.app](https://htmx-contact-manager-build46.vercel.app).
+2. **Export All Contacts as vCard**: Click **📇 Export vCard** in the main toolbar. A `.vcf` file (`contacts_vault.vcf`) will download containing all contact cards ready for import into Apple Contacts, Google Contacts, or Outlook!
+3. **Export Single Contact vCard**: Click **📇** icon on Sarah Jenkins' row or inside her detail drawer. Download `Sarah_Jenkins.vcf` instantly.
+
+## Candidate Next Iterations
+1. **Contact Lead Score & Engagement Calculator (Iteration 17)**
+   * *Plain English*: Compute dynamic lead scores based on notes, activity frequency, and custom fields.
+   * *Benefit*: Automated contact prioritization.
+   * *Interview answer*: "I built dynamic contact lead scoring algorithms."
+2. **Contact Field Encryption & Privacy Sanitizer (Iteration 17)**
+   * *Plain English*: Encrypt sensitive contact attributes (e.g. phone numbers, private notes) with AES masking.
+   * *Benefit*: Enterprise data privacy & compliance.
+   * *Interview answer*: "I built contact privacy masking and field encryption."
+3. **Contact Webhook Integration & Automated Dispatch (Iteration 17)**
+   * *Plain English*: Dispatch outbound webhooks to external URLs when contacts are added or updated.
+   * *Benefit*: CRM automation & third-party integrations.
+   * *Interview answer*: "I built real-time outbound CRM webhooks."
+4. **Contact Tagging Auto-Complete & Multi-Select Filter (Iteration 17)**
+   * *Plain English*: Filter contacts with multi-select tag pills and search auto-completion.
+   * *Benefit*: Enhanced contact search flexibility.
+   * *Interview answer*: "I built multi-tag auto-complete filtering."
+5. **Contact Activity Timeline CSV / Audit Log Exporter (Iteration 17)**
+   * *Plain English*: Export entire CRM activity audit history as downloadable CSV file.
+   * *Benefit*: Security compliance & audit reporting.
+   * *Interview answer*: "I built activity audit history exporter."
+
+## Chosen Next Iteration
 *None selected yet.*
+
 
 
 

@@ -19,6 +19,7 @@ import {
   clearContactReminder,
   getUpcomingReminders,
   getAnalyticsSummary,
+  exportContactsAsVcard,
   importContactsFromJson,
   getCategoryStats,
   getContactById,
@@ -392,6 +393,14 @@ export function renderContactRow(c) {
         >
           👁️
         </button>
+        <a 
+          href="/contacts/${c.id}/vcard" 
+          class="btn-icon btn-vcard" 
+          download 
+          title="Download vCard (.vcf)"
+        >
+          📇
+        </a>
         <button 
           type="button"
           class="btn-icon btn-edit" 
@@ -541,14 +550,17 @@ export function renderContactDrawer(c) {
             <p class="drawer-email">${c.email}</p>
           </div>
         </div>
-        <button 
-          type="button" 
-          class="btn-close-drawer" 
-          hx-get="/contacts/clear-drawer" 
-          hx-target="#contact-drawer-container"
-        >
-          ❌
-        </button>
+        <div class="drawer-header-actions">
+          <a href="/contacts/${c.id}/vcard" class="btn-icon" download title="Download vCard (.vcf)">📇</a>
+          <button 
+            type="button" 
+            class="btn-close-drawer" 
+            hx-get="/contacts/clear-drawer" 
+            hx-target="#contact-drawer-container"
+          >
+            ❌
+          </button>
+        </div>
       </div>
 
       <div class="drawer-details">
@@ -656,6 +668,24 @@ export function renderContactDrawer(c) {
 }
 
 // HTMX Server Routes
+
+// GET /contacts/export-vcard - Bulk vCard Payload Download
+app.get('/contacts/export-vcard', (req, res) => {
+  const vcardContent = exportContactsAsVcard();
+  res.setHeader('Content-Type', 'text/vcard');
+  res.setHeader('Content-Disposition', 'attachment; filename="contacts_vault.vcf"');
+  res.status(200).send(vcardContent);
+});
+
+// GET /contacts/:id/vcard - Single Contact vCard Payload Download
+app.get('/contacts/:id/vcard', (req, res) => {
+  const contact = getContactById(req.params.id);
+  if (!contact) return res.status(404).send('Contact not found');
+  const vcardContent = exportContactsAsVcard([contact.id]);
+  res.setHeader('Content-Type', 'text/vcard');
+  res.setHeader('Content-Disposition', `attachment; filename="${contact.name.replace(/\s+/g, '_')}.vcf"`);
+  res.status(200).send(vcardContent);
+});
 
 // GET /contacts/pagination - Pagination Controls Endpoint
 app.get('/contacts/pagination', (req, res) => {

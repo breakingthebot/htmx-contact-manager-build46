@@ -141,6 +141,28 @@ export function logContactActivity(contactId, action, details) {
   return entry;
 }
 
+export function exportContactsAsVcard(ids = null) {
+  const targetContacts = ids && ids.length > 0
+    ? contactsStore.filter(c => ids.includes(c.id))
+    : contactsStore;
+
+  return targetContacts.map(c => {
+    const nameParts = c.name.trim().split(' ');
+    const firstName = nameParts[0] || '';
+    const lastName = nameParts.slice(1).join(' ') || '';
+
+    let vcard = `BEGIN:VCARD\r\nVERSION:3.0\r\n`;
+    vcard += `FN:${c.name}\r\n`;
+    vcard += `N:${lastName};${firstName};;;'\r\n`;
+    vcard += `EMAIL;TYPE=INTERNET:${c.email}\r\n`;
+    vcard += `TEL;TYPE=CELL:${c.phone}\r\n`;
+    vcard += `CATEGORIES:${c.category}\r\n`;
+    vcard += `NOTE:Status: ${c.status}${c.reminderNote ? ` | FollowUp: ${c.followUpDate} (${c.reminderNote})` : ''}\r\n`;
+    vcard += `END:VCARD\r\n`;
+    return vcard;
+  }).join('\r\n');
+}
+
 export function getAnalyticsSummary() {
   const total = contactsStore.length;
   let favoritesCount = 0;

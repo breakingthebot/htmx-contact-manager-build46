@@ -17,6 +17,7 @@ import {
   clearContactReminder,
   getUpcomingReminders,
   getAnalyticsSummary,
+  exportContactsAsVcard,
   importContactsFromJson,
   generateGravatarUrl,
   updateContactAvatar,
@@ -43,6 +44,16 @@ describe('contactService', () => {
     expect(contacts[0].name).toBe('Alex Rivera');
     expect(contacts[1].name).toBe('Elena Rostova');
     expect(contacts[2].name).toBe('Sarah Jenkins');
+  });
+
+  it('exports contacts formatted as valid RFC 6350 vCard payload', () => {
+    const vcard = exportContactsAsVcard();
+    expect(vcard).toContain('BEGIN:VCARD');
+    expect(vcard).toContain('VERSION:3.0');
+    expect(vcard).toContain('FN:Sarah Jenkins');
+    expect(vcard).toContain('EMAIL;TYPE=INTERNET:sarah.jenkins@brandpartners.com');
+    expect(vcard).toContain('TEL;TYPE=CELL:+1 (555) 234-5678');
+    expect(vcard).toContain('END:VCARD');
   });
 
   it('calculates comprehensive CRM analytics metrics summary', () => {

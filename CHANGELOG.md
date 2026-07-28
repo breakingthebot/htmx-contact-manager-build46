@@ -5,6 +5,14 @@ All notable changes to the **HTMX Contact Manager** project will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.0] - 2026-07-27
+
+### Added
+- Integrated **Contact Export to VCF / vCard Payload Vault** in `contactService.js` and `server.js`.
+- Added RFC 6350 vCard formatter (`exportContactsAsVcard`), Express endpoints (`GET /contacts/export-vcard`, `GET /contacts/:id/vcard`), and single/bulk download actions.
+- Updated `public/index.html` and `public/style.css` with **📇 Export vCard** toolbar button, table row download icons, and detail drawer header actions.
+- Added unit tests in `contactService.spec.js` (32 total unit tests passing).
+
 ## [1.5.0] - 2026-07-27
 
 ### Added
