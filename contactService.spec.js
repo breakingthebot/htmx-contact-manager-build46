@@ -17,6 +17,7 @@ import {
   clearContactReminder,
   getUpcomingReminders,
   getAnalyticsSummary,
+  calculateLeadScore,
   exportContactsAsVcard,
   importContactsFromJson,
   generateGravatarUrl,
@@ -46,6 +47,20 @@ describe('contactService', () => {
     expect(contacts[2].name).toBe('Sarah Jenkins');
   });
 
+  it('calculates contact engagement lead score and tier correctly', () => {
+    const contact = getContactById('cnt_1');
+    const lead = calculateLeadScore(contact);
+    expect(lead.score).toBeGreaterThanOrEqual(70);
+    expect(lead.tier).toBe('HOT');
+    expect(lead.badgeColor).toBe('#ef4444');
+  });
+
+  it('sorts contacts by leadScore descending', () => {
+    const contacts = getAllContacts('', 'All', 'leadScore', 'desc');
+    expect(contacts[0].leadScore).toBeGreaterThanOrEqual(contacts[1].leadScore);
+    expect(contacts[1].leadScore).toBeGreaterThanOrEqual(contacts[2].leadScore);
+  });
+
   it('exports contacts formatted as valid RFC 6350 vCard payload', () => {
     const vcard = exportContactsAsVcard();
     expect(vcard).toContain('BEGIN:VCARD');
@@ -68,6 +83,7 @@ describe('contactService', () => {
     expect(analytics.totalNotes).toBe(2);
     expect(analytics.totalCustomFields).toBe(4);
     expect(analytics.totalActivities).toBe(6);
+    expect(analytics.hotLeadsCount).toBeGreaterThanOrEqual(1);
   });
 
   it('schedules and clears contact follow-up reminders', () => {

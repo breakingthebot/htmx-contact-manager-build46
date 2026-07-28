@@ -5,6 +5,14 @@ All notable changes to the **HTMX Contact Manager** project will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.0] - 2026-07-27
+
+### Added
+- Integrated **Contact Lead Score & Engagement Calculator** in `contactService.js` and `server.js`.
+- Added lead score algorithm (`calculateLeadScore`), tier classification (`🔥 HOT`, `⚡ WARM`, `❄️ COLD`), lead score sorting (`sort=leadScore&order=desc`), and hot lead opportunity metric counters.
+- Updated `public/index.html` and `public/style.css` with **Lead Score** sortable table header, row badges, and detail drawer score pills.
+- Added unit tests in `contactService.spec.js` (34 total unit tests passing).
+
 ## [1.6.0] - 2026-07-27
 
 ### Added

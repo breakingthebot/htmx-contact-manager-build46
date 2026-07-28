@@ -216,17 +216,17 @@
         <div class="table-wrapper">
           <table class="contacts-table">
             <thead>
-              <tr>
-                <th class="checkbox-cell">
-                  <input type="checkbox" id="select-all-checkbox" onclick="toggleSelectAll(this)" />
-                </th>
-                <th class="sortable-header" hx-get="/contacts/search?sort=name&order=asc" hx-target="#contacts-table-body" title="Click to sort by Name">Contact Name <span class="sort-icon">⇅</span></th>
-                <th class="sortable-header" hx-get="/contacts/search?sort=email&order=asc" hx-target="#contacts-table-body" title="Click to sort by Email">Email <span class="sort-icon">⇅</span></th>
-                <th class="sortable-header" hx-get="/contacts/search?sort=phone&order=asc" hx-target="#contacts-table-body" title="Click to sort by Phone">Phone <span class="sort-icon">⇅</span></th>
-                <th class="sortable-header" hx-get="/contacts/search?sort=category&order=asc" hx-target="#contacts-table-body" title="Click to sort by Category">Category <span class="sort-icon">⇅</span></th>
-                <th class="sortable-header" hx-get="/contacts/search?sort=status&order=asc" hx-target="#contacts-table-body" title="Click to sort by Status">Status <span class="sort-icon">⇅</span></th>
-                <th>Actions</th>
-              </tr>
+                <tr>
+                  <th class="checkbox-cell">
+                    <input type="checkbox" id="select-all-checkbox" onclick="toggleSelectAll(this)" />
+                  </th>
+                  <th class="sortable-header" hx-get="/contacts/search?sort=name&order=asc" hx-target="#contacts-table-body" title="Click to sort by Name">Contact Name <span class="sort-icon">⇅</span></th>
+                  <th class="sortable-header" hx-get="/contacts/search?sort=email&order=asc" hx-target="#contacts-table-body" title="Click to sort by Email">Email <span class="sort-icon">⇅</span></th>
+                  <th class="sortable-header" hx-get="/contacts/search?sort=leadScore&order=desc" hx-target="#contacts-table-body" title="Click to sort by Lead Score">Lead Score <span class="sort-icon">⇅</span></th>
+                  <th class="sortable-header" hx-get="/contacts/search?sort=category&order=asc" hx-target="#contacts-table-body" title="Click to sort by Category">Category <span class="sort-icon">⇅</span></th>
+                  <th class="sortable-header" hx-get="/contacts/search?sort=status&order=asc" hx-target="#contacts-table-body" title="Click to sort by Status">Status <span class="sort-icon">⇅</span></th>
+                  <th>Actions</th>
+                </tr>
             </thead>
             <tbody 
               id="contacts-table-body"

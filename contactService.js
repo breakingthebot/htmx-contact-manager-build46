@@ -39,6 +39,8 @@
  * @property {ContactNote[]} notes
  * @property {ActivityLog[]} activityLog
  * @property {CustomField[]} customFields
+ * @property {number} [leadScore]
+ * @property {'HOT' | 'WARM' | 'COLD'} [leadTier]
  */
 
 const AVATAR_COLORS = ['#6366f1', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6', '#06b6d4'];
@@ -50,6 +52,35 @@ export function generateGravatarUrl(email) {
 
 function getTimestamp() {
   return new Date().toISOString().replace('T', ' ').substring(0, 16);
+}
+
+export function calculateLeadScore(contact) {
+  let score = 0;
+
+  if (contact.isFavorite) score += 20;
+  if (contact.notes) score += contact.notes.length * 15;
+  if (contact.customFields) score += contact.customFields.length * 10;
+  if (contact.activityLog) score += contact.activityLog.length * 5;
+  if (contact.followUpDate) score += 15;
+  if (contact.status === 'Active') score += 10;
+
+  const cappedScore = Math.min(100, score);
+  let tier = 'COLD';
+  let badgeColor = '#64748b';
+
+  if (cappedScore >= 70) {
+    tier = 'HOT';
+    badgeColor = '#ef4444';
+  } else if (cappedScore >= 40) {
+    tier = 'WARM';
+    badgeColor = '#f59e0b';
+  }
+
+  return {
+    score: cappedScore,
+    tier,
+    badgeColor
+  };
 }
 
 /** @type {Contact[]} */
@@ -150,6 +181,7 @@ export function exportContactsAsVcard(ids = null) {
     const nameParts = c.name.trim().split(' ');
     const firstName = nameParts[0] || '';
     const lastName = nameParts.slice(1).join(' ') || '';
+    const lead = calculateLeadScore(c);
 
     let vcard = `BEGIN:VCARD\r\nVERSION:3.0\r\n`;
     vcard += `FN:${c.name}\r\n`;
@@ -157,7 +189,7 @@ export function exportContactsAsVcard(ids = null) {
     vcard += `EMAIL;TYPE=INTERNET:${c.email}\r\n`;
     vcard += `TEL;TYPE=CELL:${c.phone}\r\n`;
     vcard += `CATEGORIES:${c.category}\r\n`;
-    vcard += `NOTE:Status: ${c.status}${c.reminderNote ? ` | FollowUp: ${c.followUpDate} (${c.reminderNote})` : ''}\r\n`;
+    vcard += `NOTE:Status: ${c.status} | LeadScore: ${lead.score} (${lead.tier})${c.reminderNote ? ` | FollowUp: ${c.followUpDate} (${c.reminderNote})` : ''}\r\n`;
     vcard += `END:VCARD\r\n`;
     return vcard;
   }).join('\r\n');
@@ -172,6 +204,7 @@ export function getAnalyticsSummary() {
   let totalNotes = 0;
   let totalCustomFields = 0;
   let totalActivities = 0;
+  let hotLeadsCount = 0;
 
   const categoryBreakdown = { Sponsor: 0, Collaborator: 0, VIP: 0, Agency: 0 };
 
@@ -180,6 +213,9 @@ export function getAnalyticsSummary() {
     if (c.status === 'Active') activeCount++;
     if (c.status === 'Pending') pendingCount++;
     if (c.status === 'Archived') archivedCount++;
+
+    const lead = calculateLeadScore(c);
+    if (lead.tier === 'HOT') hotLeadsCount++;
 
     if (categoryBreakdown[c.category] !== undefined) {
       categoryBreakdown[c.category]++;
@@ -199,6 +235,7 @@ export function getAnalyticsSummary() {
     totalNotes,
     totalCustomFields,
     totalActivities,
+    hotLeadsCount,
     categoryBreakdown
   };
 }
@@ -411,7 +448,14 @@ export function importContactsFromJson(jsonInput) {
 }
 
 export function getAllContacts(searchQuery = '', categoryFilter = 'All', sortField = 'name', sortOrder = 'asc') {
-  let result = [...contactsStore];
+  let result = contactsStore.map(c => {
+    const lead = calculateLeadScore(c);
+    return {
+      ...c,
+      leadScore: lead.score,
+      leadTier: lead.tier
+    };
+  });
 
   if (categoryFilter && categoryFilter !== 'All') {
     result = result.filter(c => c.category === categoryFilter);
@@ -427,8 +471,15 @@ export function getAllContacts(searchQuery = '', categoryFilter = 'All', sortFie
   // Dynamic Column Sorting
   if (sortField) {
     result.sort((a, b) => {
-      let valA = (a[sortField] || '').toString().toLowerCase();
-      let valB = (b[sortField] || '').toString().toLowerCase();
+      let valA = a[sortField];
+      let valB = b[sortField];
+
+      if (typeof valA === 'number' && typeof valB === 'number') {
+        return sortOrder === 'asc' ? valA - valB : valB - valA;
+      }
+
+      valA = (valA || '').toString().toLowerCase();
+      valB = (valB || '').toString().toLowerCase();
 
       if (valA < valB) return sortOrder === 'asc' ? -1 : 1;
       if (valA > valB) return sortOrder === 'asc' ? 1 : -1;
@@ -591,10 +642,11 @@ export function exportContactsAsCsv(ids = null) {
     ? contactsStore.filter(c => ids.includes(c.id))
     : contactsStore;
 
-  const headers = 'ID,Name,Email,Phone,Category,Status,AvatarURL,FollowUpDate,ReminderNote\n';
-  const rows = targetContacts.map(c => 
-    `"${c.id}","${c.name}","${c.email}","${c.phone}","${c.category}","${c.status}","${c.avatarUrl}","${c.followUpDate || ''}","${c.reminderNote || ''}"`
-  ).join('\n');
+  const headers = 'ID,Name,Email,Phone,Category,Status,AvatarURL,FollowUpDate,ReminderNote,LeadScore\n';
+  const rows = targetContacts.map(c => {
+    const lead = calculateLeadScore(c);
+    return `"${c.id}","${c.name}","${c.email}","${c.phone}","${c.category}","${c.status}","${c.avatarUrl}","${c.followUpDate || ''}","${c.reminderNote || ''}","${lead.score}"`;
+  }).join('\n');
 
   return headers + rows;
 }

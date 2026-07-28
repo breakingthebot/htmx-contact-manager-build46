@@ -19,6 +19,7 @@ import {
   clearContactReminder,
   getUpcomingReminders,
   getAnalyticsSummary,
+  calculateLeadScore,
   exportContactsAsVcard,
   importContactsFromJson,
   getCategoryStats,
@@ -77,6 +78,13 @@ export function renderAnalyticsDashboard() {
         </div>
       </div>
       <div class="metric-card">
+        <span class="metric-icon">🔥</span>
+        <div>
+          <div class="metric-val">${summary.hotLeadsCount}</div>
+          <div class="metric-lbl">Hot Lead Opportunities</div>
+        </div>
+      </div>
+      <div class="metric-card">
         <span class="metric-icon">⭐</span>
         <div>
           <div class="metric-val">${summary.favoritesCount}</div>
@@ -88,13 +96,6 @@ export function renderAnalyticsDashboard() {
         <div>
           <div class="metric-val">${summary.totalNotes}</div>
           <div class="metric-lbl">Interaction Notes</div>
-        </div>
-      </div>
-      <div class="metric-card">
-        <span class="metric-icon">🏷️</span>
-        <div>
-          <div class="metric-val">${summary.totalCustomFields}</div>
-          <div class="metric-lbl">Custom Attributes</div>
         </div>
       </div>
     </div>
@@ -297,7 +298,7 @@ export function renderTableHeader(currentSort = 'name', currentOrder = 'asc', ca
   const columns = [
     { field: 'name', label: 'Contact Name' },
     { field: 'email', label: 'Email' },
-    { field: 'phone', label: 'Phone' },
+    { field: 'leadScore', label: 'Lead Score' },
     { field: 'category', label: 'Category' },
     { field: 'status', label: 'Status' }
   ];
@@ -350,6 +351,9 @@ export function renderContactRow(c) {
     `;
   }
 
+  const lead = calculateLeadScore(c);
+  const tierIcon = lead.tier === 'HOT' ? '🔥' : (lead.tier === 'WARM' ? '⚡' : '❄️');
+
   return `
     <tr id="contact-row-${c.id}" class="contact-row ${c.isFavorite ? 'row-favorite' : ''}">
       <td class="checkbox-cell">
@@ -376,7 +380,11 @@ export function renderContactRow(c) {
         </div>
       </td>
       <td class="contact-email">${c.email}</td>
-      <td class="contact-phone">${c.phone}</td>
+      <td>
+        <span class="lead-score-badge score-${lead.tier.toLowerCase()}" title="Engagement Score: ${lead.score}/100">
+          ${tierIcon} ${lead.tier} (${lead.score})
+        </span>
+      </td>
       <td>
         <span class="category-badge category-${c.category.toLowerCase()}">${c.category}</span>
       </td>
@@ -539,6 +547,9 @@ export function renderActivityTimeline(activityLog) {
 }
 
 export function renderContactDrawer(c) {
+  const lead = calculateLeadScore(c);
+  const tierIcon = lead.tier === 'HOT' ? '🔥' : (lead.tier === 'WARM' ? '⚡' : '❄️');
+
   return `
     <div class="drawer-backdrop" hx-get="/contacts/clear-drawer" hx-target="#contact-drawer-container"></div>
     <div class="drawer-panel">
@@ -564,6 +575,10 @@ export function renderContactDrawer(c) {
       </div>
 
       <div class="drawer-details">
+        <div class="detail-pill">
+          <span class="detail-label">Lead Score:</span>
+          <span class="lead-score-badge score-${lead.tier.toLowerCase()}">${tierIcon} ${lead.tier} (${lead.score}/100)</span>
+        </div>
         <div class="detail-pill">
           <span class="detail-label">Phone:</span>
           <span>${c.phone}</span>

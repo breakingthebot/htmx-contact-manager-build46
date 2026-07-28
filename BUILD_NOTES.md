@@ -765,7 +765,56 @@ Updated `contactService.js` and `contactService.spec.js` with vCard RFC 6350 pay
    * *Interview answer*: "I built activity audit history exporter."
 
 ## Chosen Next Iteration
+Option 1: Contact Lead Score & Engagement Calculator (Iteration 17 - Release v1.7.0).
+
+---
+
+# Build Notes - Build 46 Iteration 17 (Release v1.7.0) (2026-07-27)
+
+Implemented Contact Lead Score & Engagement Calculator (Release v1.7.0).
+
+## Summary
+Updated `contactService.js` and `contactService.spec.js` with engagement lead score algorithm (`calculateLeadScore`). Updated `server.js` with lead score table header sorting (`sort=leadScore&order=desc`) and fragment renderers (`renderContactRow`, `renderContactDrawer`, `renderAnalyticsDashboard`). Updated `public/index.html` and `public/style.css` adding **Lead Score** sortable column header and visual tier badges (`🔥 HOT`, `⚡ WARM`, `❄️ COLD`).
+
+## File-by-File Explanation
+- `contactService.js`: Contact CRM service updated with `calculateLeadScore` logic based on interaction notes (+15), custom attributes (+10), activity frequency (+5), starred status (+20), and scheduled reminders (+15).
+- `contactService.spec.js`: Vitest unit test suite verifying lead score calculation, tier classification (`HOT`/`WARM`/`COLD`), and sorting.
+- `server.js`: Express server updated with lead score badge rendering in table rows, detail drawers, analytics dashboard metric counters, and CSV export.
+- `public/index.html`: Added `Lead Score` sortable header.
+- `public/style.css`: CSS updated with `.lead-score-badge`, `.score-hot`, `.score-warm`, and `.score-cold` badge styles.
+- `CHANGELOG.md`: Logged version 1.7.0 Release notes.
+
+## Manual Test Steps
+1. Open [https://htmx-contact-manager-build46.vercel.app](https://htmx-contact-manager-build46.vercel.app).
+2. **View Lead Score Badges**: Observe lead score badges on every contact row (e.g. `🔥 HOT (85)` on Sarah Jenkins, `⚡ WARM (55)` on Alex Rivera).
+3. **Sort by Lead Score**: Click the **Lead Score** column header. Table will reorder contacts instantly by highest lead score descending (`▲` / `▼`).
+4. **Increase Lead Score Live**: Open a contact detail drawer, add an interaction note or custom attribute. Observe the lead score increase dynamically in real time!
+
+## Candidate Next Iterations
+1. **Contact Field Encryption & Privacy Sanitizer (Iteration 18)**
+   * *Plain English*: Encrypt sensitive contact attributes (e.g. phone numbers, private notes) with AES masking.
+   * *Benefit*: Enterprise data privacy & compliance.
+   * *Interview answer*: "I built contact privacy masking and field encryption."
+2. **Contact Webhook Integration & Automated Dispatch (Iteration 18)**
+   * *Plain English*: Dispatch outbound webhooks to external URLs when contacts are added or updated.
+   * *Benefit*: CRM automation & third-party integrations.
+   * *Interview answer*: "I built real-time outbound CRM webhooks."
+3. **Contact Tagging Auto-Complete & Multi-Select Filter (Iteration 18)**
+   * *Plain English*: Filter contacts with multi-select tag pills and search auto-completion.
+   * *Benefit*: Enhanced contact search flexibility.
+   * *Interview answer*: "I built multi-tag auto-complete filtering."
+4. **Contact Activity Timeline CSV / Audit Log Exporter (Iteration 18)**
+   * *Plain English*: Export entire CRM activity audit history as downloadable CSV file.
+   * *Benefit*: Security compliance & audit reporting.
+   * *Interview answer*: "I built activity audit history exporter."
+5. **Contact Avatar Drag-and-Drop Uploader Vault (Iteration 18)**
+   * *Plain English*: Drag and drop custom avatar images with live client preview and base64 storage.
+   * *Benefit*: Enhanced visual profile customization.
+   * *Interview answer*: "I built drag-and-drop contact avatar uploader."
+
+## Chosen Next Iteration
 *None selected yet.*
+
 
 
 
