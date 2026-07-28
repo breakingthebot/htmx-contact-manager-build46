@@ -522,7 +522,57 @@ Updated `contactService.js` and `contactService.spec.js` with array pagination c
    * *Interview answer*: "I built vCard / VCF contact file exporter."
 
 ## Chosen Next Iteration
+Option 1: Contact Field Customizer & Custom Key-Value Attributes (Iteration 12 - Release v1.2.0).
+
+---
+
+# Build Notes - Build 46 Iteration 12 (Release v1.2.0) (2026-07-27)
+
+Implemented Contact Field Customizer & Custom Key-Value Attributes (Release v1.2.0).
+
+## Summary
+Updated `contactService.js` and `contactService.spec.js` with custom key-value attribute manager (`addCustomField(id, key, val)`, `removeCustomField(id, key)`). Updated `server.js` with custom attribute routes (`POST /contacts/:id/custom-fields`, `DELETE /contacts/:id/custom-fields/:key`) and fragment renderer (`renderCustomFieldsList`). Updated `public/index.html` and `public/style.css` adding **🏷️ Custom Key-Value Attributes** section to the slide-out detail drawer with custom key/value inputs, attribute pills, and single-click removal buttons.
+
+## File-by-File Explanation
+- `contactService.js`: Contact CRM service updated with `customFields` array store and mutation methods.
+- `contactService.spec.js`: Vitest unit test suite verifying adding, updating, and removing custom attribute key-value pairs.
+- `server.js`: Express server updated with custom field endpoints and drawer panel section integration.
+- `public/index.html`: Contact drawer updated with `🏷️ Custom Key-Value Attributes` section.
+- `public/style.css`: CSS updated with `.custom-field-pill`, `.field-key`, `.field-val`, and `.btn-delete-field` styles.
+- `CHANGELOG.md`: Logged version 1.2.0 Release notes.
+
+## Manual Test Steps
+1. Open [https://htmx-contact-manager-build46.vercel.app](https://htmx-contact-manager-build46.vercel.app).
+2. **Open Detail Drawer**: Click **👁️ View** on any contact row (e.g. Sarah Jenkins).
+3. Under **🏷️ Custom Key-Value Attributes**, enter a custom key and value (e.g. `Twitter` and `@sarah_j`).
+4. Click **➕ Add**.
+5. Observe the custom key-value attribute pill appear instantly in the drawer panel, and see the action logged to the audit timeline!
+
+## Candidate Next Iterations
+1. **Contact Duplicate Detection & Merge Engine (Iteration 13)**
+   * *Plain English*: Detect duplicate contacts by email address and merge records into a unified contact.
+   * *Benefit*: Clean database deduplication.
+   * *Interview answer*: "I built automated contact duplicate detection and merging."
+2. **Contact Reminders & Scheduled Follow-up Alerts (Iteration 13)**
+   * *Plain English*: Schedule follow-up date reminders for contacts with urgency badge highlights.
+   * *Benefit*: Proactive contact relationship management.
+   * *Interview answer*: "I built contact follow-up date scheduling and alerts."
+3. **Contact Performance & Analytics Dashboard Fragment (Iteration 13)**
+   * *Plain English*: View visual charts of total contacts, top category breakdown, and interaction trends.
+   * *Benefit*: Executive CRM insight reporting.
+   * *Interview answer*: "I built server-rendered CRM analytics dashboards."
+4. **Contact Export to VCF / vCard Payload Vault (Iteration 13)**
+   * *Plain English*: Export contacts as `.vcf` vCard files for seamless mobile address book import.
+   * *Benefit*: Mobile CRM contact syncing.
+   * *Interview answer*: "I built vCard / VCF contact file exporter."
+5. **Contact Lead Score & Engagement Calculator (Iteration 13)**
+   * *Plain English*: Compute dynamic lead scores based on notes, activity frequency, and custom fields.
+   * *Benefit*: Automated contact prioritization.
+   * *Interview answer*: "I built dynamic contact lead scoring algorithms."
+
+## Chosen Next Iteration
 *None selected yet.*
+
 
 
 

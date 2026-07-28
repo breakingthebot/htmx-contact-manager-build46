@@ -9,6 +9,8 @@ import {
   getFavoriteContacts,
   toggleFavoriteContact,
   logContactActivity,
+  addCustomField,
+  removeCustomField,
   importContactsFromJson,
   generateGravatarUrl,
   updateContactAvatar,
@@ -35,6 +37,22 @@ describe('contactService', () => {
     expect(contacts[0].name).toBe('Alex Rivera');
     expect(contacts[1].name).toBe('Elena Rostova');
     expect(contacts[2].name).toBe('Sarah Jenkins');
+  });
+
+  it('adds and removes custom metadata key-value fields', () => {
+    addCustomField('cnt_1', 'Twitter', '@sarah_j');
+    let contact = getContactById('cnt_1');
+    expect(contact.customFields.length).toBe(3);
+    expect(contact.customFields.find(f => f.key === 'Twitter').value).toBe('@sarah_j');
+
+    removeCustomField('cnt_1', 'Twitter');
+    contact = getContactById('cnt_1');
+    expect(contact.customFields.length).toBe(2);
+  });
+
+  it('throws error when adding custom field without key or value', () => {
+    expect(() => addCustomField('cnt_1', '', 'value')).toThrow();
+    expect(() => addCustomField('cnt_1', 'key', '')).toThrow();
   });
 
   it('paginates contact records cleanly', () => {

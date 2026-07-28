@@ -5,6 +5,14 @@ All notable changes to the **HTMX Contact Manager** project will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-07-27
+
+### Added
+- Integrated **Contact Field Customizer & Custom Key-Value Attributes** in `contactService.js` and `server.js`.
+- Added custom key-value attribute store (`customFields`), mutation functions (`addCustomField`, `removeCustomField`), and Express endpoints (`POST /contacts/:id/custom-fields`, `DELETE /contacts/:id/custom-fields/:key`).
+- Updated `public/index.html` and `public/style.css` extending contact drawer panel with custom key/value input fields, custom attribute pills, and delete actions.
+- Added unit tests in `contactService.spec.js` (26 total unit tests passing).
+
 ## [1.1.0] - 2026-07-27
 
 ### Added

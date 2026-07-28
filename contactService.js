@@ -18,6 +18,12 @@
  */
 
 /**
+ * @typedef {Object} CustomField
+ * @property {string} key
+ * @property {string} value
+ */
+
+/**
  * @typedef {Object} Contact
  * @property {string} id
  * @property {string} name
@@ -30,6 +36,7 @@
  * @property {boolean} isFavorite
  * @property {ContactNote[]} notes
  * @property {ActivityLog[]} activityLog
+ * @property {CustomField[]} customFields
  */
 
 const AVATAR_COLORS = ['#6366f1', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6', '#06b6d4'];
@@ -62,6 +69,10 @@ const INITIAL_CONTACTS = [
       { id: 'act_1', action: 'CREATE', details: 'Contact record created.', timestamp: '2026-07-20 12:00' },
       { id: 'act_2', action: 'NOTE_ADD', details: 'Added note: Discussed Q3 YouTube sponsorship package rates.', timestamp: '2026-07-20 14:30' },
       { id: 'act_3', action: 'STARRED', details: 'Starred as favorite contact.', timestamp: '2026-07-21 09:15' }
+    ],
+    customFields: [
+      { key: 'Instagram', value: '@sarah_brand' },
+      { key: 'Q3 Budget', value: '$25,000' }
     ]
   },
   {
@@ -80,6 +91,10 @@ const INITIAL_CONTACTS = [
     activityLog: [
       { id: 'act_4', action: 'CREATE', details: 'Contact record created.', timestamp: '2026-07-22 10:00' },
       { id: 'act_5', action: 'NOTE_ADD', details: 'Added note: Confirmed co-hosting collaborative livestream next Tuesday.', timestamp: '2026-07-22 10:15' }
+    ],
+    customFields: [
+      { key: 'YouTube', value: 'AlexRiveraOfficial' },
+      { key: 'Subscribers', value: '450K' }
     ]
   },
   {
@@ -95,7 +110,8 @@ const INITIAL_CONTACTS = [
     notes: [],
     activityLog: [
       { id: 'act_6', action: 'CREATE', details: 'Contact record created.', timestamp: '2026-07-25 16:45' }
-    ]
+    ],
+    customFields: []
   }
 ];
 
@@ -115,6 +131,43 @@ export function logContactActivity(contactId, action, details) {
   if (!contact.activityLog) contact.activityLog = [];
   contact.activityLog.unshift(entry);
   return entry;
+}
+
+export function addCustomField(contactId, key, value) {
+  const contact = getContactById(contactId);
+  if (!contact) {
+    throw new Error(`Contact with ID ${contactId} not found`);
+  }
+  if (!key || !key.trim()) {
+    throw new Error('Attribute Key is required');
+  }
+  if (!value || !value.trim()) {
+    throw new Error('Attribute Value is required');
+  }
+
+  if (!contact.customFields) contact.customFields = [];
+
+  const cleanKey = key.trim();
+  const cleanVal = value.trim();
+
+  const existingIdx = contact.customFields.findIndex(f => f.key.toLowerCase() === cleanKey.toLowerCase());
+  if (existingIdx !== -1) {
+    contact.customFields[existingIdx].value = cleanVal;
+  } else {
+    contact.customFields.push({ key: cleanKey, value: cleanVal });
+  }
+
+  logContactActivity(contactId, 'FIELD_UPDATE', `Set custom attribute "${cleanKey}" to "${cleanVal}".`);
+  return contact.customFields;
+}
+
+export function removeCustomField(contactId, key) {
+  const contact = getContactById(contactId);
+  if (!contact || !contact.customFields) return [];
+
+  contact.customFields = contact.customFields.filter(f => f.key.toLowerCase() !== key.toLowerCase());
+  logContactActivity(contactId, 'FIELD_DELETE', `Removed custom attribute "${key}".`);
+  return contact.customFields;
 }
 
 export function validateContactInput(data) {
@@ -276,7 +329,8 @@ export function addContact(data) {
     notes: [],
     activityLog: [
       { id: `act_${Date.now()}`, action: 'CREATE', details: 'Contact record created.', timestamp: getTimestamp() }
-    ]
+    ],
+    customFields: []
   };
 
   contactsStore.unshift(newContact);

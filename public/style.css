@@ -839,6 +839,79 @@ label {
   border-radius: 6px;
 }
 
+/* Custom Key-Value Attributes */
+.add-custom-field-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.field-input {
+  flex: 1;
+  background: #090d16;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 6px 10px;
+  color: #ffffff;
+  font-size: 12px;
+  outline: none;
+}
+
+.field-input:focus {
+  border-color: var(--accent-primary);
+}
+
+.btn-add-field {
+  background: var(--accent-primary);
+  color: #ffffff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.custom-fields-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.custom-field-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #1e293b;
+  border: 1px solid var(--border-color);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.field-key {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.field-val {
+  color: #a5b4fc;
+  font-weight: 500;
+}
+
+.btn-delete-field {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0 2px;
+}
+
+.btn-delete-field:hover {
+  color: #ef4444;
+}
+
 /* Activity Audit Timeline */
 .activity-timeline-container {
   display: flex;

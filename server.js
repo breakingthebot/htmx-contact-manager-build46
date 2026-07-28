@@ -11,6 +11,8 @@ import {
   getFavoriteContacts,
   toggleFavoriteContact,
   updateContactAvatar,
+  addCustomField,
+  removeCustomField,
   importContactsFromJson,
   getCategoryStats,
   getContactById,
@@ -52,6 +54,28 @@ export function renderAvatarImg(c, sizeClass = '') {
       ${c.name.charAt(0).toUpperCase()}
     </div>
   `;
+}
+
+export function renderCustomFieldsList(contactId, customFields) {
+  if (!customFields || customFields.length === 0) {
+    return `<div class="empty-notes">🏷️ No custom attributes added yet.</div>`;
+  }
+
+  return customFields.map(f => `
+    <div class="custom-field-pill">
+      <span class="field-key">${f.key}:</span>
+      <span class="field-val">${f.value}</span>
+      <button 
+        type="button" 
+        class="btn-delete-field" 
+        hx-delete="/contacts/${contactId}/custom-fields/${encodeURIComponent(f.key)}" 
+        hx-target="#drawer-custom-fields-${contactId}" 
+        title="Remove attribute"
+      >
+        &times;
+      </button>
+    </div>
+  `).join('');
 }
 
 export function renderFavoritesBar() {
@@ -326,7 +350,9 @@ export function renderActivityTimeline(activityLog) {
     NOTE_ADD: '📝',
     STARRED: '⭐',
     UNSTARRED: '☆',
-    AVATAR_UPDATE: '🖼️'
+    AVATAR_UPDATE: '🖼️',
+    FIELD_UPDATE: '🏷️',
+    FIELD_DELETE: '🗑️'
   };
 
   return activityLog.map(act => `
@@ -379,6 +405,27 @@ export function renderContactDrawer(c) {
 
       <hr class="drawer-divider" />
 
+      <!-- Custom Key-Value Attributes Section -->
+      <div class="drawer-notes-section">
+        <h4>🏷️ Custom Key-Value Attributes</h4>
+        <form 
+          hx-post="/contacts/${c.id}/custom-fields" 
+          hx-target="#drawer-custom-fields-${c.id}" 
+          hx-on::after-request="if (event.detail.successful) this.reset()"
+          class="add-custom-field-form"
+        >
+          <input type="text" name="key" placeholder="Key (e.g. Instagram)" required class="field-input" />
+          <input type="text" name="value" placeholder="Value (e.g. @sarah_creators)" required class="field-input" />
+          <button type="submit" class="btn-add-field">➕ Add</button>
+        </form>
+
+        <div id="drawer-custom-fields-${c.id}" class="custom-fields-container">
+          ${renderCustomFieldsList(c.id, c.customFields)}
+        </div>
+      </div>
+
+      <hr class="drawer-divider" />
+
       <div class="drawer-notes-section">
         <h4>📝 Interaction & Communication Notes</h4>
         
@@ -416,6 +463,26 @@ export function renderContactDrawer(c) {
 }
 
 // HTMX Server Routes
+
+// POST /contacts/:id/custom-fields - Add Custom Key-Value Attribute
+app.post('/contacts/:id/custom-fields', (req, res) => {
+  try {
+    const fields = addCustomField(req.params.id, req.body.key, req.body.value);
+    res.send(renderCustomFieldsList(req.params.id, fields));
+  } catch (err) {
+    res.status(400).send(renderToastNotification('error', err.message));
+  }
+});
+
+// DELETE /contacts/:id/custom-fields/:key - Remove Custom Key-Value Attribute
+app.delete('/contacts/:id/custom-fields/:key', (req, res) => {
+  try {
+    const fields = removeCustomField(req.params.id, req.params.key);
+    res.send(renderCustomFieldsList(req.params.id, fields));
+  } catch (err) {
+    res.status(400).send(renderToastNotification('error', err.message));
+  }
+});
 
 // POST /contacts/import-json - Bulk JSON Import Vault Endpoint
 app.post('/contacts/import-json', (req, res) => {
