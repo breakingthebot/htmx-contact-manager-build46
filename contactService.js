@@ -34,6 +34,8 @@
  * @property {string} avatarColor
  * @property {string} avatarUrl
  * @property {boolean} isFavorite
+ * @property {string | null} followUpDate
+ * @property {string | null} reminderNote
  * @property {ContactNote[]} notes
  * @property {ActivityLog[]} activityLog
  * @property {CustomField[]} customFields
@@ -62,6 +64,8 @@ const INITIAL_CONTACTS = [
     avatarColor: '#6366f1',
     avatarUrl: generateGravatarUrl('sarah.jenkins@brandpartners.com'),
     isFavorite: true,
+    followUpDate: '2026-07-30',
+    reminderNote: 'Send Q3 YouTube sponsorship contract PDF',
     notes: [
       { id: 'note_1', text: 'Discussed Q3 YouTube sponsorship package rates.', createdAt: '2026-07-20 14:30' }
     ],
@@ -85,6 +89,8 @@ const INITIAL_CONTACTS = [
     avatarColor: '#10b981',
     avatarUrl: generateGravatarUrl('alex@creatorstudio.io'),
     isFavorite: true,
+    followUpDate: '2026-07-25',
+    reminderNote: 'Confirm co-host tech check for livestream',
     notes: [
       { id: 'note_2', text: 'Confirmed co-hosting collaborative livestream next Tuesday.', createdAt: '2026-07-22 10:15' }
     ],
@@ -107,6 +113,8 @@ const INITIAL_CONTACTS = [
     avatarColor: '#f59e0b',
     avatarUrl: generateGravatarUrl('elena@talentagency.net'),
     isFavorite: false,
+    followUpDate: null,
+    reminderNote: null,
     notes: [],
     activityLog: [
       { id: 'act_6', action: 'CREATE', details: 'Contact record created.', timestamp: '2026-07-25 16:45' }
@@ -131,6 +139,53 @@ export function logContactActivity(contactId, action, details) {
   if (!contact.activityLog) contact.activityLog = [];
   contact.activityLog.unshift(entry);
   return entry;
+}
+
+export function setContactReminder(contactId, followUpDate, reminderNote) {
+  const contact = getContactById(contactId);
+  if (!contact) {
+    throw new Error(`Contact with ID ${contactId} not found`);
+  }
+
+  if (!followUpDate || !followUpDate.trim()) {
+    throw new Error('Follow-up date is required');
+  }
+
+  contact.followUpDate = followUpDate.trim();
+  contact.reminderNote = reminderNote ? reminderNote.trim() : 'Follow-up reminder';
+
+  logContactActivity(contactId, 'REMINDER_SET', `Scheduled follow-up reminder for ${contact.followUpDate}: "${contact.reminderNote}".`);
+  return contact;
+}
+
+export function clearContactReminder(contactId) {
+  const contact = getContactById(contactId);
+  if (!contact) return null;
+
+  contact.followUpDate = null;
+  contact.reminderNote = null;
+
+  logContactActivity(contactId, 'REMINDER_CLEAR', 'Cleared scheduled follow-up reminder.');
+  return contact;
+}
+
+export function getUpcomingReminders() {
+  const todayStr = new Date().toISOString().substring(0, 10);
+
+  const reminders = contactsStore
+    .filter(c => c.followUpDate)
+    .map(c => {
+      let status = 'upcoming';
+      if (c.followUpDate < todayStr) {
+        status = 'overdue';
+      } else if (c.followUpDate === todayStr) {
+        status = 'today';
+      }
+      return { contact: c, status };
+    });
+
+  reminders.sort((a, b) => a.contact.followUpDate.localeCompare(b.contact.followUpDate));
+  return reminders;
 }
 
 export function detectDuplicateContacts() {
@@ -395,6 +450,8 @@ export function addContact(data) {
     avatarColor: AVATAR_COLORS[Math.floor(Math.random() * AVATAR_COLORS.length)],
     avatarUrl: data.avatarUrl ? data.avatarUrl.trim() : generateGravatarUrl(cleanEmail),
     isFavorite: false,
+    followUpDate: data.followUpDate || null,
+    reminderNote: data.reminderNote || null,
     notes: [],
     activityLog: [
       { id: `act_${Date.now()}`, action: 'CREATE', details: 'Contact record created.', timestamp: getTimestamp() }
@@ -472,9 +529,9 @@ export function exportContactsAsCsv(ids = null) {
     ? contactsStore.filter(c => ids.includes(c.id))
     : contactsStore;
 
-  const headers = 'ID,Name,Email,Phone,Category,Status,AvatarURL\n';
+  const headers = 'ID,Name,Email,Phone,Category,Status,AvatarURL,FollowUpDate,ReminderNote\n';
   const rows = targetContacts.map(c => 
-    `"${c.id}","${c.name}","${c.email}","${c.phone}","${c.category}","${c.status}","${c.avatarUrl}"`
+    `"${c.id}","${c.name}","${c.email}","${c.phone}","${c.category}","${c.status}","${c.avatarUrl}","${c.followUpDate || ''}","${c.reminderNote || ''}"`
   ).join('\n');
 
   return headers + rows;

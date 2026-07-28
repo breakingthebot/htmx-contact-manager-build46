@@ -133,6 +133,11 @@
         </div>
       </section>
 
+      <!-- Scheduled Follow-up Reminders Bar -->
+      <div id="reminders-bar-container" class="reminders-bar-wrapper" hx-get="/contacts/reminders-bar" hx-trigger="load, contactCreated from:body">
+        <!-- Rendered via HTMX Fragment -->
+      </div>
+
       <!-- Starred Favorites Quick-Access Bar -->
       <div id="favorites-bar-container" class="favorites-bar-wrapper" hx-get="/contacts/favorites-bar" hx-trigger="load, favoriteToggled from:body">
         <!-- Rendered via HTMX Fragment -->

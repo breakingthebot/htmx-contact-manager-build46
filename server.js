@@ -15,6 +15,9 @@ import {
   removeCustomField,
   detectDuplicateContacts,
   mergeDuplicateContacts,
+  setContactReminder,
+  clearContactReminder,
+  getUpcomingReminders,
   importContactsFromJson,
   getCategoryStats,
   getContactById,
@@ -54,6 +57,35 @@ export function renderAvatarImg(c, sizeClass = '') {
   return `
     <div class="avatar-circle ${sizeClass}" style="background-color: ${c.avatarColor}">
       ${c.name.charAt(0).toUpperCase()}
+    </div>
+  `;
+}
+
+export function renderRemindersBar() {
+  const reminders = getUpcomingReminders();
+
+  if (reminders.length === 0) {
+    return `<div class="empty-reminders">🔔 No scheduled follow-up reminders pending.</div>`;
+  }
+
+  return `
+    <div class="reminders-bar-inner">
+      <span class="reminders-title">🔔 Scheduled Reminders:</span>
+      <div class="reminders-pills">
+        ${reminders.map(r => `
+          <button 
+            type="button" 
+            class="reminder-pill reminder-${r.status}" 
+            hx-get="/contacts/${r.contact.id}/drawer" 
+            hx-target="#contact-drawer-container"
+            title="${r.contact.reminderNote || 'Follow-up'}"
+          >
+            <span class="reminder-status-icon">${r.status === 'overdue' ? '🚨' : (r.status === 'today' ? '⏰' : '📅')}</span>
+            <span class="reminder-name">${r.contact.name}</span>
+            <span class="reminder-date">(${r.contact.followUpDate})</span>
+          </button>
+        `).join('')}
+      </div>
     </div>
   `;
 }
@@ -238,6 +270,27 @@ export function renderTableHeader(currentSort = 'name', currentOrder = 'asc', ca
 }
 
 export function renderContactRow(c) {
+  const todayStr = new Date().toISOString().substring(0, 10);
+  let reminderBadgeHtml = '';
+
+  if (c.followUpDate) {
+    let badgeClass = 'badge-upcoming';
+    let icon = '📅';
+    if (c.followUpDate < todayStr) {
+      badgeClass = 'badge-overdue';
+      icon = '🚨 Overdue';
+    } else if (c.followUpDate === todayStr) {
+      badgeClass = 'badge-today';
+      icon = '⏰ Today';
+    }
+
+    reminderBadgeHtml = `
+      <div class="reminder-row-badge ${badgeClass}" title="${c.reminderNote || 'Scheduled Follow-up'}">
+        ${icon}: ${c.followUpDate}
+      </div>
+    `;
+  }
+
   return `
     <tr id="contact-row-${c.id}" class="contact-row ${c.isFavorite ? 'row-favorite' : ''}">
       <td class="checkbox-cell">
@@ -259,6 +312,7 @@ export function renderContactRow(c) {
           <div>
             <div class="contact-name">${c.name}</div>
             <div class="contact-id">${c.id}</div>
+            ${reminderBadgeHtml}
           </div>
         </div>
       </td>
@@ -401,7 +455,9 @@ export function renderActivityTimeline(activityLog) {
     AVATAR_UPDATE: '🖼️',
     FIELD_UPDATE: '🏷️',
     FIELD_DELETE: '🗑️',
-    MERGE: '👯'
+    MERGE: '👯',
+    REMINDER_SET: '🔔',
+    REMINDER_CLEAR: '🔕'
   };
 
   return activityLog.map(act => `
@@ -450,6 +506,36 @@ export function renderContactDrawer(c) {
           <span class="detail-label">Status:</span>
           <span class="status-badge status-${c.status.toLowerCase()}">${c.status}</span>
         </div>
+      </div>
+
+      <hr class="drawer-divider" />
+
+      <!-- Follow-up Reminder Section -->
+      <div class="drawer-notes-section">
+        <h4>🔔 Scheduled Follow-up Reminder</h4>
+        <form 
+          hx-post="/contacts/${c.id}/reminder" 
+          hx-target="#contact-drawer-container" 
+          class="reminder-form"
+        >
+          <div class="reminder-inputs">
+            <input type="date" name="followUpDate" value="${c.followUpDate || ''}" required class="field-input date-input" />
+            <input type="text" name="reminderNote" value="${c.reminderNote || ''}" placeholder="Reminder Note (e.g. Send rate card)" class="field-input" />
+          </div>
+          <div class="reminder-actions">
+            <button type="submit" class="btn-save">🔔 Set Reminder</button>
+            ${c.followUpDate ? `
+              <button 
+                type="button" 
+                class="btn-cancel" 
+                hx-delete="/contacts/${c.id}/reminder" 
+                hx-target="#contact-drawer-container"
+              >
+                🔕 Clear
+              </button>
+            ` : ''}
+          </div>
+        </form>
       </div>
 
       <hr class="drawer-divider" />
@@ -512,6 +598,35 @@ export function renderContactDrawer(c) {
 }
 
 // HTMX Server Routes
+
+// GET /contacts/reminders-bar - Scheduled Reminders Bar Endpoint
+app.get('/contacts/reminders-bar', (req, res) => {
+  res.send(renderRemindersBar());
+});
+
+// POST /contacts/:id/reminder - Set Contact Reminder Endpoint
+app.post('/contacts/:id/reminder', (req, res) => {
+  try {
+    setContactReminder(req.params.id, req.body.followUpDate, req.body.reminderNote);
+    const contact = getContactById(req.params.id);
+    res.setHeader('HX-Trigger', 'contactCreated');
+    res.send(renderContactDrawer(contact));
+  } catch (err) {
+    res.status(400).send(renderToastNotification('error', err.message));
+  }
+});
+
+// DELETE /contacts/:id/reminder - Clear Contact Reminder Endpoint
+app.delete('/contacts/:id/reminder', (req, res) => {
+  try {
+    clearContactReminder(req.params.id);
+    const contact = getContactById(req.params.id);
+    res.setHeader('HX-Trigger', 'contactCreated');
+    res.send(renderContactDrawer(contact));
+  } catch (err) {
+    res.status(400).send(renderToastNotification('error', err.message));
+  }
+});
 
 // GET /contacts/duplicates - Duplicate Detection Scanner Vault Endpoint
 app.get('/contacts/duplicates', (req, res) => {

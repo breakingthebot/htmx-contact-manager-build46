@@ -5,6 +5,14 @@ All notable changes to the **HTMX Contact Manager** project will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2026-07-27
+
+### Added
+- Integrated **Contact Reminders & Scheduled Follow-up Alerts** in `contactService.js` and `server.js`.
+- Added follow-up date and reminder note properties, scheduler methods (`setContactReminder`, `clearContactReminder`, `getUpcomingReminders`), and Express endpoints (`POST /contacts/:id/reminder`, `DELETE /contacts/:id/reminder`, `GET /contacts/reminders-bar`).
+- Updated `public/index.html` and `public/style.css` with **🔔 Scheduled Reminders Bar**, urgency row badges (`🚨 Overdue`, `⏰ Today`, `📅 Upcoming`), and detail drawer datepicker controls.
+- Added unit tests in `contactService.spec.js` (30 total unit tests passing).
+
 ## [1.3.0] - 2026-07-27
 
 ### Added

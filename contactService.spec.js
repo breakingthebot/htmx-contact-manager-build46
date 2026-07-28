@@ -13,6 +13,9 @@ import {
   removeCustomField,
   detectDuplicateContacts,
   mergeDuplicateContacts,
+  setContactReminder,
+  clearContactReminder,
+  getUpcomingReminders,
   importContactsFromJson,
   generateGravatarUrl,
   updateContactAvatar,
@@ -39,6 +42,26 @@ describe('contactService', () => {
     expect(contacts[0].name).toBe('Alex Rivera');
     expect(contacts[1].name).toBe('Elena Rostova');
     expect(contacts[2].name).toBe('Sarah Jenkins');
+  });
+
+  it('schedules and clears contact follow-up reminders', () => {
+    setContactReminder('cnt_3', '2026-08-01', 'Follow up on agency talent deck');
+    let contact = getContactById('cnt_3');
+    expect(contact.followUpDate).toBe('2026-08-01');
+    expect(contact.reminderNote).toBe('Follow up on agency talent deck');
+    expect(contact.activityLog[0].action).toBe('REMINDER_SET');
+
+    clearContactReminder('cnt_3');
+    contact = getContactById('cnt_3');
+    expect(contact.followUpDate).toBeNull();
+    expect(contact.activityLog[0].action).toBe('REMINDER_CLEAR');
+  });
+
+  it('retrieves upcoming and overdue follow-up reminders sorted by date', () => {
+    const reminders = getUpcomingReminders();
+    expect(reminders.length).toBe(2);
+    expect(reminders[0].contact.name).toBe('Alex Rivera');
+    expect(reminders[0].status).toBe('overdue');
   });
 
   it('detects duplicate contacts sharing identical email address', () => {

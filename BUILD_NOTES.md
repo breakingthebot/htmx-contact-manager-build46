@@ -621,7 +621,57 @@ Updated `contactService.js` and `contactService.spec.js` with automated duplicat
    * *Interview answer*: "I built contact privacy masking and field encryption."
 
 ## Chosen Next Iteration
+Option 1: Contact Reminders & Scheduled Follow-up Alerts (Iteration 14 - Release v1.4.0).
+
+---
+
+# Build Notes - Build 46 Iteration 14 (Release v1.4.0) (2026-07-27)
+
+Implemented Contact Reminders & Scheduled Follow-up Alerts (Release v1.4.0).
+
+## Summary
+Updated `contactService.js` and `contactService.spec.js` with follow-up reminder scheduler (`setContactReminder`, `clearContactReminder`, `getUpcomingReminders`). Updated `server.js` with reminder routes (`POST /contacts/:id/reminder`, `DELETE /contacts/:id/reminder`, `GET /contacts/reminders-bar`) and fragment renderers (`renderRemindersBar`, row badge indicators). Updated `public/index.html` and `public/style.css` adding **🔔 Scheduled Follow-up Reminders Bar** above the favorites bar, row urgency badges (`🚨 Overdue`, `⏰ Today`, `📅 Upcoming`), and drawer datepicker controls.
+
+## File-by-File Explanation
+- `contactService.js`: Contact CRM service updated with `followUpDate` and `reminderNote` properties, scheduler methods, and urgency calculator.
+- `contactService.spec.js`: Vitest unit test suite verifying reminder setting, clearing, and urgency classification (`overdue`, `today`, `upcoming`).
+- `server.js`: Express server updated with reminder endpoints, drawer form integration, and top reminders bar fragment controller.
+- `public/index.html`: Added `#reminders-bar-container` target above the favorites bar.
+- `public/style.css`: CSS updated with `.reminders-bar-wrapper`, `.reminder-pill`, `.reminder-row-badge`, `.badge-overdue`, `.badge-today`, and `.badge-upcoming` styles.
+- `CHANGELOG.md`: Logged version 1.4.0 Release notes.
+
+## Manual Test Steps
+1. Open [https://htmx-contact-manager-build46.vercel.app](https://htmx-contact-manager-build46.vercel.app).
+2. **View Reminders Bar**: Observe top **🔔 Scheduled Reminders** bar highlighting active reminders (e.g. `🚨 Alex Rivera (2026-07-25)` and `📅 Sarah Jenkins (2026-07-30)`).
+3. **Set New Reminder**: Click **👁️ View** on Elena Rostova's row to open the detail drawer.
+4. Under **🔔 Scheduled Follow-up Reminder**, select a follow-up date and enter a note (e.g. `Send talent roster PDF`). Click **🔔 Set Reminder**.
+5. Observe the reminder badge appear on Elena's table row and in the top **🔔 Scheduled Reminders** bar instantly!
+
+## Candidate Next Iterations
+1. **Contact Performance & Analytics Dashboard Fragment (Iteration 15)**
+   * *Plain English*: View visual charts of total contacts, top category breakdown, and interaction trends.
+   * *Benefit*: Executive CRM insight reporting.
+   * *Interview answer*: "I built server-rendered CRM analytics dashboards."
+2. **Contact Export to VCF / vCard Payload Vault (Iteration 15)**
+   * *Plain English*: Export contacts as `.vcf` vCard files for seamless mobile address book import.
+   * *Benefit*: Mobile CRM contact syncing.
+   * *Interview answer*: "I built vCard / VCF contact file exporter."
+3. **Contact Lead Score & Engagement Calculator (Iteration 15)**
+   * *Plain English*: Compute dynamic lead scores based on notes, activity frequency, and custom fields.
+   * *Benefit*: Automated contact prioritization.
+   * *Interview answer*: "I built dynamic contact lead scoring algorithms."
+4. **Contact Field Encryption & Privacy Sanitizer (Iteration 15)**
+   * *Plain English*: Encrypt sensitive contact attributes (e.g. phone numbers, private notes) with AES masking.
+   * *Benefit*: Enterprise data privacy & compliance.
+   * *Interview answer*: "I built contact privacy masking and field encryption."
+5. **Contact Webhook Integration & Automated Dispatch (Iteration 15)**
+   * *Plain English*: Dispatch outbound webhooks to external URLs when contacts are added or updated.
+   * *Benefit*: CRM automation & third-party integrations.
+   * *Interview answer*: "I built real-time outbound CRM webhooks."
+
+## Chosen Next Iteration
 *None selected yet.*
+
 
 
 
