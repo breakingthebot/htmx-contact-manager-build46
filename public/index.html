@@ -84,6 +84,37 @@
         </form>
       </section>
 
+      <!-- Bulk JSON Import Vault Card -->
+      <section class="card import-card">
+        <div class="card-header">
+          <h2>📥 Bulk JSON Import Vault</h2>
+          <span class="badge-mini">POST /contacts/import-json</span>
+        </div>
+        <form 
+          hx-post="/contacts/import-json" 
+          hx-target="#toast-container"
+          hx-swap="innerHTML"
+          hx-on::after-request="if (event.detail.successful) this.reset()"
+          class="json-import-form"
+        >
+          <div class="form-group">
+            <label>Paste JSON Contacts Array *</label>
+            <textarea 
+              name="jsonPayload" 
+              rows="3" 
+              class="form-input json-textarea"
+              placeholder='[{"name": "David Kim", "email": "david@startup.io", "category": "Sponsor"}, {"name": "Rachel Green", "email": "rachel@fashion.com", "category": "VIP"}]'
+              required
+            ></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary btn-import">
+              ⚡ Batch Import JSON
+            </button>
+          </div>
+        </form>
+      </section>
+
       <!-- Starred Favorites Quick-Access Bar -->
       <div id="favorites-bar-container" class="favorites-bar-wrapper" hx-get="/contacts/favorites-bar" hx-trigger="load, favoriteToggled from:body">
         <!-- Rendered via HTMX Fragment -->

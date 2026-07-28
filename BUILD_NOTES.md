@@ -378,7 +378,56 @@ Updated `contactService.js` and `contactService.spec.js` with activity logging e
    * *Interview answer*: "I built automated contact duplicate detection and merging."
 
 ## Chosen Next Iteration
+Option 1: Contact Import via JSON Payload Vault (Iteration 9).
+
+---
+
+# Build Notes - Build 46 Iteration 9 (2026-07-27)
+
+Implemented Contact Import via JSON Payload Vault.
+
+## Summary
+Updated `contactService.js` and `contactService.spec.js` with batch JSON importer (`importContactsFromJson(jsonInput)`). Updated `server.js` with JSON import endpoint (`POST /contacts/import-json`). Updated `public/index.html` and `public/style.css` adding **📥 Bulk JSON Import Vault** card with monospace textarea input, syntax validation, batch import button, and server-rendered toast notifications.
+
+## File-by-File Explanation
+- `contactService.js`: Contact CRM service updated with JSON array parser and batch contact creator.
+- `contactService.spec.js`: Vitest unit test suite verifying JSON contact array importing and syntax error handling.
+- `server.js`: Express server updated with `POST /contacts/import-json` endpoint returning success toasts and triggering table refreshes.
+- `public/index.html`: Added **📥 Bulk JSON Import Vault** section with monospace textarea input.
+- `public/style.css`: CSS updated with `.json-textarea` and `.btn-import` emerald gradient styles.
+- `CHANGELOG.md`: Logged version 0.9.0 release notes.
+
+## Manual Test Steps
+1. Open [https://htmx-contact-manager-build46.vercel.app](https://htmx-contact-manager-build46.vercel.app).
+2. **Batch Import JSON**: Paste a JSON array of contacts into the **📥 Bulk JSON Import Vault** textarea (e.g. `[{"name": "David Kim", "email": "david@startup.io", "category": "Sponsor"}, {"name": "Rachel Green", "email": "rachel@fashion.com", "category": "VIP"}]`).
+3. Click **⚡ Batch Import JSON**.
+4. Observe the toast notification confirm `✅ Successfully imported 2 contact(s)` and see the contact table refresh instantly with the imported contacts!
+
+## Candidate Next Iterations
+1. **Contact Field Sorting & Multi-Column Reordering (Iteration 10 - Milestone Release v1.0.0)**
+   * *Plain English*: Click table column headers (Name, Email, Status) to sort contacts dynamically.
+   * *Benefit*: Flexible table data organization.
+   * *Interview answer*: "I built dynamic table column sorting for HTMX fragments."
+2. **Contact Pagination & Items-Per-Page Selector (Iteration 10 - Milestone Release v1.0.0)**
+   * *Plain English*: Paginate large contact lists (10, 25, 50 per page) with server-rendered HTML page controls.
+   * *Benefit*: Performance optimization for massive contact databases.
+   * *Interview answer*: "I built server-rendered HTMX pagination controls."
+3. **Contact Field Customizer & Custom Key-Value Attributes (Iteration 10 - Milestone Release v1.0.0)**
+   * *Plain English*: Add custom key-value metadata fields (e.g. Instagram Handle, Budget) to contacts.
+   * *Benefit*: Extensible contact metadata.
+   * *Interview answer*: "I built extensible key-value attribute fields."
+4. **Contact Duplicate Detection & Merge Engine (Iteration 10 - Milestone Release v1.0.0)**
+   * *Plain English*: Detect duplicate contacts by email address and merge records into a unified contact.
+   * *Benefit*: Clean database deduplication.
+   * *Interview answer*: "I built automated contact duplicate detection and merging."
+5. **Contact Reminders & Scheduled Follow-up Alerts (Iteration 10 - Milestone Release v1.0.0)**
+   * *Plain English*: Schedule follow-up date reminders for contacts with urgency badge highlights.
+   * *Benefit*: Proactive contact relationship management.
+   * *Interview answer*: "I built contact follow-up date scheduling and alerts."
+
+## Chosen Next Iteration
 *None selected yet.*
+
 
 
 

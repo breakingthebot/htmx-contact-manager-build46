@@ -325,6 +325,21 @@ label {
   transition: border-color 0.2s;
 }
 
+.json-textarea {
+  font-family: ui-monospace, monospace;
+  font-size: 12px;
+  resize: vertical;
+  line-height: 1.4;
+}
+
+.btn-import {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.btn-import:hover {
+  background: linear-gradient(135deg, #059669, #047857);
+}
+
 .form-input:focus {
   border-color: var(--accent-primary);
 }

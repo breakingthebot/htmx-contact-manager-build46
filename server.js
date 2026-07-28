@@ -10,6 +10,7 @@ import {
   getFavoriteContacts,
   toggleFavoriteContact,
   updateContactAvatar,
+  importContactsFromJson,
   getCategoryStats,
   getContactById,
   addContact,
@@ -329,6 +330,18 @@ export function renderContactDrawer(c) {
 }
 
 // HTMX Server Routes
+
+// POST /contacts/import-json - Bulk JSON Import Vault Endpoint
+app.post('/contacts/import-json', (req, res) => {
+  try {
+    const { importedCount, errors } = importContactsFromJson(req.body.jsonPayload);
+    res.setHeader('HX-Trigger', 'contactCreated');
+    const msg = `Successfully imported ${importedCount} contact(s).${errors.length > 0 ? ` (${errors.length} skipped)` : ''}`;
+    res.send(renderToastNotification('success', msg));
+  } catch (err) {
+    res.status(400).send(renderToastNotification('error', err.message));
+  }
+});
 
 // GET /contacts/favorites-bar - Starred Favorites Bar
 app.get('/contacts/favorites-bar', (req, res) => {

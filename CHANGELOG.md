@@ -5,6 +5,14 @@ All notable changes to the **HTMX Contact Manager** project will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.0] - 2026-07-27
+
+### Added
+- Integrated **Contact Import via JSON Payload Vault** in `contactService.js` and `server.js`.
+- Added batch JSON array parser (`importContactsFromJson`) and `POST /contacts/import-json` endpoint.
+- Updated `public/index.html` and `public/style.css` with **📥 Bulk JSON Import Vault** card, monospace textarea input, and emerald gradient submit buttons.
+- Added unit tests in `contactService.spec.js`.
+
 ## [0.8.0] - 2026-07-27
 
 ### Added

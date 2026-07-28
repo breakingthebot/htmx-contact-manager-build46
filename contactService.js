@@ -133,6 +133,44 @@ export function validateContactInput(data) {
   return true;
 }
 
+export function importContactsFromJson(jsonInput) {
+  if (!jsonInput || !jsonInput.trim()) {
+    throw new Error('JSON payload cannot be empty');
+  }
+
+  let items;
+  try {
+    items = JSON.parse(jsonInput.trim());
+  } catch (err) {
+    throw new Error(`Invalid JSON syntax: ${err.message}`);
+  }
+
+  if (!Array.isArray(items)) {
+    throw new Error('JSON payload must be an array of contact objects');
+  }
+
+  let importedCount = 0;
+  const errors = [];
+
+  items.forEach((item, idx) => {
+    try {
+      addContact({
+        name: item.name,
+        email: item.email,
+        phone: item.phone,
+        category: item.category,
+        status: item.status,
+        avatarUrl: item.avatarUrl
+      });
+      importedCount++;
+    } catch (err) {
+      errors.push(`Item #${idx + 1} (${item.name || 'Unnamed'}): ${err.message}`);
+    }
+  });
+
+  return { importedCount, errors };
+}
+
 export function getAllContacts(searchQuery = '', categoryFilter = 'All') {
   let result = [...contactsStore];
 

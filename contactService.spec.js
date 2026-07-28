@@ -8,6 +8,7 @@ import {
   getFavoriteContacts,
   toggleFavoriteContact,
   logContactActivity,
+  importContactsFromJson,
   generateGravatarUrl,
   updateContactAvatar,
   getCategoryStats,
@@ -31,6 +32,21 @@ describe('contactService', () => {
     const contacts = getAllContacts();
     expect(contacts.length).toBe(3);
     expect(contacts[0].name).toBe('Sarah Jenkins');
+  });
+
+  it('imports bulk contacts from JSON array payload', () => {
+    const jsonPayload = JSON.stringify([
+      { name: 'David Kim', email: 'david@startup.io', category: 'Sponsor' },
+      { name: 'Rachel Green', email: 'rachel@fashion.com', category: 'VIP' }
+    ]);
+    const res = importContactsFromJson(jsonPayload);
+    expect(res.importedCount).toBe(2);
+    expect(res.errors.length).toBe(0);
+    expect(getAllContacts().length).toBe(5);
+  });
+
+  it('throws error when importing invalid JSON syntax', () => {
+    expect(() => importContactsFromJson('{ invalid-json')).toThrow('Invalid JSON syntax');
   });
 
   it('logs and tracks contact activity audit entries', () => {
