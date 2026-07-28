@@ -19,24 +19,6 @@
 
 ---
 
-## 🎯 Topics Covered & Core Learning Objectives
-
-- **HTMX Server-Driven Interactivity**:
-  - `hx-get`, `hx-post`, `hx-put`, `hx-delete` RESTful HTML fragment swapping.
-  - Out-Of-Band updates (`hx-swap-oob="true"`) for simultaneous counter and table updates.
-  - Form inclusion (`hx-include`) and target response error handling (`htmx:responseError`, `response-targets`).
-  - Custom HTMX event triggers (`HX-Trigger: favoriteToggled`, `HX-Trigger: contactUpdated`).
-- **CRM Domain Modeling & Data Processing**:
-  - Lead scoring algorithms (`calculateLeadScore`) with `HOT`, `WARM`, and `COLD` engagement badges.
-  - Privacy mode masking (`maskEmail`, `maskPhone`) with interactive CSS hover unblur filters.
-  - RFC 6350 `.vcf` vCard payload generation for address book sync.
-  - Duplicate profile scanning & merging algorithm consolidating activity timelines.
-  - CSV spreadsheet export and JSON batch ingestion vault.
-- **Automated Unit Testing & Quality Assurance**:
-  - Vitest test suite with 36 passing unit tests covering validation, pagination, duplicate merging, lead score calculation, and field encryption sanitization.
-
----
-
 ## 🔥 Feature Highlights Across 18 Iterations
 
 - **v1.0.0 — Core HTMX CRUD Foundation**: Full HTMX contact list table, add modal, inline edit, delete, and search filtering.
