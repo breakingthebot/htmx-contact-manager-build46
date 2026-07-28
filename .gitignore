@@ -22,3 +22,8 @@ Thumbs.db
 .vscode/
 
 .vercel
+
+# Workspace Internal Files (NEVER COMMIT OR PUSH TO GIT)
+AGENTS.md
+BUILD_NOTES.md
+BUILD_NOTES*.md
