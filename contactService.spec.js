@@ -28,10 +28,23 @@ describe('contactService', () => {
     resetContactsStore();
   });
 
-  it('retrieves initial list of contacts', () => {
-    const contacts = getAllContacts();
+  it('retrieves initial list of contacts sorted by name ascending', () => {
+    const contacts = getAllContacts('', 'All', 'name', 'asc');
     expect(contacts.length).toBe(3);
+    expect(contacts[0].name).toBe('Alex Rivera');
+    expect(contacts[1].name).toBe('Elena Rostova');
+    expect(contacts[2].name).toBe('Sarah Jenkins');
+  });
+
+  it('sorts contacts by name descending', () => {
+    const contacts = getAllContacts('', 'All', 'name', 'desc');
     expect(contacts[0].name).toBe('Sarah Jenkins');
+    expect(contacts[2].name).toBe('Alex Rivera');
+  });
+
+  it('sorts contacts by email ascending', () => {
+    const contacts = getAllContacts('', 'All', 'email', 'asc');
+    expect(contacts[0].email).toBe('alex@creatorstudio.io');
   });
 
   it('imports bulk contacts from JSON array payload', () => {

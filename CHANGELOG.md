@@ -5,6 +5,14 @@ All notable changes to the **HTMX Contact Manager** project will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0] - 2026-07-27 - Milestone Release 🎉
+
+### Added
+- Integrated **Contact Field Sorting & Multi-Column Reordering** in `contactService.js` and `server.js`.
+- Added multi-column array sorting (`getAllContacts(q, category, sortField, sortOrder)`) and dynamic table header fragment renderer (`renderTableHeader`).
+- Updated `public/index.html` and `public/style.css` with clickable table column headers, sorting indicators (`▲`/`▼`), and active header column highlights.
+- Added unit tests in `contactService.spec.js` (23 total unit tests passing).
+
 ## [0.9.0] - 2026-07-27
 
 ### Added

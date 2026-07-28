@@ -426,7 +426,56 @@ Updated `contactService.js` and `contactService.spec.js` with batch JSON importe
    * *Interview answer*: "I built contact follow-up date scheduling and alerts."
 
 ## Chosen Next Iteration
+Option 1: Contact Field Sorting & Multi-Column Reordering (Iteration 10 - Milestone Release v1.0.0).
+
+---
+
+# Build Notes - Build 46 Iteration 10 (Milestone Release v1.0.0) (2026-07-27)
+
+Implemented Contact Field Sorting & Multi-Column Reordering (Milestone v1.0.0).
+
+## Summary
+Updated `contactService.js` and `contactService.spec.js` with multi-column sorting capabilities (`getAllContacts(searchQuery, categoryFilter, sortField, sortOrder)`). Updated `server.js` with table header fragment controller (`renderTableHeader`, `GET /contacts/search?sort=name&order=desc`). Updated `public/index.html` and `public/style.css` making all table column headers (`Name`, `Email`, `Phone`, `Category`, `Status`) clickable with HTMX fragment triggers, sorting indicators (`▲` / `▼`), and active column glow highlights.
+
+## File-by-File Explanation
+- `contactService.js`: Contact CRM service updated with dynamic array sorting by name, email, category, or status.
+- `contactService.spec.js`: Vitest unit test suite verifying ascending and descending multi-column sorting.
+- `server.js`: Express server updated with `sort` and `order` parameters on `GET /contacts/search`.
+- `public/index.html`: Table header columns updated with HTMX sort triggers (`hx-get="/contacts/search?sort=email"`).
+- `public/style.css`: CSS updated with `.sortable-header`, `.sorted-active`, and `.sort-arrow` styles.
+- `CHANGELOG.md`: Logged version 1.0.0 Milestone Release notes.
+
+## Manual Test Steps
+1. Open [https://htmx-contact-manager-build46.vercel.app](https://htmx-contact-manager-build46.vercel.app).
+2. **Column Sorting**: Click on **Contact Name**, **Email**, **Category**, or **Status** column headers in the contact table.
+3. Observe the table rows re-order instantly via HTMX server fragment with visual sorting arrows (`▲` / `▼`)!
+4. Click the header again to reverse the sort direction between ascending and descending.
+
+## Candidate Next Iterations
+1. **Contact Pagination & Items-Per-Page Selector (Iteration 11 - Release v1.1.0)**
+   * *Plain English*: Paginate large contact lists (10, 25, 50 per page) with server-rendered HTML page controls.
+   * *Benefit*: Performance optimization for massive contact databases.
+   * *Interview answer*: "I built server-rendered HTMX pagination controls."
+2. **Contact Field Customizer & Custom Key-Value Attributes (Iteration 11 - Release v1.1.0)**
+   * *Plain English*: Add custom key-value metadata fields (e.g. Instagram Handle, Budget) to contacts.
+   * *Benefit*: Extensible contact metadata.
+   * *Interview answer*: "I built extensible key-value attribute fields."
+3. **Contact Duplicate Detection & Merge Engine (Iteration 11 - Release v1.1.0)**
+   * *Plain English*: Detect duplicate contacts by email address and merge records into a unified contact.
+   * *Benefit*: Clean database deduplication.
+   * *Interview answer*: "I built automated contact duplicate detection and merging."
+4. **Contact Reminders & Scheduled Follow-up Alerts (Iteration 11 - Release v1.1.0)**
+   * *Plain English*: Schedule follow-up date reminders for contacts with urgency badge highlights.
+   * *Benefit*: Proactive contact relationship management.
+   * *Interview answer*: "I built contact follow-up date scheduling and alerts."
+5. **Contact Performance & Analytics Dashboard Fragment (Iteration 11 - Release v1.1.0)**
+   * *Plain English*: View visual charts of total contacts, top category breakdown, and interaction trends.
+   * *Benefit*: Executive CRM insight reporting.
+   * *Interview answer*: "I built server-rendered CRM analytics dashboards."
+
+## Chosen Next Iteration
 *None selected yet.*
+
 
 
 

@@ -79,6 +79,41 @@ export function renderFavoritesBar() {
   `;
 }
 
+export function renderTableHeader(currentSort = 'name', currentOrder = 'asc', category = 'All', query = '') {
+  const columns = [
+    { field: 'name', label: 'Contact Name' },
+    { field: 'email', label: 'Email' },
+    { field: 'phone', label: 'Phone' },
+    { field: 'category', label: 'Category' },
+    { field: 'status', label: 'Status' }
+  ];
+
+  return `
+    <tr>
+      <th class="checkbox-cell">
+        <input type="checkbox" id="select-all-checkbox" onclick="toggleSelectAll(this)" />
+      </th>
+      ${columns.map(col => {
+        const isSorted = currentSort === col.field;
+        const nextOrder = isSorted && currentOrder === 'asc' ? 'desc' : 'asc';
+        const arrow = isSorted ? (currentOrder === 'asc' ? ' ▲' : ' ▼') : '';
+        return `
+          <th 
+            class="sortable-header ${isSorted ? 'sorted-active' : ''}"
+            hx-get="/contacts/search?sort=${col.field}&order=${nextOrder}&category=${category}&q=${query}"
+            hx-target="#contacts-table-body"
+            hx-swap="innerHTML"
+            title="Click to sort by ${col.label}"
+          >
+            ${col.label}<span class="sort-arrow">${arrow}</span>
+          </th>
+        `;
+      }).join('')}
+      <th>Actions</th>
+    </tr>
+  `;
+}
+
 export function renderContactRow(c) {
   return `
     <tr id="contact-row-${c.id}" class="contact-row ${c.isFavorite ? 'row-favorite' : ''}">
@@ -388,11 +423,14 @@ app.post('/contacts/:id/notes', (req, res) => {
   }
 });
 
-// GET /contacts/search - Live HTMX Search & Category Filter
+// GET /contacts/search - Live HTMX Search & Category Filter with Dynamic Column Sorting
 app.get('/contacts/search', (req, res) => {
   const searchQuery = req.query.q || '';
   const category = req.query.category || 'All';
-  const contacts = getAllContacts(searchQuery, category);
+  const sortField = req.query.sort || 'name';
+  const sortOrder = req.query.order || 'asc';
+
+  const contacts = getAllContacts(searchQuery, category, sortField, sortOrder);
 
   if (contacts.length === 0) {
     return res.send(`

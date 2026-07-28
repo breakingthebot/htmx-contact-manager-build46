@@ -171,7 +171,7 @@ export function importContactsFromJson(jsonInput) {
   return { importedCount, errors };
 }
 
-export function getAllContacts(searchQuery = '', categoryFilter = 'All') {
+export function getAllContacts(searchQuery = '', categoryFilter = 'All', sortField = 'name', sortOrder = 'asc') {
   let result = [...contactsStore];
 
   if (categoryFilter && categoryFilter !== 'All') {
@@ -183,6 +183,18 @@ export function getAllContacts(searchQuery = '', categoryFilter = 'All') {
     result = result.filter(
       c => c.name.toLowerCase().includes(q) || c.email.toLowerCase().includes(q) || c.category.toLowerCase().includes(q)
     );
+  }
+
+  // Dynamic Column Sorting
+  if (sortField) {
+    result.sort((a, b) => {
+      let valA = (a[sortField] || '').toString().toLowerCase();
+      let valB = (b[sortField] || '').toString().toLowerCase();
+
+      if (valA < valB) return sortOrder === 'asc' ? -1 : 1;
+      if (valA > valB) return sortOrder === 'asc' ? 1 : -1;
+      return 0;
+    });
   }
 
   return result;
