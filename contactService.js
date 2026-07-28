@@ -141,6 +141,46 @@ export function logContactActivity(contactId, action, details) {
   return entry;
 }
 
+export function getAnalyticsSummary() {
+  const total = contactsStore.length;
+  let favoritesCount = 0;
+  let activeCount = 0;
+  let pendingCount = 0;
+  let archivedCount = 0;
+  let totalNotes = 0;
+  let totalCustomFields = 0;
+  let totalActivities = 0;
+
+  const categoryBreakdown = { Sponsor: 0, Collaborator: 0, VIP: 0, Agency: 0 };
+
+  contactsStore.forEach(c => {
+    if (c.isFavorite) favoritesCount++;
+    if (c.status === 'Active') activeCount++;
+    if (c.status === 'Pending') pendingCount++;
+    if (c.status === 'Archived') archivedCount++;
+
+    if (categoryBreakdown[c.category] !== undefined) {
+      categoryBreakdown[c.category]++;
+    }
+
+    if (c.notes) totalNotes += c.notes.length;
+    if (c.customFields) totalCustomFields += c.customFields.length;
+    if (c.activityLog) totalActivities += c.activityLog.length;
+  });
+
+  return {
+    total,
+    favoritesCount,
+    activeCount,
+    pendingCount,
+    archivedCount,
+    totalNotes,
+    totalCustomFields,
+    totalActivities,
+    categoryBreakdown
+  };
+}
+
 export function setContactReminder(contactId, followUpDate, reminderNote) {
   const contact = getContactById(contactId);
   if (!contact) {

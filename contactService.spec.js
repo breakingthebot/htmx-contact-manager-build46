@@ -16,6 +16,7 @@ import {
   setContactReminder,
   clearContactReminder,
   getUpcomingReminders,
+  getAnalyticsSummary,
   importContactsFromJson,
   generateGravatarUrl,
   updateContactAvatar,
@@ -42,6 +43,20 @@ describe('contactService', () => {
     expect(contacts[0].name).toBe('Alex Rivera');
     expect(contacts[1].name).toBe('Elena Rostova');
     expect(contacts[2].name).toBe('Sarah Jenkins');
+  });
+
+  it('calculates comprehensive CRM analytics metrics summary', () => {
+    const analytics = getAnalyticsSummary();
+    expect(analytics.total).toBe(3);
+    expect(analytics.favoritesCount).toBe(2);
+    expect(analytics.activeCount).toBe(2);
+    expect(analytics.pendingCount).toBe(1);
+    expect(analytics.categoryBreakdown.Sponsor).toBe(1);
+    expect(analytics.categoryBreakdown.Collaborator).toBe(1);
+    expect(analytics.categoryBreakdown.Agency).toBe(1);
+    expect(analytics.totalNotes).toBe(2);
+    expect(analytics.totalCustomFields).toBe(4);
+    expect(analytics.totalActivities).toBe(6);
   });
 
   it('schedules and clears contact follow-up reminders', () => {

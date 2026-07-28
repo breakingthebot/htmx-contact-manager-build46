@@ -670,7 +670,56 @@ Updated `contactService.js` and `contactService.spec.js` with follow-up reminder
    * *Interview answer*: "I built real-time outbound CRM webhooks."
 
 ## Chosen Next Iteration
+Option 1: Contact Performance & Analytics Dashboard Fragment (Iteration 15 - Release v1.5.0).
+
+---
+
+# Build Notes - Build 46 Iteration 15 (Release v1.5.0) (2026-07-27)
+
+Implemented Contact Performance & Analytics Dashboard Fragment (Release v1.5.0).
+
+## Summary
+Updated `contactService.js` and `contactService.spec.js` with analytics metrics calculator (`getAnalyticsSummary`). Updated `server.js` with analytics endpoint (`GET /contacts/analytics`) and fragment renderer (`renderAnalyticsDashboard`). Updated `public/index.html` and `public/style.css` adding **📊 CRM Analytics & Performance Dashboard** card featuring 4 key metric counters (Total Contacts, Starred Favorites, Interaction Notes, Custom Attributes) and category distribution progress bars.
+
+## File-by-File Explanation
+- `contactService.js`: Contact CRM service updated with `getAnalyticsSummary` aggregation logic.
+- `contactService.spec.js`: Vitest unit test suite verifying totals, category percentages, custom field counts, and activity audit counts.
+- `server.js`: Express server updated with `GET /contacts/analytics` endpoint and HTMX fragment renderer.
+- `public/index.html`: Added `📊 CRM Analytics & Performance Dashboard` section with auto-refresh on contact mutations.
+- `public/style.css`: CSS updated with `.analytics-grid`, `.metric-card`, `.metric-val`, `.analytics-category-bars`, and category progress fill styles.
+- `CHANGELOG.md`: Logged version 1.5.0 Release notes.
+
+## Manual Test Steps
+1. Open [https://htmx-contact-manager-build46.vercel.app](https://htmx-contact-manager-build46.vercel.app).
+2. **View CRM Dashboard**: Observe top **📊 CRM Analytics & Performance Dashboard** displaying total contacts, favorites, notes, custom fields, and category distribution percentages.
+3. **Trigger Real-Time Metric Updates**: Add a new contact or star a contact.
+4. Observe the analytics metrics and category progress bars update live via HTMX server fragment!
+
+## Candidate Next Iterations
+1. **Contact Export to VCF / vCard Payload Vault (Iteration 16)**
+   * *Plain English*: Export contacts as `.vcf` vCard files for seamless mobile address book import.
+   * *Benefit*: Mobile CRM contact syncing.
+   * *Interview answer*: "I built vCard / VCF contact file exporter."
+2. **Contact Lead Score & Engagement Calculator (Iteration 16)**
+   * *Plain English*: Compute dynamic lead scores based on notes, activity frequency, and custom fields.
+   * *Benefit*: Automated contact prioritization.
+   * *Interview answer*: "I built dynamic contact lead scoring algorithms."
+3. **Contact Field Encryption & Privacy Sanitizer (Iteration 16)**
+   * *Plain English*: Encrypt sensitive contact attributes (e.g. phone numbers, private notes) with AES masking.
+   * *Benefit*: Enterprise data privacy & compliance.
+   * *Interview answer*: "I built contact privacy masking and field encryption."
+4. **Contact Webhook Integration & Automated Dispatch (Iteration 16)**
+   * *Plain English*: Dispatch outbound webhooks to external URLs when contacts are added or updated.
+   * *Benefit*: CRM automation & third-party integrations.
+   * *Interview answer*: "I built real-time outbound CRM webhooks."
+5. **Contact Tagging Auto-Complete & Multi-Select Filter (Iteration 16)**
+   * *Plain English*: Filter contacts with multi-select tag pills and search auto-completion.
+   * *Benefit*: Enhanced contact search flexibility.
+   * *Interview answer*: "I built multi-tag auto-complete filtering."
+
+## Chosen Next Iteration
 *None selected yet.*
+
 
 
 

@@ -18,6 +18,7 @@ import {
   setContactReminder,
   clearContactReminder,
   getUpcomingReminders,
+  getAnalyticsSummary,
   importContactsFromJson,
   getCategoryStats,
   getContactById,
@@ -57,6 +58,63 @@ export function renderAvatarImg(c, sizeClass = '') {
   return `
     <div class="avatar-circle ${sizeClass}" style="background-color: ${c.avatarColor}">
       ${c.name.charAt(0).toUpperCase()}
+    </div>
+  `;
+}
+
+export function renderAnalyticsDashboard() {
+  const summary = getAnalyticsSummary();
+  const categories = ['Sponsor', 'Collaborator', 'VIP', 'Agency'];
+
+  return `
+    <div class="analytics-grid">
+      <div class="metric-card">
+        <span class="metric-icon">📇</span>
+        <div>
+          <div class="metric-val">${summary.total}</div>
+          <div class="metric-lbl">Total Contacts</div>
+        </div>
+      </div>
+      <div class="metric-card">
+        <span class="metric-icon">⭐</span>
+        <div>
+          <div class="metric-val">${summary.favoritesCount}</div>
+          <div class="metric-lbl">Starred Favorites</div>
+        </div>
+      </div>
+      <div class="metric-card">
+        <span class="metric-icon">📝</span>
+        <div>
+          <div class="metric-val">${summary.totalNotes}</div>
+          <div class="metric-lbl">Interaction Notes</div>
+        </div>
+      </div>
+      <div class="metric-card">
+        <span class="metric-icon">🏷️</span>
+        <div>
+          <div class="metric-val">${summary.totalCustomFields}</div>
+          <div class="metric-lbl">Custom Attributes</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="analytics-category-bars">
+      <h4>Category Distribution</h4>
+      ${categories.map(cat => {
+        const count = summary.categoryBreakdown[cat] || 0;
+        const pct = summary.total > 0 ? Math.round((count / summary.total) * 100) : 0;
+        return `
+          <div class="cat-bar-row">
+            <div class="cat-bar-header">
+              <span class="cat-name">${cat}</span>
+              <span class="cat-count">${count} (${pct}%)</span>
+            </div>
+            <div class="cat-progress-track">
+              <div class="cat-progress-fill cat-fill-${cat.toLowerCase()}" style="width: ${pct}%"></div>
+            </div>
+          </div>
+        `;
+      }).join('')}
     </div>
   `;
 }
@@ -598,6 +656,11 @@ export function renderContactDrawer(c) {
 }
 
 // HTMX Server Routes
+
+// GET /contacts/analytics - CRM Analytics Dashboard Endpoint
+app.get('/contacts/analytics', (req, res) => {
+  res.send(renderAnalyticsDashboard());
+});
 
 // GET /contacts/reminders-bar - Scheduled Reminders Bar Endpoint
 app.get('/contacts/reminders-bar', (req, res) => {

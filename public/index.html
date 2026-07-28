@@ -133,6 +133,25 @@
         </div>
       </section>
 
+      <!-- CRM Analytics & Performance Metrics Dashboard Card -->
+      <section class="card analytics-card">
+        <div class="card-header">
+          <h2>📊 CRM Analytics & Performance Dashboard</h2>
+          <button 
+            type="button" 
+            class="btn-icon btn-refresh"
+            hx-get="/contacts/analytics"
+            hx-target="#analytics-container"
+            title="Refresh Analytics Metrics"
+          >
+            🔄
+          </button>
+        </div>
+        <div id="analytics-container" class="analytics-container" hx-get="/contacts/analytics" hx-trigger="load, contactCreated from:body, favoriteToggled from:body">
+          <!-- Rendered via HTMX Fragment -->
+        </div>
+      </section>
+
       <!-- Scheduled Follow-up Reminders Bar -->
       <div id="reminders-bar-container" class="reminders-bar-wrapper" hx-get="/contacts/reminders-bar" hx-trigger="load, contactCreated from:body">
         <!-- Rendered via HTMX Fragment -->

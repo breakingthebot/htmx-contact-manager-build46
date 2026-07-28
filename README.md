@@ -4,8 +4,8 @@
 
 [![Vercel Deployment](https://img.shields.io/badge/Vercel-Live%20Demo-000000?style=for-the-badge&logo=vercel)](https://htmx-contact-manager-build46.vercel.app)
 [![GitHub Repository](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github)](https://github.com/breakingthebot/htmx-contact-manager-build46)
-[![Tests](https://img.shields.io/badge/Vitest-30%20Passed-6E9F18?style=for-the-badge&logo=vitest)](file:///C:/Users/marve/Desktop/AI-286-Builds/Build_46/contactService.spec.js)
-[![Version](https://img.shields.io/badge/Release-v1.4.0-blue?style=for-the-badge)](file:///C:/Users/marve/Desktop/AI-286-Builds/Build_46/CHANGELOG.md)
+[![Tests](https://img.shields.io/badge/Vitest-31%20Passed-6E9F18?style=for-the-badge&logo=vitest)](file:///C:/Users/marve/Desktop/AI-286-Builds/Build_46/contactService.spec.js)
+[![Version](https://img.shields.io/badge/Release-v1.5.0-blue?style=for-the-badge)](file:///C:/Users/marve/Desktop/AI-286-Builds/Build_46/CHANGELOG.md)
 
 ---
 
@@ -22,6 +22,7 @@
 ## 🔥 Key Features
 
 - **⚡ Zero Client-Side JS Framework**: Powered purely by HTMX `hx-get`, `hx-post`, `hx-put`, and `hx-delete` fragment swaps.
+- **📊 CRM Analytics & Performance Dashboard**: Real-time metric counters (Total Contacts, Favorites, Notes, Attributes) and visual category distribution progress bars.
 - **🔔 Contact Reminders & Scheduled Follow-up Alerts**: Set follow-up dates and reminder notes with visual urgency badges (`🚨 Overdue`, `⏰ Today`, `📅 Upcoming`) and top quick-access reminders bar.
 - **👯 Duplicate Detection & Merge Engine**: Automated scanner detecting matching emails/names and merging duplicate profiles, consolidating notes and activity timelines.
 - **🔍 Real-Time Live Search & Category Filtering**: Instantly search contacts by name, email, or category tags (`Sponsor`, `Collaborator`, `VIP`, `Agency`) without page refreshes.
