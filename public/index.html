@@ -239,8 +239,13 @@
           </div>
 
           <!-- Server-Rendered HTMX Pagination Controls Container -->
-          <div id="pagination-container" class="pagination-wrapper">
-            <!-- Swapping via HTMX OOB (Out of Band) fragment -->
+          <div 
+            id="pagination-container" 
+            class="pagination-wrapper"
+            hx-get="/contacts/pagination"
+            hx-trigger="load, contactsLoaded from:body, contactCreated from:body"
+          >
+            <!-- Rendered via HTMX Fragment -->
           </div>
         </form>
       </section>

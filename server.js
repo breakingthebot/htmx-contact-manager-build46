@@ -657,6 +657,19 @@ export function renderContactDrawer(c) {
 
 // HTMX Server Routes
 
+// GET /contacts/pagination - Pagination Controls Endpoint
+app.get('/contacts/pagination', (req, res) => {
+  const searchQuery = req.query.q || '';
+  const category = req.query.category || 'All';
+  const sortField = req.query.sort || 'name';
+  const sortOrder = req.query.order || 'asc';
+  const page = parseInt(req.query.page, 10) || 1;
+  const pageSize = parseInt(req.query.limit, 10) || 10;
+
+  const { totalCount, totalPages } = getPaginatedContacts(searchQuery, category, sortField, sortOrder, page, pageSize);
+  res.send(renderPaginationControls(page, totalPages, pageSize, totalCount, category, searchQuery, sortField, sortOrder));
+});
+
 // GET /contacts/analytics - CRM Analytics Dashboard Endpoint
 app.get('/contacts/analytics', (req, res) => {
   res.send(renderAnalyticsDashboard());
@@ -796,9 +809,10 @@ app.get('/contacts/search', (req, res) => {
   const page = parseInt(req.query.page, 10) || 1;
   const pageSize = parseInt(req.query.limit, 10) || 10;
 
-  const { contacts, totalCount, totalPages } = getPaginatedContacts(searchQuery, category, sortField, sortOrder, page, pageSize);
+  const { contacts } = getPaginatedContacts(searchQuery, category, sortField, sortOrder, page, pageSize);
 
   if (contacts.length === 0) {
+    res.setHeader('HX-Trigger', 'contactsLoaded');
     return res.send(`
       <tr>
         <td colspan="7" class="empty-state">
@@ -809,15 +823,8 @@ app.get('/contacts/search', (req, res) => {
   }
 
   const rowsHtml = contacts.map(renderContactRow).join('');
-  const paginationHtml = renderPaginationControls(page, totalPages, pageSize, totalCount, category, searchQuery, sortField, sortOrder);
-
-  // Return rows + OOB (Out of Band) pagination container swap
-  res.send(`
-    ${rowsHtml}
-    <div id="pagination-container" hx-swap-oob="true" class="pagination-wrapper">
-      ${paginationHtml}
-    </div>
-  `);
+  res.setHeader('HX-Trigger', 'contactsLoaded');
+  res.send(rowsHtml);
 });
 
 // GET /contacts/export-csv - CSV File Download
@@ -837,7 +844,7 @@ app.post('/contacts/bulk-delete', (req, res) => {
   if (typeof ids === 'string') ids = [ids];
 
   bulkDeleteContacts(ids);
-  res.setHeader('HX-Trigger', 'favoriteToggled');
+  res.setHeader('HX-Trigger', 'contactCreated');
   const remaining = getAllContacts();
 
   if (remaining.length === 0) {
@@ -906,7 +913,7 @@ app.put('/contacts/:id', (req, res) => {
 // DELETE /contacts/:id - Delete Contact Fragment
 app.delete('/contacts/:id', (req, res) => {
   deleteContact(req.params.id);
-  res.setHeader('HX-Trigger', 'favoriteToggled');
+  res.setHeader('HX-Trigger', 'contactCreated');
   res.send('');
 });
 
